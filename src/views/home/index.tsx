@@ -13,7 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, Theme } from '@material-ui/core/styles';
-import { PhaseCountdown } from './countdown';
+import { PhaseCountdown } from '../../components/Countdown';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -33,7 +33,7 @@ import {
   CandyMachineAccount,
   getCandyMachineState,
   mintOneToken,
-} from './candy-machine';
+} from '../../logic/candy-machine';
 
 import {
   FairLaunchAccount,
@@ -41,9 +41,9 @@ import {
   punchTicket,
   purchaseTicket,
   receiveRefund,
-} from './fair-launch';
+} from '../../logic/fair-launch';
 
-import { formatNumber, getAtaForMint, toDate } from './utils';
+import { formatNumber, getAtaForMint, toDate } from '../../logic/utils';
 import Countdown from 'react-countdown';
 
 const ConnectButton = styled(WalletDialogButton)`
