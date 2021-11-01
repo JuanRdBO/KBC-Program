@@ -1,7 +1,11 @@
+import './style/bootstrap.css';
 import './App.css';
+import './style/font-icons.css';
+import './style/animate.css';
+import './style/fonts.css';
+import './style/custom.css';
 import { useMemo } from 'react';
 
-import FLP from './views/flp';
 
 import * as anchor from '@project-serum/anchor';
 import { clusterApiUrl } from '@solana/web3.js';
@@ -21,6 +25,7 @@ import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui';
 import { ThemeProvider, createTheme } from '@material-ui/core';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import Home from './views/home';
+import Purpose from './views/purpose';
 
 const theme = createTheme({
   palette: {
@@ -28,22 +33,9 @@ const theme = createTheme({
   },
 });
 
-const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
-  ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
-  : undefined;
-
-const fairLaunchId = new anchor.web3.PublicKey(
-  process.env.REACT_APP_FAIR_LAUNCH_ID!,
-);
 
 const network = process.env.REACT_APP_SOLANA_NETWORK as WalletAdapterNetwork;
 
-const rpcHost = process.env.REACT_APP_SOLANA_RPC_HOST!;
-const connection = new anchor.web3.Connection(rpcHost);
-
-const startDateSeed = parseInt(process.env.REACT_APP_CANDY_START_DATE!, 10);
-
-const txTimeout = 30000; // milliseconds (confirm this works for your project)
 
 const App = () => {
   const endpoint = useMemo(() => clusterApiUrl(network), []);
@@ -60,13 +52,7 @@ const App = () => {
         <WalletProvider wallets={wallets} autoConnect>
           <WalletDialogProvider>
             <Switch>
-              <Route exact path="/flp" component={() => <FLP
-                candyMachineId={candyMachineId}
-                fairLaunchId={fairLaunchId}
-                connection={connection}
-                startDate={startDateSeed}
-                txTimeout={txTimeout}
-              />}/>
+              <Route path="/purpose" component={() => <Purpose />} />
               <Route path="/" component={() => <Home />} />
             </Switch>
           </WalletDialogProvider>
