@@ -1,7 +1,7 @@
 import './App.css';
 import { useMemo } from 'react';
 
-import Home from './views/home';
+import FLP from './views/flp';
 
 import * as anchor from '@project-serum/anchor';
 import { clusterApiUrl } from '@solana/web3.js';
@@ -19,6 +19,8 @@ import {
 
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui';
 import { ThemeProvider, createTheme } from '@material-ui/core';
+import { HashRouter, Route, Switch } from 'react-router-dom';
+import Home from './views/home';
 
 const theme = createTheme({
   palette: {
@@ -52,21 +54,26 @@ const App = () => {
   );
 
   return (
+    <HashRouter basename={'/'}>
     <ThemeProvider theme={theme}>
       <ConnectionProvider endpoint={endpoint}>
         <WalletProvider wallets={wallets} autoConnect>
           <WalletDialogProvider>
-              <Home
+            <Switch>
+              <Route exact path="/flp" component={() => <FLP
                 candyMachineId={candyMachineId}
                 fairLaunchId={fairLaunchId}
                 connection={connection}
                 startDate={startDateSeed}
                 txTimeout={txTimeout}
-              />
+              />}/>
+              <Route path="/" component={() => <Home />} />
+            </Switch>
           </WalletDialogProvider>
         </WalletProvider>
       </ConnectionProvider>
     </ThemeProvider>
+    </HashRouter>
   );
 };
 
