@@ -14,6 +14,14 @@ import { useWallet } from '@solana/wallet-adapter-react';
 //@ts-ignore
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion'
 
+const ConnectButton = styled(WalletMultiButton)`
+  height: 50px;
+`;
+
+const DisconnectButton = styled(WalletDisconnectButton)`
+  height: 50px;
+`;
+
 const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
   ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
   : undefined;
