@@ -606,7 +606,7 @@ Accordion
 --------------------------*/
 
 .accordion-wrapper .accordion-item h3.accordion-title {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   margin: 0;
 }
 
@@ -614,27 +614,21 @@ Accordion
   position: relative;
   display: flex;
   align-items: center;
-  background: #c4c4c4;
-  border-radius: 1rem;
+  background: transparent;
   border: none;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  font-family: 'Heebo';
   width: 100%;
   text-align: left;
-  color: #ffffff;
+  color: #999;
   font-weight: bold;
   margin-top: 0.5rem;
-  padding: 1rem;
 }
 
 .accordion-wrapper .accordion-item h3.accordion-title button.active {
-  background-color: #44413d;
-  color: #ffffff;
-  border: grey solid 1px;
+  color: #333;
 }
 
-.accordion-wrapper .accordion-item h3.accordion-title button:hover {
-    background-color: #44413d;
-}
 
 .accordion-wrapper .accordion-item h3.accordion-title button span.title-wrapper {
   display: block;
@@ -650,13 +644,13 @@ Accordion
 
 
 .accordion-wrapper .accordion-item h3.accordion-title button span.icon-wrapper span.minus {
-  content: url('https://github.com/peteraiello/custom-react-accordion/tree/master/src/assets/line.svg');
+  content: '-';
   width: 24px;
   height: 24px;
 }
 
 .accordion-wrapper .accordion-item h3.accordion-title button span.icon-wrapper span.plus {
-  content: url('https://github.com/peteraiello/custom-react-accordion/tree/master/src/assets/plus.svg');
+  content: '-';
   width: 24px;
   height: 24px;
   transform: rotate(90deg);
@@ -665,20 +659,16 @@ Accordion
 }
 
 .accordion-wrapper .accordion-item .accordion-panel .panel-close { 
-  background: rgb(241, 239, 229);
   box-sizing: border-box;
   padding: 0.5rem 1rem 0 1rem;
   opacity:0;
   width:100%;
   height:0;
   overflow: hidden;
-  transition-timing-function: ease-out;
-  transition: all 1s;
 }
 
 .accordion-wrapper .accordion-item .accordion-panel .panel-open {
   overflow: hidden;
-  background:rgb(241, 239, 229);
   padding: 1rem;
   margin-bottom: 1rem;
   box-sizing: border-box;
@@ -686,15 +676,17 @@ Accordion
   opacity:1;
   width:100%;
   height: auto;
-  transition-timing-function: ease-in;
-  transition: all 1s;
 }
 
-.accordion-wrapper .accordion-item .accordion-panel p {
+.accordion-wrapper .accordion-item .accordion-panel {
   margin: 0;
+  font-size: 14px;
+  color: #555;
+
 }
 
 .accordion-item {
   background-color: rgb(241, 239, 229);
   border: 1px transparent;
 }
+

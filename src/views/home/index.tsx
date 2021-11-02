@@ -57,7 +57,7 @@ function Home() {
         to fight & beat child cancer!`
       }, {
         "title": "What can I do with my JOJO?",
-        "content": `You are JOJO and JOJO is you.Enjoy it!You are free to use it as a profile picture, to show your support, to print it, to send it
+        "content": `You are JOJO and JOJO is you. Enjoy it! You are free to use it as a profile picture, to show your support, to print it, to send it
         as a gift (hopefully to a good friend), to sell it, to keep it...But it's fully yours
         and noone can ever do anything about it!`
       }, {
