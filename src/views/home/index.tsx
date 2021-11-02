@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import FairLaunchContainer from "../../components/FairLaunchContainer";
 /* import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -14,6 +14,31 @@ import { useWallet } from '@solana/wallet-adapter-react';
 //@ts-ignore
 import {AccordionWrapper, AccordionItem} from 'custom-react-accordion'
 
+export const GlobalStyles = createGlobalStyle`
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+  *, *::after, *::before {
+    box-sizing: border-box;
+  }
+  body {
+    align-items: center;
+    background: #0D0C1D;
+    color: #EFFFFA;
+    display: flex;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    height: 100vh;
+    justify-content: center;
+    text-rendering: optimizeLegibility;
+  }
+  `
+export const theme = {
+  primaryDark: '#0D0C1D',
+  primaryLight: '#EFFFFA',
+  primaryHover: '#343078',
+  mobile: '576px',
+}
 
 const ConnectButton = styled(WalletMultiButton)`
   height: 50px;
@@ -168,18 +193,6 @@ function Home() {
                 </ConnectButton> : <DisconnectButton className="button button-border rounded-pill">
                     Disconnect
                 </DisconnectButton> }
-              </div>
-
-              <div id="primary-menu-trigger">
-                <svg className="svg-trigger" viewBox="0 0 100 100">
-                  <path
-                    d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"
-                  ></path>
-                  <path d="m 30,50 h 40"></path>
-                  <path
-                    d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"
-                  ></path>
-                </svg>
               </div>
 
               <nav className="primary-menu">
