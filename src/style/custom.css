@@ -676,12 +676,15 @@ Accordion
   opacity:1;
   width:100%;
   height: auto;
+  transition-timing-function: ease-in;
+  transition: all 0.1s;
 }
 
 .accordion-wrapper .accordion-item .accordion-panel {
   margin: 0;
   font-size: 14px;
-  color: #555;
+  color: #333;
+  text-align: justify;
 
 }
 
