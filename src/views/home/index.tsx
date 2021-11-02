@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled from 'styled-components';
 import FairLaunchContainer from "../../components/FairLaunchContainer";
 /* import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -13,14 +13,6 @@ import { WalletMultiButton, WalletDisconnectButton } from '@solana/wallet-adapte
 import { useWallet } from '@solana/wallet-adapter-react';
 //@ts-ignore
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion'
-
-const ConnectButton = styled(WalletMultiButton)`
-  height: 50px;
-`;
-
-const DisconnectButton = styled(WalletDisconnectButton)`
-  height: 50px;
-`;
 
 const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
   ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
@@ -167,6 +159,18 @@ function Home() {
                 </WalletMultiButton> : <WalletDisconnectButton className="button button-border rounded-pill">
                   Disconnect
                 </WalletDisconnectButton>}
+              </div>
+
+              <div id="primary-menu-trigger">
+                <svg className="svg-trigger" viewBox="0 0 100 100">
+                  <path
+                    d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"
+                  ></path>
+                  <path d="m 30,50 h 40"></path>
+                  <path
+                    d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"
+                  ></path>
+                </svg>
               </div>
 
               <nav className="primary-menu">
