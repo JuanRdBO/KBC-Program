@@ -62,25 +62,25 @@ function Home() {
         and noone can ever do anything about it!`
       }, {
         "title": "Who is the team behind KidsBeatCancer?",
-        "content": `KidsBeatCancer has been created by 4 people from Barcelona who
+        "content": <div>KidsBeatCancer has been created by 4 people from Barcelona who
         joined because they were all open and motivated to
-        work on something meaningful and fun.If you are too,
-        ${<a href="mailto:jojo@kidsbeatcancer.org" className="h-op-07" style={{ color: "black" }}>
-          <strong>contact us</strong>.
-        </a>} Let's make good things happen!`
+        work on something meaningful and fun. If you are too, 
+        <a href="mailto:jojo@kidsbeatcancer.org" className="h-op-07" style={{ color: "black" }}>
+          <strong> contact us</strong>.
+        </a> Let's make good things happen!</div>
       }, {
         "title": "Why should I get a JOJO?",
-        "content": `When you purchase a JOJO you will be contributing to research projects to fight
+        "content": <div>When you purchase a JOJO you will be contributing to research projects to fight
         child cancer and activities for the children themselves.Moreover, you will be
         rewarded with Exclusive Passes and IRL Passes!
         
-        Check ${<ScrollLink
+        Check {<ScrollLink
           to="future" spy={true} smooth={true} offset={0} duration={500} style={{ color: "black" }}>
           <strong>JOJOs Future</strong>
-        </ScrollLink> }to see what's comming and how you can be rewarded for long-term owning a JOJO.
+        </ScrollLink>} to see what's comming and how you can be rewarded for long-term owning a JOJO.
 
         Also, by owning a JOJO you will be eligible to enter Merchandise, NFT and SOL
-        giveaways that will start once the minting is completed!`
+        giveaways that will start once the minting is completed!</div>
       }, {
         "title": "Are there any reserved JOJO's?",
         "content": `We have reserved 321 JOJOs for the centers and institutions that will help this
@@ -88,14 +88,14 @@ function Home() {
         collaborations, etc.The 4000 remaining are all available for purchase.`
       }, {
         "title": "How can I get a JOJO?",
-        "content": `JOJOs will be sold using the Fair Launch Protocol built by Metaplex.
+        "content": <div>JOJOs will be sold using the Fair Launch Protocol built by Metaplex.
 
         If you want more information, here you have a brief explanation of what is it and how it works:
         
         With the Fair Launch Protocol buyers can bid on the price they want
         for buying a certain NFT.It's comprised by 3 phases:
-
-        ${<ul className="dashed">
+        <br/> <br/>
+        {<ul className="dashed">
         <li className="dashed">
           The <strong>Bidding Phase</strong> where buyers come in and
           set the price they are willing to pay in the range the creator has
@@ -114,10 +114,14 @@ function Home() {
           will be refunded.
         </li>
       </ul>}
-        `
-      }, {
-        "title": "What are we setting up for the JOJO Fair Launch Protocol?",
-        "content": `${<ul className="dashed">
+    
+      <br/>
+
+      What are we setting up for the JOJO Fair Launch Protocol?
+      
+      <br/> <br/>
+
+      {<ul className="dashed">
         <li className="dashed">
           Fees for fair launch.
         </li>
@@ -136,7 +140,8 @@ function Home() {
           the Anti Rug Reserve if we don't deliver as expected. That date is the 11th
           of November at 12UTC.
         </li>
-      </ul>}`
+      </ul>}
+      </div>
       }
     ]
 
@@ -670,12 +675,12 @@ function Home() {
                     Any questions?
                   </h3>
                   
-                  <AccordionWrapper style={{backgroundColor: "rgb(241, 239, 229)"}}>
+                  <AccordionWrapper>
                       {data.map((item, index) => (
-                          <AccordionItem key={index} index={index} title={item.title} description={item.content} style={{backgroundColor: "rgb(241, 239, 229)"}}/>
+                          <AccordionItem key={index} index={index} title={item.title} description={item.content}/>
                       ))}
                   </AccordionWrapper>
-                  
+
                 </div>
                 <div className="col-lg-4">
                   <img src="images/jojo jump.png" alt="" />
