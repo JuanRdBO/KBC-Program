@@ -26,7 +26,7 @@ import * as anchor from '@project-serum/anchor';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 import { useWallet } from '@solana/wallet-adapter-react';
-import { WalletDialogButton } from '@solana/wallet-adapter-material-ui';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 import {
   awaitTransactionSignatureConfirmation,
@@ -46,28 +46,28 @@ import {
 import { formatNumber, getAtaForMint, toDate } from '../../logic/utils';
 import Countdown from 'react-countdown';
 
-const ConnectButton = styled(WalletDialogButton)`
-  width: 100%;
+const ConnectButton = styled(WalletMultiButton)`
   height: 60px;
   margin-top: 10px;
   margin-bottom: 5px;
-  background: linear-gradient(180deg, #604ae5 0%, #813eee 100%);
-  color: white;
+  color: #333;
   font-size: 16px;
   font-weight: bold;
 `;
 
-const MintContainer = styled.div``; // add your styles here
+const MintContainer = styled.div`
+background-color: white;
+border: 2px solid red
+`; // add your styles here
 
 const MintButton = styled(Button)`
   width: 100%;
   height: 60px;
   margin-top: 10px;
   margin-bottom: 5px;
-  background: linear-gradient(180deg, #604ae5 0%, #813eee 100%);
   color: white;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 800;
 `; // add your styles here
 
 const dialogStyles: any = (theme: Theme) =>
@@ -75,12 +75,13 @@ const dialogStyles: any = (theme: Theme) =>
     root: {
       margin: 0,
       padding: theme.spacing(2),
+      backgroundColor: 'red'
     },
     closeButton: {
       position: 'absolute',
       right: theme.spacing(1),
       top: theme.spacing(1),
-      color: theme.palette.grey[500],
+      color: 'black',
     },
   });
 
@@ -139,11 +140,11 @@ const Header = (props: {
   const { phaseName, desc, date, status } = props;
   return (
     <Grid container justifyContent="center">
-      <Grid xs={6} justifyContent="center" direction="column">
-        <Typography variant="h5" style={{ fontWeight: 600 }}>
+      <Grid xs={6} justifyContent='center' direction="column">
+        <Typography style={{ fontWeight: 800, color: '#333', fontSize: 24, margin: 0,  textAlign: 'left' }}>
           {phaseName}
         </Typography>
-        <Typography variant="body1" color="textSecondary">
+        <Typography variant="body2" style={{color: '#333',textAlign: 'left' }}>
           {desc}
         </Typography>
       </Grid>
@@ -567,7 +568,6 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
           <Link
             component="button"
             variant="body2"
-            color="primary"
             align="right"
             onClick={() => {
               setAnitRugPolicyOpen(true);
@@ -577,11 +577,12 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
           </Link>
         </div>
       </Container>
-      <Container maxWidth="xs" style={{ position: 'relative' }}>
+      <Container maxWidth="xs" style={{ position: 'relative',  }}>
+      <div className='h-gradient-red-yellow border-0 ' style={{borderRadius: 10, padding: 3, border: '3px solid black',}}>
         <Paper
-          style={{ padding: 24, backgroundColor: '#151A1F', borderRadius: 6 }}
+          style={{ padding: 24, backgroundColor: 'white', borderRadius: 6,  }}
         >
-          <Grid container justifyContent="center" direction="column">
+          <Grid container justifyContent="center" direction="column" style={{background: 'white'}}>
             {phase === Phase.Phase0 && (
               <Header
                 phaseName={'Phase 0'}
@@ -1127,6 +1128,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
             )} */}
           </Grid>
         </Paper>
+        </div>
       </Container>
 
       {fairLaunch && (
