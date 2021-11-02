@@ -4468,7 +4468,7 @@ color-name@1.1.3:
 
 color-name@^1.0.0, color-name@^1.1.4, color-name@~1.1.4:
   version "1.1.4"
-  resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
+  resolved "https://registry.npmjs.org/color-name/-/color-name-1.1.4.tgz"
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
 
 color-string@^1.6.0:
@@ -5051,6 +5051,11 @@ csstype@^3.0.2:
   version "3.0.9"
   resolved "https://registry.npmjs.org/csstype/-/csstype-3.0.9.tgz"
   integrity sha512-rpw6JPxK6Rfg1zLOYCSwle2GFOOsnjmDYDaBwEcwoOg4qlsIVCN789VkBZDJAGi4T07gI4YSutR43t9Zz4Lzuw==
+
+custom-react-accordion@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/custom-react-accordion/-/custom-react-accordion-1.0.4.tgz#5bb66189d166643c71682f917f56ce6505a82487"
+  integrity sha512-SJzDML0VfnEmW8NY20yBGB0AsG6hcvkrvm4BhA21f7V3OPdntQy+sWbcut9keZZL1veJSmDlrsBsut6AQoTSnw==
 
 cyclist@^1.0.1:
   version "1.0.1"
@@ -7428,7 +7433,7 @@ is-typedarray@^1.0.0:
 
 is-url-superb@^4.0.0:
   version "4.0.0"
-  resolved "https://registry.yarnpkg.com/is-url-superb/-/is-url-superb-4.0.0.tgz#b54d1d2499bb16792748ac967aa3ecb41a33a8c2"
+  resolved "https://registry.npmjs.org/is-url-superb/-/is-url-superb-4.0.0.tgz"
   integrity sha512-GI+WjezhPPcbM+tqE9LnmsY5qqjwHzTvjJ36wxYX5ujNXefSUJ/T17r5bqDV8yLhcgB59KTPNOc9O9cmHTPWsA==
 
 is-weakref@^1.0.1:
@@ -9661,7 +9666,7 @@ postcss-custom-media@^7.0.8:
 
 postcss-custom-properties@^10.0.0, postcss-custom-properties@^8.0.11:
   version "10.0.0"
-  resolved "https://registry.yarnpkg.com/postcss-custom-properties/-/postcss-custom-properties-10.0.0.tgz#5cb31afc530f58ad241f1e836dd5f5f7065334df"
+  resolved "https://registry.npmjs.org/postcss-custom-properties/-/postcss-custom-properties-10.0.0.tgz"
   integrity sha512-55BPj5FudpCiPZzBaO+MOeqmwMDa+nV9/0QBJBfhZjYg6D9hE+rW9lpMBLTJoF4OTXnS5Po4yM1nMlgkPbCxFg==
   dependencies:
     postcss "^7.0.17"
@@ -10209,7 +10214,7 @@ postcss-values-parser@^2.0.0, postcss-values-parser@^2.0.1:
 
 postcss-values-parser@^4.0.0:
   version "4.0.0"
-  resolved "https://registry.yarnpkg.com/postcss-values-parser/-/postcss-values-parser-4.0.0.tgz#3b4625e649279613f52842f1c81f2064321beec7"
+  resolved "https://registry.npmjs.org/postcss-values-parser/-/postcss-values-parser-4.0.0.tgz"
   integrity sha512-R9x2D87FcbhwXUmoCXJR85M1BLII5suXRuXibGYyBJ7lVDEpRIdKZh4+8q5S+/+A4m0IoG1U5tFw39asyhX/Hw==
   dependencies:
     color-name "^1.1.4"
