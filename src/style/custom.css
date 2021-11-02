@@ -608,6 +608,8 @@ Accordion
 .accordion-wrapper .accordion-item h3.accordion-title {
   font-size: 1.5rem;
   margin: 0;
+  margin-top: 20px ;
+
 }
 
 .accordion-wrapper .accordion-item h3.accordion-title button {
@@ -616,13 +618,14 @@ Accordion
   align-items: center;
   background: transparent;
   border: none;
-  font-size: 1rem;
+  font-size: 18px;
   font-family: 'Heebo';
   width: 100%;
   text-align: left;
-  color: #999;
+  color: #aaa;
   font-weight: bold;
   margin-top: 0.5rem;
+  margin-left: 20px;
 }
 
 .accordion-wrapper .accordion-item h3.accordion-title button.active {
@@ -642,15 +645,20 @@ Accordion
   justify-content: center;
 }
 
+.accordion-wrapper .accordion-item h3.accordion-title::before {
+  content: "❓";
+  font-size: 14px;
+  margin-top: 4px;
+  position:absolute;
+}
+
 
 .accordion-wrapper .accordion-item h3.accordion-title button span.icon-wrapper span.minus {
-  content: '-';
   width: 24px;
   height: 24px;
 }
 
 .accordion-wrapper .accordion-item h3.accordion-title button span.icon-wrapper span.plus {
-  content: '-';
   width: 24px;
   height: 24px;
   transform: rotate(90deg);
@@ -661,10 +669,12 @@ Accordion
 .accordion-wrapper .accordion-item .accordion-panel .panel-close { 
   box-sizing: border-box;
   padding: 0.5rem 1rem 0 1rem;
-  opacity:0;
+  opacity:1;
   width:100%;
   height:0;
   overflow: hidden;
+  margin-bottom: 10px ;
+
 }
 
 .accordion-wrapper .accordion-item .accordion-panel .panel-open {
@@ -677,7 +687,8 @@ Accordion
   width:100%;
   height: auto;
   transition-timing-function: ease-in;
-  transition: all 0.1s;
+  transition: all 0.3s;
+  margin-bottom: 10px ;
 }
 
 .accordion-wrapper .accordion-item .accordion-panel {
@@ -688,11 +699,12 @@ Accordion
 
 }
 
-.accordion-item {
-  background-color: rgb(241, 239, 229);
-  border: 1px transparent;
+.accordion-wrapper .accordion-item {
+  background-color: transparent;
+  border: none;
+  border-top: 1px dashed #00000010;
 }
 
-/*--------------------
-Hamnurger menu
----------------------*/
+.accordion-wrapper :first-child{
+  border: none !important
+}

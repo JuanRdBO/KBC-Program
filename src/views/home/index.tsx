@@ -12,7 +12,7 @@ import * as anchor from '@project-serum/anchor';
 import { WalletMultiButton, WalletDisconnectButton } from '@solana/wallet-adapter-react-ui';
 import { useWallet } from '@solana/wallet-adapter-react';
 //@ts-ignore
-import {AccordionWrapper, AccordionItem} from 'custom-react-accordion'
+import { AccordionWrapper, AccordionItem } from 'custom-react-accordion'
 
 export const GlobalStyles = createGlobalStyle`
   html, body {
@@ -65,40 +65,40 @@ const txTimeout = 30000; // milliseconds (confirm this works for your project)
 
 function Home() {
   const wallet = useWallet();
-  
+
   const data = [
-      {
-        "title": "What are JOJOs?",
-        "content": `JOJO is the character illustrated in a series of NFTs collectibles
+    {
+      "title": "What are JOJOs?",
+      "content": `JOJO is the character illustrated in a series of NFTs collectibles
         under the name KidsBeatCancer.The NFT collection comprises 4.321 unique
         JOJOs, each one of them designed with remarkable traits that combined create
         a unique and special JOJO.`
-      }, {
-        "title": "What happens if I purchase a JOJO?",
-        "content": `You make a change, and not only in your wallet where you will see your JOJO.You enter
+    }, {
+      "title": "What happens if I purchase a JOJO?",
+      "content": `You make a change, and not only in your wallet where you will see your JOJO.You enter
         the KidsBeatCancer community where your voice will
         be heard regarding this and other initiatives alike, you are gifted with a paid version of
         the JOJO Canvas app, you enter a 20 SOL raffle and, last but not least, you are donating 33% of the purchase
         to fight & beat child cancer!`
-      }, {
-        "title": "What can I do with my JOJO?",
-        "content": `You are JOJO and JOJO is you. Enjoy it! You are free to use it as a profile picture, to show your support, to print it, to send it
+    }, {
+      "title": "What can I do with my JOJO?",
+      "content": `You are JOJO and JOJO is you. Enjoy it! You are free to use it as a profile picture, to show your support, to print it, to send it
         as a gift (hopefully to a good friend), to sell it, to keep it...But it's fully yours
         and noone can ever do anything about it!`
-      }, {
-        "title": "Who is the team behind KidsBeatCancer?",
-        "content": <div>KidsBeatCancer has been created by 4 people from Barcelona who
+    }, {
+      "title": "Who is the team behind KidsBeatCancer?",
+      "content": <div>KidsBeatCancer has been created by 4 people from Barcelona who
         joined because they were all open and motivated to
-        work on something meaningful and fun. If you are too, 
+        work on something meaningful and fun. If you are too,
         <a href="mailto:jojo@kidsbeatcancer.org" className="h-op-07" style={{ color: "black" }}>
           <strong> contact us</strong>.
         </a> Let's make good things happen!</div>
-      }, {
-        "title": "Why should I get a JOJO?",
-        "content": <div>When you purchase a JOJO you will be contributing to research projects to fight
+    }, {
+      "title": "Why should I get a JOJO?",
+      "content": <div>When you purchase a JOJO you will be contributing to research projects to fight
         child cancer and activities for the children themselves.Moreover, you will be
         rewarded with Exclusive Passes and IRL Passes!
-        
+
         Check {<ScrollLink
           to="future" spy={true} smooth={true} offset={0} duration={500} style={{ color: "black" }}>
           <strong>JOJOs Future</strong>
@@ -106,69 +106,69 @@ function Home() {
 
         Also, by owning a JOJO you will be eligible to enter Merchandise, NFT and SOL
         giveaways that will start once the minting is completed!</div>
-      }, {
-        "title": "Are there any reserved JOJO's?",
-        "content": `We have reserved 321 JOJOs for the centers and institutions that will help this
+    }, {
+      "title": "Are there any reserved JOJO's?",
+      "content": `We have reserved 321 JOJOs for the centers and institutions that will help this
         become a reality, for the community to be used in giveaways, competitions and airdrops, for marketing promotions and
         collaborations, etc.The 4000 remaining are all available for purchase.`
-      }, {
-        "title": "How can I get a JOJO?",
-        "content": <div>JOJOs will be sold using the Fair Launch Protocol built by Metaplex.
+    }, {
+      "title": "How can I get a JOJO?",
+      "content": <div>JOJOs will be sold using the Fair Launch Protocol built by Metaplex.
 
         If you want more information, here you have a brief explanation of what is it and how it works:
-        
+
         With the Fair Launch Protocol buyers can bid on the price they want
         for buying a certain NFT.It's comprised by 3 phases:
-        <br/> <br/>
+        <br /> <br />
         {<ul className="dashed">
-        <li className="dashed">
-          The <strong>Bidding Phase</strong> where buyers come in and
-          set the price they are willing to pay in the range the creator has
-          specified.
-        </li>
-        <li className="dashed">
-          The <strong>Grace Period</strong> where you can adjust your
-          bid in order to be eligible for a raffle ticket.Thus, if you final bid
-          ends up below the median you are not eligible for a raffle ticket
-          which means you can't get a JOJO.
-        </li>
-        <li className="dashed">
-          The <strong>Raffle Phase</strong> where the raffle happens.If your final
-          bid is higher than the median then you enter the raffle!Now the lottery runs and
-          the winners are randomly chosen.If you are one of them bravo!If not, your tokens
-          will be refunded.
-        </li>
-      </ul>}
-    
-      <br/>
+          <li className="dashed">
+            The <strong>Bidding Phase</strong> where buyers come in and
+            set the price they are willing to pay in the range the creator has
+            specified.
+          </li>
+          <li className="dashed">
+            The <strong>Grace Period</strong> where you can adjust your
+            bid in order to be eligible for a raffle ticket.Thus, if you final bid
+            ends up below the median you are not eligible for a raffle ticket
+            which means you can't get a JOJO.
+          </li>
+          <li className="dashed">
+            The <strong>Raffle Phase</strong> where the raffle happens.If your final
+            bid is higher than the median then you enter the raffle!Now the lottery runs and
+            the winners are randomly chosen.If you are one of them bravo!If not, your tokens
+            will be refunded.
+          </li>
+        </ul>}
 
-      What are we setting up for the JOJO Fair Launch Protocol?
-      
-      <br/> <br/>
+        <br />
 
-      {<ul className="dashed">
-        <li className="dashed">
-          Fees for fair launch.
-        </li>
-        <li className="dashed">
-          A minimum price of 0.5 SOL and a maixmum price of 4 SOL.
-        </li>
-        <li className="dashed">
-          An anti rug reserve of the 50% to issue refunds in case of a rug.
-        </li>
-        <li className="dashed">
-          An anti rug token requirement of 2000 tokens, which is the minimum amount of unclaimed
-          tokens at which point the anti rug reserve fund is released to KidsBeatCancer.
-        </li>
-        <li className="dashed">
-          The self destruct date at which buyers will have the option of getting a refund from
-          the Anti Rug Reserve if we don't deliver as expected. That date is the 11th
-          of November at 12UTC.
-        </li>
-      </ul>}
+        What are we setting up for the JOJO Fair Launch Protocol?
+
+        <br /> <br />
+
+        {<ul className="dashed">
+          <li className="dashed">
+            Fees for fair launch.
+          </li>
+          <li className="dashed">
+            A minimum price of 0.5 SOL and a maixmum price of 4 SOL.
+          </li>
+          <li className="dashed">
+            An anti rug reserve of the 50% to issue refunds in case of a rug.
+          </li>
+          <li className="dashed">
+            An anti rug token requirement of 2000 tokens, which is the minimum amount of unclaimed
+            tokens at which point the anti rug reserve fund is released to KidsBeatCancer.
+          </li>
+          <li className="dashed">
+            The self destruct date at which buyers will have the option of getting a refund from
+            the Anti Rug Reserve if we don't deliver as expected. That date is the 11th
+            of November at 12UTC.
+          </li>
+        </ul>}
       </div>
-      }
-    ]
+    }
+  ]
   return (
     <div>
 
@@ -188,11 +188,11 @@ function Home() {
               </div>
 
               <div className="header-misc">
-              {!wallet.connected ? <ConnectButton className="button button-border rounded-pill">
-                    Connect
+                {!wallet.connected ? <ConnectButton className="button button-border rounded-pill">
+                  Connect
                 </ConnectButton> : <DisconnectButton className="button button-border rounded-pill">
-                    Disconnect
-                </DisconnectButton> }
+                  Disconnect
+                </DisconnectButton>}
               </div>
 
               <nav className="primary-menu">
@@ -673,11 +673,11 @@ function Home() {
                   <h3 className="fw-bolder h1 my-5 gradient-text gradient-red-yellow">
                     Any questions?
                   </h3>
-                  
+
                   <AccordionWrapper>
-                      {data.map((item, index) => (
-                          <AccordionItem key={index} index={index} title={item.title} description={item.content}/>
-                      ))}
+                    {data.map((item, index) => (
+                        <AccordionItem key={index} index={index} title={item.title} description={item.content} />
+                    ))}
                   </AccordionWrapper>
 
                 </div>
