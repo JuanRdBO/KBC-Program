@@ -572,6 +572,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
             onClick={() => {
               setAnitRugPolicyOpen(true);
             }}
+            style={{textDecoration: 'none', color: '#555', fontWeight: 600, fontSize: 12}}
           >
             Anti-Rug Policy
           </Link>
