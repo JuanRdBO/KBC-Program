@@ -531,27 +531,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
 
   return (
     <Container style={{ marginTop: 55 }}>
-      <Container maxWidth="xs" style={{ position: 'relative' }}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-          }}
-        >
-          <Link
-            component="button"
-            variant="body2"
-            align="right"
-            onClick={() => {
-              setAnitRugPolicyOpen(true);
-            }}
-            style={{ textDecoration: 'none', color: '#555', fontWeight: 600, fontSize: 12 }}
-          >
-            Anti-Rug Policy
-          </Link>
-        </div>
-      </Container>
+
       <Container maxWidth="xs" style={{ position: 'relative', }}>
         <div className='gradient-red-yellow border-0 ' style={{ borderRadius: 10, padding: 3, border: '3px solid black', }}>
           <Paper
@@ -677,7 +657,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
                   ].includes(phase) &&
                     fairLaunch?.ticket?.data?.state.withdrawn && (
                       <div style={{ paddingTop: '20px' }}>
-                        <Alert severity="error"  icon={false}  variant="outlined" style={{border: 'none', margin: 0, padding: 0, fontSize: 12}}>
+                        <Alert severity="error" icon={false} variant="outlined" style={{ border: 'none', margin: 0, padding: 0, fontSize: 12 }}>
                           Your bid was withdrawn and cannot be adjusted or
                           re-inserted.
                         </Alert>
@@ -691,7 +671,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
                       fairLaunch?.ticket?.data?.amount,
                     ) && (
                       <div style={{ paddingTop: '20px' }}>
-                        <Alert severity="warning"  icon={false}  variant="outlined" style={{border: 'none', margin: 0, padding: 0, fontSize: 12}}>
+                        <Alert severity="warning" icon={false} variant="outlined" style={{ border: 'none', margin: 0, padding: 0, fontSize: 12 }}>
                           Your bid is currently below the median and will not be
                           eligible for the raffle.
                         </Alert>
@@ -705,7 +685,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
                       fairLaunch?.ticket?.data?.amount,
                     ) && (
                       <div style={{ paddingTop: '20px' }}>
-                        <Alert severity="error"  icon={false}  variant="outlined" style={{border: 'none', margin: 0, padding: 0, fontSize: 12}}>
+                        <Alert severity="error" icon={false} variant="outlined" style={{ border: 'none', margin: 0, padding: 0, fontSize: 12 }}>
                           Your bid was below the median and was not included in
                           the raffle. You may click <em>Withdraw</em> when the
                           raffle ends or you will be automatically issued one when
@@ -714,7 +694,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
                       </div>
                     )}
                   {notEnoughSOL && (
-                    <Alert severity="error" icon={false}  variant="outlined" style={{border: 'none', margin: 0, padding: 0, fontSize: 12}}>
+                    <Alert severity="error" icon={false} variant="outlined" style={{ border: 'none', margin: 0, padding: 0, fontSize: 12 }}>
                       You do not have enough SOL in your account to place this
                       bid.
                     </Alert>
@@ -857,18 +837,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
                 justifyContent="space-between"
                 color="textSecondary"
               >
-                <Link
-                  component="button"
-                  variant="body2"
-                  align="left"
-                  onClick={() => {
-                    setHowToOpen(true);
-                  }}
-                  style={{ textDecoration: 'none', color: '#555', fontWeight: 600, fontSize: 12, marginTop: 5 }}
 
-                >
-                  How this raffle works
-                </Link>
                 {fairLaunch?.ticket.data && (
                   <Link
                     component="button"
@@ -1119,43 +1088,75 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
           </Paper>
         </div>
       </Container>
+      <Container maxWidth="xs" style={{ position: 'relative' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Link
+            component="button"
+            variant="body2"
+            align="left"
+            onClick={() => {
+              setHowToOpen(true);
+            }}
+            style={{ textDecoration: 'none', color: '#555', fontWeight: 600, fontSize: 12 }}
 
+          >
+            How this raffle works
+          </Link>
+          <Link
+            component="button"
+            variant="body2"
+            align="right"
+            onClick={() => {
+              setAnitRugPolicyOpen(true);
+            }}
+            style={{ textDecoration: 'none', color: '#555', fontWeight: 600, fontSize: 12 }}
+          >
+            Anti-Rug Policy
+          </Link>
+        </div>
+      </Container>
       {fairLaunch && (
         <Container
           maxWidth="xs"
           style={{ position: 'relative', marginTop: 10 }}
         >
-          <div style={{ margin: 20 }}>
+          <div style={{ margin: '20px 10px' }}>
             <Grid container direction="row" wrap="nowrap">
               <Grid container md={4} direction="column">
-                <Typography variant="body2" >
+                <Typography variant="body2" style={{fontSize: 12, color: '#777'}} >
                   Bids
                 </Typography>
                 <Typography
                   variant="h6"
-                  style={{ fontWeight: 'bold' }}
+                  style={{ fontWeight: 800, fontSize: 28  }}
                 >
                   {fairLaunch?.state.numberTicketsSold.toNumber() || 0}
                 </Typography>
               </Grid>
               <Grid container md={4} direction="column">
-                <Typography variant="body2" >
+                <Typography variant="body2" style={{fontSize: 12, color: '#777'}}>
                   Median bid
                 </Typography>
                 <Typography
                   variant="h6"
-                  style={{ fontWeight: 'bold' }}
+                  style={{ fontWeight: 800, fontSize: 28  }}
                 >
                   ◎ {formatNumber.format(median)}
                 </Typography>
               </Grid>
               <Grid container md={4} direction="column">
-                <Typography variant="body2">
+                <Typography variant="body2" style={{fontSize: 12, color: '#777'}}>
                   Total raised
                 </Typography>
                 <Typography
                   variant="h6"
-                  style={{ fontWeight: 'bold' }}
+                  style={{ fontWeight: 800, fontSize: 28  }}
                 >
                   ◎{' '}
                   {formatNumber.format(
@@ -1175,7 +1176,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
         <Alert
           onClose={() => setAlertState({ ...alertState, open: false })}
           severity={alertState.severity}
-          icon={false}  variant="outlined" style={{border: 'none', margin: 0, padding: 0, fontSize: 12}}
+          icon={false} variant="outlined" style={{ border: 'none', margin: 0, padding: 0, fontSize: 12 }}
         >
           {alertState.message}
         </Alert>

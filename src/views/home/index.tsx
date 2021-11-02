@@ -15,14 +15,6 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion'
 import Navbar from '../../components/Nav/navBar';
 
-const ConnectButton = styled(WalletMultiButton)`
-  height: 50px;
-`;
-
-const DisconnectButton = styled(WalletDisconnectButton)`
-  height: 50px;
-`;
-
 const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
   ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
   : undefined;
@@ -163,11 +155,11 @@ function Home() {
               </div>
 
               <div className="header-misc">
-                {!wallet.connected ? <ConnectButton className="button button-border rounded-pill">
+                {!wallet.connected ? <WalletMultiButton className="button button-border rounded-pill">
                   Connect
-                </ConnectButton> : <DisconnectButton className="button button-border rounded-pill">
+                </WalletMultiButton> : <WalletDisconnectButton className="button button-border rounded-pill">
                   Disconnect
-                </DisconnectButton>}
+                </WalletDisconnectButton>}
               </div>
 
               <Navbar />
