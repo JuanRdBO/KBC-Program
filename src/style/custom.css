@@ -708,3 +708,9 @@ Accordion
 .accordion-wrapper :first-child{
   border: none !important
 }
+
+.hamburger-div{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5vh;
+}

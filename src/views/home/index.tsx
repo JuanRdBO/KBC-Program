@@ -13,6 +13,7 @@ import { WalletMultiButton, WalletDisconnectButton } from '@solana/wallet-adapte
 import { useWallet } from '@solana/wallet-adapter-react';
 //@ts-ignore
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion'
+import Navbar from '../../components/Nav/navBar';
 
 const ConnectButton = styled(WalletMultiButton)`
   height: 50px;
@@ -169,26 +170,8 @@ function Home() {
                 </DisconnectButton>}
               </div>
 
-              <nav className="primary-menu">
-                <ul className="menu-container">
-                  <li className="menu-item">
-                    <ScrollLink className="menu-link" to="learn" spy={true} smooth={true} offset={0} duration={750}>
-                      <div>Learn</div>
-                    </ScrollLink>
-                  </li>
+              <Navbar />
 
-                  <li className="menu-item">
-                    <ScrollLink className="menu-link" to="future" spy={true} smooth={true} offset={0} duration={1250}>
-                      <div>JOJOs Future</div>
-                    </ScrollLink>
-                  </li>
-                  <li className="menu-item">
-                    <Link className="menu-link" to="/purpose">
-                      <div>Purpose</div>
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
             </div>
           </div>
         </div>
