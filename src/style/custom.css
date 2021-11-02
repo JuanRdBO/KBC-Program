@@ -284,10 +284,10 @@ ul.dashed {
   list-style-type: none;
 }
 ul.dashed > li {
-  text-indent: -5px;
+  text-indent: -10px;
 }
 ul.dashed > li:before {
-  content: '-';
+  content: '- ';
   text-indent: -5px;
 }
 
@@ -608,8 +608,7 @@ Accordion
 .accordion-wrapper .accordion-item h3.accordion-title {
   font-size: 1.5rem;
   margin: 0;
-  margin-top: 20px ;
-
+  margin-top: 20px;
 }
 
 .accordion-wrapper .accordion-item h3.accordion-title button {
@@ -632,8 +631,11 @@ Accordion
   color: #333;
 }
 
-
-.accordion-wrapper .accordion-item h3.accordion-title button span.title-wrapper {
+.accordion-wrapper
+  .accordion-item
+  h3.accordion-title
+  button
+  span.title-wrapper {
   display: block;
   position: relative;
   width: 100%;
@@ -646,19 +648,28 @@ Accordion
 }
 
 .accordion-wrapper .accordion-item h3.accordion-title::before {
-  content: "❓";
+  content: '❓';
   font-size: 14px;
   margin-top: 4px;
-  position:absolute;
+  position: absolute;
 }
 
-
-.accordion-wrapper .accordion-item h3.accordion-title button span.icon-wrapper span.minus {
+.accordion-wrapper
+  .accordion-item
+  h3.accordion-title
+  button
+  span.icon-wrapper
+  span.minus {
   width: 24px;
   height: 24px;
 }
 
-.accordion-wrapper .accordion-item h3.accordion-title button span.icon-wrapper span.plus {
+.accordion-wrapper
+  .accordion-item
+  h3.accordion-title
+  button
+  span.icon-wrapper
+  span.plus {
   width: 24px;
   height: 24px;
   transform: rotate(90deg);
@@ -666,15 +677,14 @@ Accordion
   transition: all 1s;
 }
 
-.accordion-wrapper .accordion-item .accordion-panel .panel-close { 
+.accordion-wrapper .accordion-item .accordion-panel .panel-close {
   box-sizing: border-box;
   padding: 0.5rem 1rem 0 1rem;
-  opacity:1;
-  width:100%;
-  height:0;
+  opacity: 1;
+  width: 100%;
+  height: 0;
   overflow: hidden;
-  margin-bottom: 10px ;
-
+  margin-bottom: 10px;
 }
 
 .accordion-wrapper .accordion-item .accordion-panel .panel-open {
@@ -683,12 +693,12 @@ Accordion
   margin-bottom: 1rem;
   box-sizing: border-box;
   border-radius: 1rem;
-  opacity:1;
-  width:100%;
+  opacity: 1;
+  width: 100%;
   height: auto;
   transition-timing-function: ease-in;
   transition: all 0.3s;
-  margin-bottom: 10px ;
+  margin-bottom: 10px;
 }
 
 .accordion-wrapper .accordion-item .accordion-panel {
@@ -696,7 +706,6 @@ Accordion
   font-size: 14px;
   color: #333;
   text-align: justify;
-
 }
 
 .accordion-wrapper .accordion-item {
@@ -705,12 +714,58 @@ Accordion
   border-top: 1px dashed #00000010;
 }
 
-.accordion-wrapper :first-child{
-  border: none !important
+.accordion-wrapper :first-child {
+  border: none !important;
+}
+
+/* FLP */
+
+.flp-button {
+  margin-top: 10px;
+  color: #fff ;
+  font-family: 'Heebo';
+  letter-spacing: 1.2px;
+  font-weight: 700 !important;
+  border: 2px solid #222 !important;
+  border-radius: 50px !important;
+  background-color: #222;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  width: 100%;
+  padding: 15px 30px;
+}
+
+.flp-button:hover:enabled {
+  color: #222 !important;
+  background-color: #fff !important;
+}
+
+.flp-button:disabled {
+  background-color: #ccc;
+  border: 2px solid #ccc !important;
+
+}
+
+.flp-button:hover:disabled {
+  cursor: not-allowed;
 }
 
 .hamburger-div{
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.5vh;
+}
+
+.flp-dialog-title{
+  margin: 0;
+  font-weight: 800;
+  font-size: 24px;
+  color: #333;
+  text-transform: uppercase;
+}
+
+.flp-dialog-content{
+  font-size: 16px;
+  color: #333;
+  font-weight: 300;
 }
