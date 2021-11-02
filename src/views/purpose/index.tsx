@@ -1,5 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { WalletDialogButton } from '@solana/wallet-adapter-material-ui';
+
+const ConnectButton = styled(WalletDialogButton)`
+  height: 50px;
+`;
 
 function Purpose() {
   return (
@@ -19,11 +25,7 @@ function Purpose() {
                   </Link>
                 </div>
 
-                <div className="header-misc">
-                <Link to="#" className="button button-border rounded-pill">
-                  Connect
-                </Link>
-                </div>
+                
 
                 <div id="primary-menu-trigger">
                   <svg className="svg-trigger" viewBox="0 0 100 100">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
+import styled from 'styled-components';
 import FairLaunchContainer from "../../components/FairLaunchContainer";
 /* import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -8,7 +9,20 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography'; */
 import * as anchor from '@project-serum/anchor';
+import { WalletDialogButton, WalletDisconnectButton, WalletMultiButton } from '@solana/wallet-adapter-material-ui';
+import { useWallet } from '@solana/wallet-adapter-react';
 
+const ConnectButton = styled(WalletDialogButton)`
+  height: 50px;
+`;
+
+const DisconnectButton = styled(WalletDisconnectButton)`
+  height: 50px;
+`;
+
+const MultitButton = styled(WalletMultiButton)`
+  height: 50px;
+`;
 
 const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
   ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
@@ -26,8 +40,11 @@ const startDateSeed = parseInt(process.env.REACT_APP_CANDY_START_DATE!, 10);
 const txTimeout = 30000; // milliseconds (confirm this works for your project)
 
 function Home() {
+  const wallet = useWallet();
+  
   return (
     <div>
+
       {/* Header */}
       <header id="header" className="border-bottom-0 no-sticky transparent-header">
         <div id="header-wrap">
@@ -44,9 +61,11 @@ function Home() {
               </div>
 
               <div className="header-misc">
-                <Link to="#" className="button button-border rounded-pill">
-                  Connect
-                </Link>
+              {!wallet.connected ? <ConnectButton className="button button-border rounded-pill">
+                    Connect
+                </ConnectButton> : <DisconnectButton className="button button-border rounded-pill">
+                    Disconnect
+                </DisconnectButton> }
               </div>
 
               <div id="primary-menu-trigger">
@@ -93,7 +112,7 @@ function Home() {
           background: "#fff url('images/hero-bg.svg') repeat top center",
           backgroundSize: "cover",
           position: 'relative',
-          top: 50
+          top: 150
         }}
       >
         <div className="vertical-middle">
