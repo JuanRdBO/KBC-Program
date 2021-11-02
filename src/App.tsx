@@ -1,9 +1,4 @@
-import './style/bootstrap.css';
-import './App.css';
-import './style/font-icons.css';
-import './style/animate.css';
-import './style/fonts.css';
-import './style/custom.css';
+
 import { useMemo } from 'react';
 
 import { clusterApiUrl } from '@solana/web3.js';
@@ -24,6 +19,13 @@ import { ThemeProvider, createTheme } from '@material-ui/core';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import Home from './views/home';
 import Purpose from './views/purpose';
+
+import './style/bootstrap.css';
+import './App.css';
+import './style/font-icons.css';
+import './style/animate.css';
+import './style/fonts.css';
+import './style/custom.css';
 
 const theme = createTheme({
   palette: {
@@ -48,7 +50,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <ConnectionProvider endpoint={endpoint}>
         <WalletProvider wallets={wallets} autoConnect>
-          <WalletModalProvider logo="images/logo.png">
+          <WalletModalProvider logo="images/logo.png" featuredWallets={4}>
             <Switch>
               <Route path="/purpose" component={() => <Purpose />} />
               <Route path="/" component={() => <Home />} />
