@@ -19,7 +19,7 @@ import {
   WalletProvider,
 } from '@solana/wallet-adapter-react';
 
-import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { ThemeProvider, createTheme } from '@material-ui/core';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import Home from './views/home';
@@ -48,12 +48,12 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <ConnectionProvider endpoint={endpoint}>
         <WalletProvider wallets={wallets} autoConnect>
-          <WalletDialogProvider>
+          <WalletModalProvider logo="images/logo.png">
             <Switch>
               <Route path="/purpose" component={() => <Purpose />} />
               <Route path="/" component={() => <Home />} />
             </Switch>
-          </WalletDialogProvider>
+          </WalletModalProvider>
         </WalletProvider>
       </ConnectionProvider>
     </ThemeProvider>

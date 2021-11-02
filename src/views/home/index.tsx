@@ -9,18 +9,14 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography'; */
 import * as anchor from '@project-serum/anchor';
-import { WalletDialogButton, WalletDisconnectButton, WalletMultiButton } from '@solana/wallet-adapter-material-ui';
+import { WalletMultiButton, WalletDisconnectButton } from '@solana/wallet-adapter-react-ui';
 import { useWallet } from '@solana/wallet-adapter-react';
 
-const ConnectButton = styled(WalletDialogButton)`
+const ConnectButton = styled(WalletMultiButton)`
   height: 50px;
 `;
 
 const DisconnectButton = styled(WalletDisconnectButton)`
-  height: 50px;
-`;
-
-const MultitButton = styled(WalletMultiButton)`
   height: 50px;
 `;
 
