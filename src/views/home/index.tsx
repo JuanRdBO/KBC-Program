@@ -14,6 +14,8 @@ import { useWallet } from '@solana/wallet-adapter-react';
 
 const ConnectButton = styled(WalletMultiButton)`
   height: 50px;
+  background-color: red;
+  background: pink;
 `;
 
 const DisconnectButton = styled(WalletDisconnectButton)`
