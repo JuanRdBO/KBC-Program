@@ -13,7 +13,6 @@ import { WalletMultiButton, WalletDisconnectButton } from '@solana/wallet-adapte
 import { useWallet } from '@solana/wallet-adapter-react';
 //@ts-ignore
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion'
-import Navbar from '../../components/Nav/navBar';
 
 const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
   ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
@@ -162,8 +161,26 @@ function Home() {
                 </WalletDisconnectButton>}
               </div>
 
-              <Navbar />
+              <nav className="primary-menu">
+                <ul className="menu-container">
+                  <li className="menu-item">
+                    <ScrollLink className="menu-link" to="learn" spy={true} smooth={true} offset={0} duration={750}>
+                      <div>Learn</div>
+                    </ScrollLink>
+                  </li>
 
+                  <li className="menu-item">
+                    <ScrollLink className="menu-link" to="future" spy={true} smooth={true} offset={0} duration={1250}>
+                      <div>JOJOs Future</div>
+                    </ScrollLink>
+                  </li>
+                  <li className="menu-item">
+                    <Link className="menu-link" to="/purpose">
+                      <div>Purpose</div>
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
             </div>
           </div>
         </div>

@@ -750,12 +750,6 @@ Accordion
   cursor: not-allowed;
 }
 
-.hamburger-div{
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5vh;
-}
-
 .flp-dialog-title{
   margin: 0;
   font-weight: 800;
