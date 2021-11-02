@@ -6,8 +6,6 @@ import './style/fonts.css';
 import './style/custom.css';
 import { useMemo } from 'react';
 
-
-import * as anchor from '@project-serum/anchor';
 import { clusterApiUrl } from '@solana/web3.js';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {

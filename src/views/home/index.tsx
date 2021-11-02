@@ -1,17 +1,33 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
+import FairLaunchContainer from "../../components/FairLaunchContainer";
 /* import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography'; */
+import * as anchor from '@project-serum/anchor';
 
+
+const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
+  ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
+  : undefined;
+
+const fairLaunchId = new anchor.web3.PublicKey(
+  process.env.REACT_APP_FAIR_LAUNCH_ID!,
+);
+
+const rpcHost = process.env.REACT_APP_SOLANA_RPC_HOST!;
+const connection = new anchor.web3.Connection(rpcHost);
+
+const startDateSeed = parseInt(process.env.REACT_APP_CANDY_START_DATE!, 10);
+
+const txTimeout = 30000; // milliseconds (confirm this works for your project)
 
 function Home() {
   return (
     <div>
-
       {/* Header */}
       <header id="header" className="border-bottom-0 no-sticky transparent-header">
         <div id="header-wrap">
@@ -25,13 +41,6 @@ function Home() {
                     width='60'
                   />
                 </Link>
-
-                <a href="index.html" className="retina-logo">
-                  <img
-                    src="images/logo.png"
-                    alt="KidsBeatCancer"
-                  />
-                </a>
               </div>
 
               <div className="header-misc">
@@ -79,45 +88,53 @@ function Home() {
 
       {/* Slider  */}
       <section
-        id="slider"
-        className="slider-element min-vh-md-100 py-4 include-header"
+        className=" min-vh-md-100 py-4 "
         style={{
           background: "#fff url('images/hero-bg.svg') repeat top center",
           backgroundSize: "cover",
+          position: 'relative',
+          top: 50
         }}
       >
-        <div className="slider-inner">
-          <div className="vertical-middle slider-element-fade">
-            <div className="container text-center py-5">
-              <div className="emphasis-title mb-2">
-                <h4 className="text-uppercase ls3 fw-bolder mb-0">Welcome To</h4>
-                <h1>
-                  <div className="oc-item gradient-text gradient-red-yellow">
-                    KidsBeatCancer
-                  </div>
-                </h1>
-              </div>
-              <div className="mx-auto" style={{ maxWidth: 600 }}>
-                <p className="lead fw-normal text-dark mb-5">
-                  Become one of us, get a JOJO and join this adventure trying to
-                  help kids fight and beat cancer.
-                </p>
-                <Link
-                  to="/purpose"
-                  className="button button-dark button-hero h-translatey-3 tf-ts button-reveal overflow-visible bg-dark text-end"
-                >
-                  <span>The Purpose</span>
-                  <i className="icon-line-arrow-right"></i>
-                </Link>
-                <ScrollLink className="button button-large button-light text-dark bg-transparent m-0"
-                  to="learn" spy={true} smooth={true} offset={0} duration={750}>
-                  <i className="icon-line2-arrow-down fw-bold"></i>
-                  <u>More About Jojo</u>
-                </ScrollLink>
-              </div>
+        <div className="vertical-middle">
+          <div className="container text-center py-5" >
+            <div className="emphasis-title mb-2">
+              <h4 className="text-uppercase ls3 fw-bolder mb-0">Welcome To</h4>
+              <h1>
+                <div className="oc-item gradient-text gradient-red-yellow">
+                  KidsBeatCancer
+                </div>
+              </h1>
+            </div>
+            <div className="mx-auto" style={{ maxWidth: 600 }}>
+              <p className="lead fw-normal text-dark mb-5">
+                Get a JOJO and join this adventure to help kids beat cancer!
+              </p>
+
+              <Link
+                to="/purpose"
+                className="button button-dark button-hero h-translatey-3 tf-ts button-reveal overflow-visible bg-dark text-end"
+              >
+                <span>The Purpose</span>
+                <i className="icon-line-arrow-right"></i>
+              </Link>
+              <ScrollLink className="button button-large button-light text-dark bg-transparent m-0"
+                to="learn" spy={true} smooth={true} offset={0} duration={750}>
+                <i className="icon-line2-arrow-down fw-bold"></i>
+                <u>More About Jojo</u>
+              </ScrollLink>
+            </div>
+            <div className="">
+              <FairLaunchContainer candyMachineId={candyMachineId}
+                fairLaunchId={fairLaunchId}
+                connection={connection}
+                startDate={startDateSeed}
+                txTimeout={txTimeout} />
             </div>
           </div>
         </div>
+
+
       </section>
 
       {/* Content */}
@@ -179,18 +196,16 @@ function Home() {
                   className="row align-items-center justify-content-center h-100"
                 >
                   <div className="col-auto text-center">
-                    <a
-                      href="#"
+                    <span
                       className="display-4 fw-bolder gradient-text gradient-red-yellow d-inline-block mx-4 h-op-08 op-ts"
                     >
                       #research
-                    </a>
-                    <a
-                      href="#"
+                    </span>
+                    <span
                       className="display-4 fw-bolder gradient-text gradient-red-yellow text-white d-inline-block mx-4 h-op-08 op-ts"
                     >
                       #activities
-                    </a>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -645,14 +660,10 @@ function Home() {
                     <div className="accordion-content">
                       When you purchase a JOJO you will be contributing to research projects to fight
                       child cancer and activities for the children themselves.Moreover, you will be
-                      rewarded with Exclusive Passes and IRL Passes! <br /><br />Check <a
-                        href="#"
-                        data-scrollto="#future"
-                        data-easing="easeInOutExpo"
-                        data-speed="1250"
-                        data-offset="70" className="h-op-07" style={{ color: "black" }}>
+                      rewarded with Exclusive Passes and IRL Passes! <br /><br />Check <ScrollLink
+                        to="future" spy={true} smooth={true} offset={0} duration={500} style={{ color: "black" }}>
                         <strong>JOJOs Future</strong>
-                      </a> to see what's comming and how you can be rewarded for long-term owning a JOJO.
+                      </ScrollLink> to see what's comming and how you can be rewarded for long-term owning a JOJO.
 
                       Also, by owning a JOJO you will be eligible to enter Merchandise, NFT and SOL
                       giveaways that will start once the minting is completed!
@@ -779,17 +790,17 @@ function Home() {
               </div>
               <div className="col-sm-4  row align-items-center justify-content-center footer-social" style={{ margin: 'auto' }}>
                 <div className="col-auto text-center">
-                  <a href="#" className="social-icon  si-small  si-discord si-dark">
+                  <a href="https://discord.com" target='_blank' rel="noreferrer" className="social-icon  si-small  si-discord si-dark">
                     <i className="icon-discord"></i>
                     <i className="icon-discord"></i>
                   </a>
 
-                  <a href="#" className="social-icon  si-small si-twitter si-dark">
+                  <a href="https://twitter.com" target='_blank' rel="noreferrer" className="social-icon  si-small si-twitter si-dark">
                     <i className="icon-twitter"></i>
                     <i className="icon-twitter"></i>
                   </a>
 
-                  <a href="#" className="social-icon si-small  si-github si-dark">
+                  <a href="https://github.com" target='_blank' rel="noreferrer" className="social-icon si-small  si-github si-dark">
                     <i className="icon-github"></i>
                     <i className="icon-github"></i>
                   </a>

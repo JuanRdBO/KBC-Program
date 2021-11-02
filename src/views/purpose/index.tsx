@@ -20,9 +20,9 @@ function Purpose() {
                 </div>
 
                 <div className="header-misc">
-                  <a href="#" className="button button-border rounded-pill">
-                    Connect
-                  </a>
+                <Link to="#" className="button button-border rounded-pill">
+                  Connect
+                </Link>
                 </div>
 
                 <div id="primary-menu-trigger">
@@ -46,9 +46,9 @@ function Purpose() {
                     </li>
 
                     <li className="menu-item current">
-                      <a className="menu-link" href="#">
+                      <div className="menu-link">
                         <div>Purpose</div>
-                      </a>
+                      </div>
                     </li>
                   </ul>
                 </nav>
@@ -257,17 +257,17 @@ function Purpose() {
                 </div>
                 <div className="col-sm-4  row align-items-center justify-content-center footer-social" style={{ margin: 'auto' }}>
                   <div className="col-auto text-center">
-                    <a href="#" className="social-icon  si-small  si-discord si-dark">
+                    <a href="https://discord.com" target='_blank' rel="noreferrer" className="social-icon  si-small  si-discord si-dark">
                       <i className="icon-discord"></i>
                       <i className="icon-discord"></i>
                     </a>
 
-                    <a href="#" className="social-icon  si-small si-twitter si-dark">
+                    <a href="https://twitter.com" target='_blank' rel="noreferrer" className="social-icon  si-small si-twitter si-dark">
                       <i className="icon-twitter"></i>
                       <i className="icon-twitter"></i>
                     </a>
 
-                    <a href="#" className="social-icon si-small  si-github si-dark">
+                    <a href="https://github.com" target='_blank' rel="noreferrer" className="social-icon si-small  si-github si-dark">
                       <i className="icon-github"></i>
                       <i className="icon-github"></i>
                     </a>

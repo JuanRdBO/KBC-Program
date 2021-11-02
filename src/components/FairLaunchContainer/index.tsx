@@ -190,7 +190,7 @@ function getPhase(
   return Phase.Unknown;
 }
 
-export interface HomeProps {
+export interface FairLaunchContainerProps {
   candyMachineId?: anchor.web3.PublicKey;
   fairLaunchId: anchor.web3.PublicKey;
   connection: anchor.web3.Connection;
@@ -230,7 +230,7 @@ const isWinner = (
   return isWinner > 0;
 };
 
-const FLP = (props: HomeProps) => {
+const FairLaunchContainer = (props: FairLaunchContainerProps) => {
   const [fairLaunchBalance, setFairLaunchBalance] = useState<number>(0);
   const [yourSOLBalance, setYourSOLBalance] = useState<number | null>(null);
 
@@ -555,7 +555,7 @@ const FLP = (props: HomeProps) => {
   );
 
   return (
-    <Container style={{ marginTop: 100 }}>
+    <Container style={{ marginTop: 35}}>
       <Container maxWidth="xs" style={{ position: 'relative' }}>
         <div
           style={{
@@ -567,7 +567,7 @@ const FLP = (props: HomeProps) => {
           <Link
             component="button"
             variant="body2"
-            color="textSecondary"
+            color="primary"
             align="right"
             onClick={() => {
               setAnitRugPolicyOpen(true);
@@ -1201,4 +1201,4 @@ interface AlertState {
   severity: 'success' | 'info' | 'warning' | 'error' | undefined;
 }
 
-export default FLP;
+export default FairLaunchContainer;
