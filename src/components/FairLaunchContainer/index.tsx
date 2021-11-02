@@ -579,7 +579,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
         </div>
       </Container>
       <Container maxWidth="xs" style={{ position: 'relative',  }}>
-      <div className='h-gradient-red-yellow border-0 ' style={{borderRadius: 10, padding: 3, border: '3px solid black',}}>
+      <div className='gradient-red-yellow border-0 ' style={{borderRadius: 10, padding: 3, border: '3px solid black',}}>
         <Paper
           style={{ padding: 24, backgroundColor: 'white', borderRadius: 6,  }}
         >
