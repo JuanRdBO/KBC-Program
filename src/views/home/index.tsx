@@ -144,20 +144,6 @@ function Home() {
       </div>
       }
     ]
-
-  const styles = {
-      bgColor: 'rgb(241, 239, 229)',
-      titleTextColor: "grey",
-      rowTitleColor: "black",
-      rowContentColor: 'grey',
-      // arrowColor: "red",
-  };
-
-  const config = {
-      animate: true,
-      arrowIcon: "+",
-      tabFocus: true
-  };
   return (
     <div>
 

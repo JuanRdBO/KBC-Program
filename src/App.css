@@ -3816,8 +3816,8 @@ body:not(.top-search-open) .top-search-parent #primary-menu-trigger {
 }
 
 .svg-trigger {
-  width: 30px;
-  height: 30px;
+  width: 90px;
+  height: 90px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: transform 400ms;
