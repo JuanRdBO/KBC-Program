@@ -48,7 +48,7 @@ import Countdown from 'react-countdown';
 
 const ConnectButton = styled(WalletMultiButton)`
   height: 60px;
-  margin-top: 10px;
+  margin-top: 30px;
   margin-bottom: 5px;
   color: #333;
   font-size: 16px;
