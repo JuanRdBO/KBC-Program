@@ -12,7 +12,8 @@ import * as anchor from '@project-serum/anchor';
 import { WalletMultiButton, WalletDisconnectButton } from '@solana/wallet-adapter-react-ui';
 import { useWallet } from '@solana/wallet-adapter-react';
 //@ts-ignore
-import { AccordionWrapper, AccordionItem } from 'custom-react-accordion'
+import { AccordionWrapper, AccordionItem } from 'custom-react-accordion';
+
 
 const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
   ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
@@ -139,7 +140,52 @@ function Home() {
     <div>
 
       {/* Header */}
-      <header id="header" className="border-bottom-0 no-sticky transparent-header">
+      <div className="header">
+        <div className="logo">
+          <Link to={`/`} className='standard-logo'>
+            <img
+              src="images/logo.png"
+              alt="KidsBeatCancer"
+              width='60'
+            />
+          </Link>
+        </div>
+        <div className='header-button'>
+          {!wallet.connected ? <WalletMultiButton className="button button-border rounded-pill header-element-centered">
+            Connect
+          </WalletMultiButton> : <WalletDisconnectButton className="button button-border rounded-pill header-element-centered">
+            Disconnect
+          </WalletDisconnectButton>}
+        </div>
+        <div className="header-links">
+          <ul className="header-items">
+            <li className="header-item ">
+              <ScrollLink className="header-link" to="learn" spy={true} smooth={true} offset={0} duration={750}>
+                <div>Learn</div>
+              </ScrollLink>
+            </li>
+
+            <li className="header-item">
+              <ScrollLink className="header-link" to="future" spy={true} smooth={true} offset={0} duration={1250}>
+                <div>Future</div>
+              </ScrollLink>
+            </li>
+            <li className="header-item">
+              <Link className="header-link" to="/purpose">
+                <div>Purpose</div>
+              </Link>
+            </li>
+          </ul>
+        </div>
+        <div className='header-button header-button-sm'>
+          {!wallet.connected ? <WalletMultiButton className="button button-border rounded-pill header-element-centered">
+            Connect
+          </WalletMultiButton> : <WalletDisconnectButton className="button button-border rounded-pill header-element-centered">
+            Disconnect
+          </WalletDisconnectButton>}
+        </div>
+      </div>
+      {/*  <header id="header" className="border-bottom-0 no-sticky transparent-header">
         <div id="header-wrap">
           <div className="container">
             <div className="header-row">
@@ -176,13 +222,13 @@ function Home() {
               <nav className="primary-menu">
                 <ul className="menu-container">
                   <li className="menu-item">
-                    <ScrollLink className="menu-link" to="learn" spy={true} smooth={true} offset={0} duration={750}>
+                    <ScrollLink className="menu-link r-hidden" to="learn" spy={true} smooth={true} offset={0} duration={750}>
                       <div>Learn</div>
                     </ScrollLink>
                   </li>
 
                   <li className="menu-item">
-                    <ScrollLink className="menu-link" to="future" spy={true} smooth={true} offset={0} duration={1250}>
+                    <ScrollLink className="menu-link r-hidden" to="future" spy={true} smooth={true} offset={0} duration={1250}>
                       <div>JOJOs Future</div>
                     </ScrollLink>
                   </li>
@@ -196,7 +242,7 @@ function Home() {
             </div>
           </div>
         </div>
-      </header>
+      </header> */}
 
       {/* Slider  */}
       <section
@@ -205,11 +251,11 @@ function Home() {
           background: "#fff url('images/hero-bg.svg') repeat top center",
           backgroundSize: "cover",
           position: 'relative',
-          top: 150
+          top: 25,
         }}
       >
         <div className="vertical-middle">
-          <div className="container text-center py-5" >
+          <div className="container text-center py-0" >
             <div className="emphasis-title mb-2">
               <h4 className="text-uppercase ls3 fw-bolder mb-0">Welcome To</h4>
               <h1>
@@ -245,8 +291,6 @@ function Home() {
             </div>
           </div>
         </div>
-
-
       </section>
 
       {/* Content */}
@@ -258,7 +302,7 @@ function Home() {
             className="section mb-0 pt-3 pb-0"
             style={{
               backgroundColor: '#f4f4f4',
-              marginTop: 150,
+              marginTop: 50,
               overflow: 'visible',
             }}
           >
@@ -497,7 +541,7 @@ function Home() {
               </div>
 
               <div className="row gutter-30 mb-5 align-items-stretch">
-                <div className="col-md-6 col-sm-6">
+                <div className="col-md-6 col-sm-6 col-xl-4">
                   <div
                     className="card d-flex align-items-end flex-column p-1 border-0 h-gradient-red-yellow"
                   >
@@ -519,7 +563,7 @@ function Home() {
                   </div>
                 </div>
 
-                <div className="col-md-6 col-sm-6">
+                <div className="col-md-6 col-sm-6 col-xl-4">
                   <div
                     className="card d-flex align-items-end flex-column p-1 border-0 h-gradient-red-yellow"
                   >
@@ -541,7 +585,7 @@ function Home() {
                   </div>
                 </div>
 
-                <div className="col-md-6 col-sm-6">
+                <div className="col-md-6 col-sm-6 col-xl-4">
                   <div
                     className="card d-flex align-items-end flex-column p-1 border-0 h-gradient-red-yellow"
                   >
@@ -564,7 +608,7 @@ function Home() {
                   </div>
                 </div>
 
-                <div className="col-md-6 col-sm-6">
+                <div className="col-md-6 col-sm-6 col-xl-4">
                   <div
                     className="card d-flex align-items-end flex-column p-1 border-0 h-gradient-red-yellow"
                   >
@@ -588,7 +632,7 @@ function Home() {
                   </div>
                 </div>
 
-                <div className="col-md-6 col-sm-6">
+                <div className="col-md-6 col-sm-6 col-xl-4">
                   <div
                     className="card d-flex align-items-end flex-column p-1 border-0 h-gradient-red-yellow"
                   >
@@ -612,7 +656,7 @@ function Home() {
                   </div>
                 </div>
 
-                <div className="col-md-6 col-sm-6">
+                <div className="col-md-6 col-sm-6 col-xl-4">
                   <div
                     className="card d-flex align-items-end flex-column p-1 border-0 h-gradient-red-yellow"
                   >
@@ -654,7 +698,7 @@ function Home() {
 
                   <AccordionWrapper>
                     {data.map((item, index) => (
-                        <AccordionItem key={index} index={index} title={item.title} description={item.content} />
+                      <AccordionItem key={index} index={index} title={item.title} description={item.content} />
                     ))}
                   </AccordionWrapper>
 

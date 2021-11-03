@@ -27,6 +27,7 @@ import './style/animate.css';
 import './style/fonts.css';
 import './style/custom.css';
 
+
 const theme = createTheme({
   palette: {
     type: 'dark',
