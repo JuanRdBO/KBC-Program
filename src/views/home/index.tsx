@@ -191,64 +191,7 @@ function Home() {
           </WalletDisconnectButton>}
         </div>
       </div>
-      {/*  <header id="header" className="border-bottom-0 no-sticky transparent-header">
-        <div id="header-wrap">
-          <div className="container">
-            <div className="header-row">
-              <div id="logo">
-                <Link to={`/`} className='standard-logo'>
-                  <img
-                    src="images/logo.png"
-                    alt="KidsBeatCancer"
-                    width='60'
-                  />
-                </Link>
-              </div>
-
-              <div className="header-misc">
-                {!wallet.connected ? <WalletMultiButton className="button button-border rounded-pill">
-                  Connect
-                </WalletMultiButton> : <WalletDisconnectButton className="button button-border rounded-pill">
-                  Disconnect
-                </WalletDisconnectButton>}
-              </div>
-
-              <div id="primary-menu-trigger">
-                <svg className="svg-trigger" viewBox="0 0 100 100">
-                  <path
-                    d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"
-                  ></path>
-                  <path d="m 30,50 h 40"></path>
-                  <path
-                    d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"
-                  ></path>
-                </svg>
-              </div>
-
-              <nav className="primary-menu">
-                <ul className="menu-container">
-                  <li className="menu-item">
-                    <ScrollLink className="menu-link r-hidden" to="learn" spy={true} smooth={true} offset={0} duration={750}>
-                      <div>Learn</div>
-                    </ScrollLink>
-                  </li>
-
-                  <li className="menu-item">
-                    <ScrollLink className="menu-link r-hidden" to="future" spy={true} smooth={true} offset={0} duration={1250}>
-                      <div>JOJOs Future</div>
-                    </ScrollLink>
-                  </li>
-                  <li className="menu-item">
-                    <Link className="menu-link" to="/purpose">
-                      <div>Purpose</div>
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </header> */}
+      
 
       {/* Slider  */}
       <section
@@ -792,7 +735,7 @@ function Home() {
         </div>
       </footer>
 
-      <div id="gotoTop" className="icon-double-angle-up bg-white text-dark rounded-circle shadow"></div>
+      {/* <div id="gotoTop" className="icon-double-angle-up bg-white text-dark rounded-circle shadow"></div> */}
 
     </div>
 
