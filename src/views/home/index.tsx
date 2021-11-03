@@ -162,23 +162,23 @@ function Home() {
           <ul className="header-items">
             <li className="header-item ">
               <ScrollLink className="header-link" to="learn" spy={true} smooth={true} offset={0} duration={750}>
-                <div>Learn</div>
+                Learn
               </ScrollLink>
             </li>
 
             <li className="header-item">
               <ScrollLink className="header-link" to="future" spy={true} smooth={true} offset={0} duration={1250}>
-                <div>Future</div>
+                Future
               </ScrollLink>
             </li>
             <li className="header-item">
               <ScrollLink className="header-link" to="donate" spy={true} smooth={true} offset={0} duration={1750}>
-                <div>Donate</div>
+                Donate
               </ScrollLink>
             </li>
             <li className="header-item">
               <Link className="header-link" to="/purpose">
-                <div>Purpose</div>
+                Purpose
               </Link>
             </li>
           </ul>

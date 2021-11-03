@@ -777,8 +777,6 @@ Accordion
 .header-link {
   font-weight: 600;
   display: inline;
-  margin: 0;
-  padding: 0;
   width: 85px;
 }
 
@@ -807,13 +805,8 @@ Accordion
   -webkit-text-fill-color: transparent;
 }
 
-@media screen and (max-width: 620px) {
-  .header {
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
+@media screen and (max-width: 676px) {
+
 
   .header-element-centered {
     margin: auto;
@@ -841,22 +834,28 @@ Accordion
   }
 
   .header-button {
-    margin: auto;
-    height: auto;
+    margin: 0;
     display: none;
   }
 
   .header-links {
+    height: auto;
     margin: auto;
-    text-align: center;
-
   }
+
 
   .header-items{
     display: flex;
     text-align: center;
     width: min-content;
     margin: auto
+  }
+
+  .header-link {
+    padding: 0 !important;
+    margin: 0;
+    width: 75px;
+    font-size: 14px !important;
   }
 
   .header-button-sm {
