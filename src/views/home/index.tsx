@@ -13,6 +13,7 @@ import { WalletMultiButton, WalletDisconnectButton } from '@solana/wallet-adapte
 import { useWallet } from '@solana/wallet-adapter-react';
 //@ts-ignore
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion';
+import CountUp from 'react-countup';
 
 
 const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
@@ -299,21 +300,21 @@ function Home() {
 
           {/* Learn */}
           <div id="learn"
-            className="section mb-0 pt-3 pb-0"
+            className="section mb-0 pt-5 pb-0"
             style={{
               backgroundColor: '#f4f4f4',
               marginTop: 50,
               overflow: 'visible',
             }}
           >
-            <div
+            {/*             <div
               className="shape-divider"
               data-shape="wave"
               data-height="150"
               data-outside="true"
               data-flip-vertical="true"
               data-fill="#F4F4F4"
-            ></div>
+            ></div> */}
             <div className="container">
               <div className="row justify-content-center text-center mt-5">
                 <div className="col-lg-8">
@@ -420,12 +421,7 @@ function Home() {
               <div className="col-md-4">
                 <div className="d-flex align-items-center justify-content-center">
                   <div className="counter counter-xlarge text-dark fw-bolder">
-                    <span
-                      data-from="1"
-                      data-to="4321"
-                      data-refresh-interval="4"
-                      data-speed="600"
-                    >4321</span>
+                    <CountUp end={4321} duration={2} />
                   </div>
                   <span style={{ textTransform: 'none' }}>
                     JOJOs
@@ -438,12 +434,7 @@ function Home() {
               <div className="col-md-4">
                 <div className="d-flex align-items-center justify-content-center">
                   <div className="counter counter-xlarge text-dark fw-bolder">
-                    <span
-                      data-from="0"
-                      data-to="33"
-                      data-refresh-interval="5"
-                      data-speed="1500"
-                    >33</span>
+                    <CountUp end={33} duration={2} />
                   </div>
                   <span style={{ textTransform: 'none' }}>
                     % of Proceeds
@@ -456,12 +447,7 @@ function Home() {
               <div className="col-md-4">
                 <div className="d-flex align-items-center justify-content-center">
                   <div className="counter counter-xlarge text-dark fw-bolder">
-                    <span
-                      data-from="0"
-                      data-to="66"
-                      data-refresh-interval="5"
-                      data-speed="1200"
-                    >66</span>
+                    <CountUp end={66} duration={2} />
                   </div>
                   <span style={{ textTransform: 'none' }}>
                     % of Royalties
@@ -683,12 +669,46 @@ function Home() {
             </div>
 
             <div className="clear"></div>
-
-
           </div>
 
+          {/* donate */}
+          <section id="donate"
+            className="section mb-0 pt-5 pb-0"
+            style={{
+              backgroundColor: '#f4f4f4',
+              marginTop: 50,
+              overflow: 'visible',
+              
+            }}
+          >
+            <div className="container">
+              <div className="row justify-content-center text-center mt-5 " >
+                <div className="col-lg-8">
+                  <div>
+                    <h3 className="fw-bolder h1 mb-4">
+                      DONATE TO&nbsp;
+                      <span className="gradient-text gradient-red-yellow">
+                        KIDSBEATCANCER.SOL
+                      </span>
+                    </h3>
+                    <p className="mb-5 lead text-black-50 fw-light">
+                      At KidsBeatCancer we want everyone to be able to collaborate with the 
+                      initiatives we are carrying on. Join us and help kids beat cancer by 
+                      donating to our &nbsp;
+                      <span className="gradient-text gradient-red-yellow">
+                        kidsbeatcancer.sol
+                      </span>
+                      &nbsp;wallet address or by 
+                    </p>
+                    <div style={{height: 700, border: '3px solid black', borderRadius: 12, marginBottom: 100}}></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* FAQS */}
-          <div className="section m-0" style={{ background: '#f1efe5', paddingTop: '100px' }}>
+          <div className="section m-0" style={{ background: '#f1efe5', paddingTop: '50px' }}>
             <div className="container">
               <div className="row align-items-center">
                 <div className="col-lg-8">
