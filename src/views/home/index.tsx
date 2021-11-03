@@ -172,6 +172,11 @@ function Home() {
               </ScrollLink>
             </li>
             <li className="header-item">
+              <ScrollLink className="header-link" to="donate" spy={true} smooth={true} offset={0} duration={1750}>
+                <div>Donate</div>
+              </ScrollLink>
+            </li>
+            <li className="header-item">
               <Link className="header-link" to="/purpose">
                 <div>Purpose</div>
               </Link>

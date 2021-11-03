@@ -777,7 +777,9 @@ Accordion
 .header-link {
   font-weight: 600;
   display: inline;
-  width: 100px;
+  margin: 0;
+  padding: 0;
+  width: 85px;
 }
 
 .header-item.current > .header-link,
