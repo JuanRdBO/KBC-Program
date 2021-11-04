@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const pubkeyToString = (key: PublicKey | null | string = '') => {
+export const pubkeyToString = (key: PublicKey | null | string = '') => {
   return typeof key === 'string' ? key : key?.toBase58() || '';
 };
 
@@ -89,8 +89,6 @@ export default function TokenDialog({
           metadata.some(m => pubkeyToString(m.info.mint) == w.address 
           || w.name == "Native SOL")
         )
-      
-  console.log("TOKENS", walletTokens)
 
   return (
     <Dialog

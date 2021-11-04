@@ -35,10 +35,33 @@ const theme = createTheme({
   },
 });
 
-const network = process.env.REACT_APP_SOLANA_NETWORK as WalletAdapterNetwork;
+const ENDPOINTS = [
+  {
+    name: 'mainnet-beta',
+    endpoint: 'https://api.metaplex.solana.com/',
+  },
+  {
+    name: 'mainnet-beta (Solana)',
+    endpoint: 'https://api.mainnet-beta.solana.com',
+  },
+  {
+    name: 'mainnet-beta (Serum)',
+    endpoint: 'https://solana-api.projectserum.com/',
+  },
+  {
+    name: 'testnet',
+    endpoint: 'https://api.testnet.solana.com',
+  },
+  {
+    name: 'devnet',
+    endpoint: 'https://api.devnet.solana.com',
+  },
+];
 
 const App = () => {
-  const endpoint = useMemo(() => clusterApiUrl(network), []);
+  const endpointUrl = ENDPOINTS[4].endpoint
+  
+  const endpoint = useMemo(() => endpointUrl, []);
 
   const wallets = useMemo(
     () => [getPhantomWallet(), getSolflareWallet(), getSolletWallet()],
@@ -47,22 +70,22 @@ const App = () => {
 
   return (
     <HashRouter basename={'/'}>
-    <ThemeProvider theme={theme}>
-      <ConnectionProvider endpoint={endpoint}>
-        <SPLTokenListProvider>
-          <WalletProvider wallets={wallets} autoConnect>
-            <MetaProvider>
-              <WalletModalProvider logo="images/logo.png" featuredWallets={4}>
-                <Switch>
-                  <Route path="/purpose" component={() => <Purpose />} />
-                  <Route path="/" component={() => <Home />} />
-                </Switch>
-              </WalletModalProvider>
-            </MetaProvider>
-          </WalletProvider>
-        </SPLTokenListProvider>
-      </ConnectionProvider>
-    </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <ConnectionProvider endpoint={endpoint}>
+          <SPLTokenListProvider>
+            <WalletProvider wallets={wallets} autoConnect>
+              <MetaProvider endpointUrl={endpointUrl}>
+                <WalletModalProvider logo="images/logo.png" featuredWallets={4}>
+                  <Switch>
+                    <Route path="/purpose" component={() => <Purpose />} />
+                    <Route path="/" component={() => <Home />} />
+                  </Switch>
+                </WalletModalProvider>
+              </MetaProvider>
+            </WalletProvider>
+          </SPLTokenListProvider>
+        </ConnectionProvider>
+      </ThemeProvider>
     </HashRouter>
   );
 };
