@@ -14,7 +14,7 @@ export interface ParsedAccountBase {
   }
 
 export interface MetaState {
-    metadata: ParsedAccount<Metadata>[];
+    metadata: Metadata[];
     fetchInProgress: boolean;
   }
 

@@ -68,7 +68,7 @@ export function MetaProvider({ children = null as any }) {
   /* console.log("META") */
 
   if (!endpointUrl) {
-    setEndpointUrl(ENDPOINTS[4].endpoint)
+    setEndpointUrl(ENDPOINTS[0].endpoint)
   }
 
   async function update() {

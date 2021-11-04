@@ -69,6 +69,7 @@ const pubkeyToString = (key: PublicKey | null | string = '') => {
 
 function Home() {
   const { metadata, isLoading, endpointUrl} = useMeta()
+  const tokenList = useTokenList()
   const wallet = useWallet();
   const connection = new Connection(endpointUrl, "confirmed");
 
@@ -176,8 +177,8 @@ function Home() {
     }
   ]  
 
-  const mint = new PublicKey("89CMLuSQdQsta5vyztjB3MfEajMzuRbiHFo9Noew2pHm")
-  
+  console.log("METADATA", metadata, tokenList)
+
   return (
     <div>
 

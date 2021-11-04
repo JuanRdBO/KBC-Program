@@ -1,9 +1,10 @@
 
 import { deserializeUnchecked } from 'borsh';
 import * as anchor from "@project-serum/anchor";
-import { PublicKey, AccountInfo } from "@solana/web3.js";
+import { PublicKey, AccountInfo, ConnectionConfig, Connection } from "@solana/web3.js";
 import { useState } from 'react';
 import { MetaState } from '../contexts/meta/types';
+import { getOrCreateAta } from './sendSol';
 export const METADATA_PREFIX = "metadata";
 
 class Creator {
@@ -105,29 +106,62 @@ export class Data {
   }
 }
 
-export class Metadata {
-  key: MetadataKey;
-  updateAuthority: PublicKey;
-  mint: PublicKey;
-  data: Data;
-  primarySaleHappened: boolean;
-  isMutable: boolean;
-  masterEdition?: PublicKey;
-  edition?: PublicKey;
-  constructor(args: {
-    updateAuthority: PublicKey;
-    mint: PublicKey;
-    data: Data;
-    primarySaleHappened: boolean;
-    isMutable: boolean;
-    masterEdition?: PublicKey;
-  }) {
-    this.key = MetadataKey.MetadataV1;
-    this.updateAuthority = args.updateAuthority;
+
+export class TokenAmount {
+  amount: string
+  decimals: number
+  uiAmount: number
+  uiAmountString: string
+  constructor(
+    args: {
+      amount: string;
+      decimals: number;
+      uiAmount: number;
+      uiAmountString: string;
+    }
+  ) {
+    this.amount = args.amount;
+    this.decimals = args.decimals;
+    this.uiAmount = args.uiAmount;
+    this.uiAmountString = args.uiAmountString;
+  }
+}
+
+export class Info {
+  isNFT: boolean;
+  isNative: boolean;
+  mint: string;
+  owner: string;
+  state: string;
+  tokenAmount: TokenAmount
+  constructor(
+    args: {
+      isNFT: boolean;
+      isNative: boolean;
+      mint: string;
+      owner: string;
+      state: string;
+      tokenAmount: TokenAmount
+    }
+  ) {
+    this.isNFT = args.isNFT;
+    this.isNative = args.isNative;
     this.mint = args.mint;
+    this.owner = args.owner;
+    this.state = args.state;
+    this.tokenAmount = args.tokenAmount;
+  }
+}
+
+export class Metadata {
+  data: Data;
+  info: Info;
+  constructor(args: {
+    data: Data;
+    info: Info;
+  }) {
     this.data = args.data;
-    this.primarySaleHappened = args.primarySaleHappened;
-    this.isMutable = args.isMutable;
+    this.info = args.info;
   }
 }
 
@@ -444,11 +478,6 @@ export const getMints = async (creatorId: string, url: string, tempCache?: MetaS
     console.log("LOADED!", metadata)
 
     return metadata
-    // download(
-    //   "mints-creatorId-" + Date.now() + ".json",
-    //   jsonFormat(deserialized.map(g => new PublicKey(g.mint).toBase58()), {
-    //     type: "space",
-    //     size: 2,
-    //   })
-    // );
+    
 }
+
