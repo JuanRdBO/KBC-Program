@@ -863,3 +863,13 @@ Accordion
     display: block;
   }
 }
+
+
+/* * Donation * */
+.donation-input{
+  border-bottom: 2px solid black !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 180px !important;
+
+}

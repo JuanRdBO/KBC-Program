@@ -14,7 +14,30 @@ import { useWallet } from '@solana/wallet-adapter-react';
 //@ts-ignore
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion';
 import CountUp from 'react-countup';
+import { Box, Input, InputAdornment, InputLabel, OutlinedInputProps, TextField, TextFieldProps, withStyles } from '@material-ui/core';
 
+const DonationTextField = withStyles({
+  root: {
+    '& .MuiInputBase-input': {
+      color: '#000', // Text color
+    },
+    '& .MuiInput-underline:before': {
+      borderBottomColor: 'white', // Semi-transparent underline
+    },
+    '& .MuiInput-underline:hover:before': {
+      borderBottomColor: '#777', // Solid underline on hover
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#000', // Solid underline on focus
+    },
+    "&:hover .MuiInputAdornment-root": {
+      color: 'red'
+    },
+    ".MuiInputAdornment-root ": {
+      color: 'blue'
+    }
+  },
+})(TextField);
 
 const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
   ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
@@ -33,6 +56,7 @@ const txTimeout = 30000; // milliseconds (confirm this works for your project)
 
 function Home() {
   const wallet = useWallet();
+
 
   const data = [
     {
@@ -191,7 +215,7 @@ function Home() {
           </WalletDisconnectButton>}
         </div>
       </div>
-      
+
 
       {/* Slider  */}
       <section
@@ -626,29 +650,58 @@ function Home() {
               backgroundColor: '#f4f4f4',
               marginTop: 50,
               overflow: 'visible',
-              
+
             }}
           >
             <div className="container">
-              <div className="row justify-content-center text-center mt-5 " >
-                <div className="col-lg-8">
-                  <div>
-                    <h3 className="fw-bolder h1 mb-4">
-                      DONATE TO&nbsp;
-                      <span className="gradient-text gradient-red-yellow">
-                        KIDSBEATCANCER.SOL
-                      </span>
-                    </h3>
-                    <p className="mb-5 lead text-black-50 fw-light">
-                      At KidsBeatCancer we want everyone to be able to collaborate with the 
-                      initiatives we are carrying on. Join us and help kids beat cancer by 
-                      donating to our &nbsp;
-                      <span className="gradient-text gradient-red-yellow">
-                        kidsbeatcancer.sol
-                      </span>
-                      &nbsp;wallet address or by 
-                    </p>
-                    <div style={{height: 700, border: '3px solid black', borderRadius: 12, marginBottom: 100}}></div>
+              <div className="row justify-content-center text-center mt-5 pb-5" >
+                <div className="col-lg-8 pb-3">
+                  <h3 className="fw-bolder h1 mb-4">
+                    DONATE TO&nbsp;
+                    <span className="gradient-text gradient-red-yellow">
+                      KIDSBEATCANCER.SOL
+                    </span>
+                  </h3>
+                  <p className="mb-5 lead text-black-50 fw-light">
+                    At KidsBeatCancer we want everyone to be able to collaborate with the
+                    initiatives we are carrying on. Join our purpose and support our mission by
+                    donating to our &nbsp;
+                    <strong style={{ color: '#333' }}>
+                      kidsbeatcancer.sol
+                    </strong>
+                    &nbsp;wallet address or by using&nbsp;
+                    <span className="gradient-text gradient-red-yellow fw-bolder">
+                      JOJO's Piggybank
+                    </span>
+                    :
+                  </p>
+                  <div style={{ padding: '300px 0', border: '3px solid black', borderRadius: 12, textAlign: 'center', margin: 'auto' }}>
+                    <DonationTextField
+                      className='donation-input'
+                      defaultValue={0.4321}
+                      inputProps={{
+                        style: {
+                          textAlign: 'center',
+                          color: 'black',
+                          fontWeight: 800,
+                          fontSize: 32,
+                          width: 180,
+                          margin: 'auto',
+                        },
+                      }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start" style={{color: 'green !important'}}>
+                            ◎
+                          </InputAdornment>
+                        ),
+                        endAdornment: 
+                          <InputAdornment position="end" style={{color: 'red !important'}}>
+                            SOL
+                          </InputAdornment>
+                        ,
+                      }}
+                    />
                   </div>
                 </div>
               </div>
