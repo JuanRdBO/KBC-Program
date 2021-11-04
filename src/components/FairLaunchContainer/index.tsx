@@ -8,11 +8,9 @@ import {
   Slider,
   Snackbar,
 } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import { createStyles, Theme } from '@material-ui/core/styles';
 import { PhaseCountdown } from '../Countdown';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';

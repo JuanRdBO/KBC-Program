@@ -1,63 +1,35 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { WalletDialogButton } from '@solana/wallet-adapter-material-ui';
-
-const ConnectButton = styled(WalletDialogButton)`
-  height: 50px;
-`;
 
 function Purpose() {
   return (
     <div>
-      <div id="wrapper" className="clearfix">
-        <header id="header" className="border-bottom-0 no-sticky transparent-header">
-          <div id="header-wrap">
-            <div className="container">
-              <div className="header-row">
-                <div id="logo">
-                  <Link to="/" className="standard-logo">
-                    <img
-                      src="images/logo.png"
-                      alt="KidsBeatCancer"
-                      width='60'
-                    />
-                  </Link>
-                </div>
-
-                
-
-                <div id="primary-menu-trigger">
-                  <svg className="svg-trigger" viewBox="0 0 100 100">
-                    <path
-                      d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"
-                    ></path>
-                    <path d="m 30,50 h 40"></path>
-                    <path
-                      d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"
-                    ></path>
-                  </svg>
-                </div>
-
-                <nav className="primary-menu">
-                  <ul className="menu-container">
-                    <li className="menu-item">
-                      <Link className="menu-link" to="/">
-                        <div>Home</div>
-                      </Link>
-                    </li>
-
-                    <li className="menu-item current">
-                      <div className="menu-link">
-                        <div>Purpose</div>
-                      </div>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
+        <div className="header" style={{margin: '0 50px'}}>
+          <div className="logo">
+            <Link to={`/`} className='standard-logo'>
+              <img
+                src="images/logo.png"
+                alt="KidsBeatCancer"
+                width='60'
+              />
+            </Link>
           </div>
-        </header>
+          <div className="header-links">
+            <ul className="header-items">
+
+              <li className="header-item">
+                <Link className="header-link" to="/">
+                  Home
+                </Link>
+              </li>
+              <li className="header-item current">
+                <Link className="header-link" to="/purpose">
+                  Puropse
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
 
         <section id="content" >
           <div className="content-wrap pb-0 " style={{
@@ -65,7 +37,7 @@ function Purpose() {
             backgroundSize: "cover",
           }}>
 
-            <div className="container mw-md mt-5">
+            <div className="container mw-md mt-0">
               <h2 className="display-3 fw-bolder">
                 The&nbsp;<span className="gradient-text gradient-red-yellow">Purpose</span>
 
@@ -289,12 +261,8 @@ function Purpose() {
             </div>
           </div>
         </footer>
-      </div>
 
-      <div
-        id="gotoTop"
-        className="icon-double-angle-up bg-white text-dark rounded-circle shadow"
-      ></div>
+      
     </div>
   );
 }

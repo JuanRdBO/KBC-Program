@@ -1,32 +1,20 @@
-import React, { Component, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
-import styled from 'styled-components';
 import FairLaunchContainer from "../../components/FairLaunchContainer";
-/* import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Typography from '@material-ui/core/Typography'; */
+
 import * as anchor from '@project-serum/anchor';
 import { WalletMultiButton, WalletDisconnectButton } from '@solana/wallet-adapter-react-ui';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 //@ts-ignore
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion';
 import CountUp from 'react-countup';
-import {TokenName, TokenIcon} from "../../components/TokenInfo"
-import { createMuiTheme, makeStyles } from "@material-ui/core/styles";
-import { Box, Button, Grid, InputAdornment, Paper, TextField } from '@material-ui/core';
 
 import {sendSol} from "../../logic/sendSol"
 import { Connection, PublicKey } from '@solana/web3.js';
-import { Wallet } from '@project-serum/anchor';
-import {
-  TokenListContainer,
-  TokenListProvider,
-} from "@solana/spl-token-registry";
+
 import { useTokenList } from '../../contexts/TokenList';
 import { useMeta } from '../../contexts/meta/meta';
+import { DonationPointEl } from '../../components/DonationPoint';
 
 const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
   ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
@@ -72,6 +60,7 @@ function Home() {
   const tokenList = useTokenList()
   const wallet = useWallet();
   const connection = new Connection(endpointUrl, "confirmed");
+
 
   const data = [
     {
@@ -204,18 +193,23 @@ function Home() {
           <ul className="header-items">
             <li className="header-item ">
               <ScrollLink className="header-link" to="learn" spy={true} smooth={true} offset={0} duration={750}>
-                <div>Learn</div>
+                Learn
               </ScrollLink>
             </li>
 
             <li className="header-item">
               <ScrollLink className="header-link" to="future" spy={true} smooth={true} offset={0} duration={1250}>
-                <div>Future</div>
+                Future
+              </ScrollLink>
+            </li>
+            <li className="header-item">
+              <ScrollLink className="header-link" to="donate" spy={true} smooth={true} offset={0} duration={1750}>
+                Donate
               </ScrollLink>
             </li>
             <li className="header-item">
               <Link className="header-link" to="/purpose">
-                <div>Purpose</div>
+                Purpose
               </Link>
             </li>
           </ul>
@@ -228,64 +222,7 @@ function Home() {
           </WalletDisconnectButton>}
         </div>
       </div>
-      {/*  <header id="header" className="border-bottom-0 no-sticky transparent-header">
-        <div id="header-wrap">
-          <div className="container">
-            <div className="header-row">
-              <div id="logo">
-                <Link to={`/`} className='standard-logo'>
-                  <img
-                    src="images/logo.png"
-                    alt="KidsBeatCancer"
-                    width='60'
-                  />
-                </Link>
-              </div>
 
-              <div className="header-misc">
-                {!wallet.connected ? <WalletMultiButton className="button button-border rounded-pill">
-                  Connect
-                </WalletMultiButton> : <WalletDisconnectButton className="button button-border rounded-pill">
-                  Disconnect
-                </WalletDisconnectButton>}
-              </div>
-
-              <div id="primary-menu-trigger">
-                <svg className="svg-trigger" viewBox="0 0 100 100">
-                  <path
-                    d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"
-                  ></path>
-                  <path d="m 30,50 h 40"></path>
-                  <path
-                    d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"
-                  ></path>
-                </svg>
-              </div>
-
-              <nav className="primary-menu">
-                <ul className="menu-container">
-                  <li className="menu-item">
-                    <ScrollLink className="menu-link r-hidden" to="learn" spy={true} smooth={true} offset={0} duration={750}>
-                      <div>Learn</div>
-                    </ScrollLink>
-                  </li>
-
-                  <li className="menu-item">
-                    <ScrollLink className="menu-link r-hidden" to="future" spy={true} smooth={true} offset={0} duration={1250}>
-                      <div>JOJOs Future</div>
-                    </ScrollLink>
-                  </li>
-                  <li className="menu-item">
-                    <Link className="menu-link" to="/purpose">
-                      <div>Purpose</div>
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </header> */}
 
       {/* Slider  */}
       <section
@@ -720,34 +657,33 @@ function Home() {
               backgroundColor: '#f4f4f4',
               marginTop: 50,
               overflow: 'visible',
-              
+
             }}
           >
             <div className="container">
-              <div className="row justify-content-center text-center mt-5 " >
-                <div className="col-lg-8">
-                  <div>
-                    <h3 className="fw-bolder h1 mb-4">
-                      DONATE TO&nbsp;
-                      <span className="gradient-text gradient-red-yellow">
-                        KIDSBEATCANCER.SOL
-                      </span>
-                    </h3>
-                    <p className="mb-5 lead text-black-50 fw-light">
-                      At KidsBeatCancer we want everyone to be able to collaborate with the 
-                      initiatives we are carrying on. Join us and help kids beat cancer by 
-                      donating to our &nbsp;
-                      <span className="gradient-text gradient-red-yellow">
-                        kidsbeatcancer.sol
-                      </span>
-                      &nbsp;wallet address or by 
-                    </p>
-                    <div style={{height: 700, border: '3px solid black', borderRadius: 12, marginBottom: 100}}>
-
-                    <Button variant="contained" onClick={() => sendSolFromBtn(wallet, connection)}>Send motherfucking SOL</Button>
-
-
-                    </div>
+              <div className="row justify-content-center text-center mt-5 pb-5" >
+                <div className="col-lg-8 pb-3">
+                  <h3 className="fw-bolder h1 mb-4">
+                    DONATE TO&nbsp;
+                    <span className="gradient-text gradient-red-yellow">
+                      KIDSBEATCANCER.SOL
+                    </span>
+                  </h3>
+                  <p className="mb-5 lead text-black-50 fw-light">
+                    At KidsBeatCancer we want everyone to be able to collaborate with the
+                    initiatives we are carrying on. Join our purpose and support our mission by
+                    donating to our &nbsp;
+                    <strong style={{ color: '#333' }}>
+                      kidsbeatcancer.sol
+                    </strong>
+                    &nbsp;wallet address or by using&nbsp;
+                    <span className="gradient-text gradient-red-yellow fw-bolder">
+                      JOJO's Piggybank
+                    </span>
+                    :
+                  </p>
+                  <div style={{ padding: '50px', border: '3px solid black', borderRadius: 12, textAlign: 'center' }}>
+                    <DonationPointEl />
                   </div>
                 </div>
               </div>
@@ -834,7 +770,7 @@ function Home() {
         </div>
       </footer>
 
-      <div id="gotoTop" className="icon-double-angle-up bg-white text-dark rounded-circle shadow"></div>
+      {/* <div id="gotoTop" className="icon-double-angle-up bg-white text-dark rounded-circle shadow"></div> */}
 
     </div>
 

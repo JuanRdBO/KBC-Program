@@ -36,9 +36,7 @@ const theme = createTheme({
   },
 });
 
-
 const network = process.env.REACT_APP_SOLANA_NETWORK as WalletAdapterNetwork;
-
 
 const App = () => {
   const endpoint = useMemo(() => clusterApiUrl(network), []);
