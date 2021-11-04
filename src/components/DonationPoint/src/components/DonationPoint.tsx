@@ -24,73 +24,58 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 const useStyles = makeStyles((theme) => ({
-  card: {
-    width: "450px",
-    borderRadius: "16px",
-    boxShadow: "0px 0px 20px 10px #8f6dde20, -10px -10px 20px 5px #d329fc10,  10px 10px 20px 5px #19e6ad10",
-    background: '#18192B',
-    border: '2px solid #292A3C',
-    padding: "24px",
-  },
+
   tab: {
     width: "50%",
-  },
-  settingsButton: {
-    padding: 0,
-  },
-  donationButton: {
-    width: "100%",
-    borderRadius: "10px",
-    background: 'linear-gradient(to right, #d329fc 0%, #8f6dde 49.48%, #19e6ad 100%)',
-    color: theme.palette.primary.contrastText,
-    fontSize: 16,
-    fontWeight: 500,
-    padding: "10px",
-    marginBottom: '10px'
   },
   amountInput: {
     fontSize: 20,
     fontWeight: 600,
-    color: 'white',
     marginRight: '10px'
   },
   input: {
     textAlign: "right",
+    color: 'black',
+    border: '1px solid orange',
+    fontSize: 34,
+    width: 150,
   },
   tokenFormContainer: {
-    borderRadius: "10px",
-    background: "#08091B",
+    background: "transparent",
+    borderBottom: '4px solid black',
     display: "flex",
     justifyContent: "space-between",
     padding: "10px",
-    color: 'white'
   },
   tokenSelectorContainer: {
     marginLeft: "5px",
     display: "flex",
     flexDirection: "column",
     width: "50%",
-    color: 'white',
+    border: '1px solid pink',
   },
   balanceContainer: {
     display: "flex",
     alignItems: "center",
     fontSize: "14px",
-    color: 'white',
+    border: '1px solid green',
+    color: '#333',
   },
   maxButton: {
     marginLeft: 10,
-    color: theme.palette.primary.contrastText,
+    color: '#333',
     fontWeight: 600,
     fontSize: "12px",
     cursor: "pointer",
+    border: '1px solid blue',
   },
   tokenButton: {
     display: "flex",
     alignItems: "center",
     cursor: "pointer",
     marginBottom: "10px",
-    color: 'white'
+    color: '#333',
+    border: '1px solid lime',
   },
 }));
 
@@ -105,21 +90,21 @@ const ConnectButton = styled(WalletMultiButton)`
 
 export default function DonationPointCard({
   containerStyle,
-  contentStyle,
   tokenContainerStyle,
 }: {
   containerStyle?: any;
-  contentStyle?: any;
   tokenContainerStyle?: any;
 }) {
-  const styles = useStyles();
   return (
-    <Card className={styles.card} style={containerStyle}>
+    <Card style={{
+      borderRadius: '50%',
+      border: '4px solid black',
+      background: '#fff',
+      padding: 75,
+    }}>
       <DonationPointHeader />
-      <div style={contentStyle}>
-        <DonationPointForm style={tokenContainerStyle} />
-        <DonationPointButton />
-      </div>
+      <DonationPointForm/>
+      <DonationPointButton />
     </Card>
   );
 }
@@ -128,32 +113,30 @@ export function DonationPointHeader() {
   return (
     <div
       style={{
-        display: "flex",
-        justifyContent: "space-between",
         marginBottom: "25px",
+        textAlign: 'center'
       }}
     >
-
-
       <Typography
+        className={'gradient-text wallet-adapter-modal-title'}
         style={{
-          fontSize: 18,
-          fontWeight: 600,
-          color: 'white'
+          fontSize: 32,
+          fontFamily: 'Heebo',
+          fontWeight: 800,
+          textAlign: 'center'
         }}
       >
-        KEKW SWAP
+        PIGGYBANK
       </Typography>
     </div>
   );
 }
 
-function DonationPointForm({ style }: { style?: any }) {
+function DonationPointForm() {
   const { tokenMint, setTokenMint, amount, setAmount } = useDonationPointContext();
   return (
     <DonationPointInput
       from
-      style={style}
       tokenMint={tokenMint}
       setTokenMint={setTokenMint}
       amount={amount}
@@ -164,14 +147,12 @@ function DonationPointForm({ style }: { style?: any }) {
 
 export function DonationPointInput({
   from,
-  style,
   tokenMint,
   setTokenMint,
   amount,
   setAmount,
 }: {
   from: boolean;
-  style?: any;
   tokenMint: PublicKey;
   setTokenMint: (m: PublicKey) => void;
   amount: number;
@@ -199,7 +180,7 @@ export function DonationPointInput({
   console.log("AMOUNT", amount, formattedAmount)
 
   return (
-    <div className={styles.tokenFormContainer} style={style}>
+    <div className={styles.tokenFormContainer} style={{}}>
       <div className={styles.tokenSelectorContainer}>
         <TokenButton mint={tokenMint} onClick={() => setShowTokenDialog(true)} />
         <Typography color="textSecondary" className={styles.balanceContainer}>

@@ -9,7 +9,7 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion';
 import CountUp from 'react-countup';
 
-import {sendSol} from "../../logic/sendSol"
+import { sendSol } from "../../logic/sendSol"
 import { Connection, PublicKey } from '@solana/web3.js';
 
 import { useTokenList } from '../../contexts/TokenList';
@@ -44,9 +44,9 @@ function sendSolFromBtn(wallet: any, connection: Connection) {
       toWallet,
       quantity,
       mintAddress
-    )            
+    )
   } catch (e) {
-      console.error(`TX failed. ERROR ${e}`);
+    console.error(`TX failed. ERROR ${e}`);
   }
 
 }
@@ -56,7 +56,7 @@ const pubkeyToString = (key: PublicKey | null | string = '') => {
 };
 
 function Home() {
-  const { metadata, isLoading, endpointUrl} = useMeta()
+  const { metadata, isLoading, endpointUrl } = useMeta()
   const tokenList = useTokenList()
   const wallet = useWallet();
   const connection = new Connection(endpointUrl, "confirmed");
@@ -164,7 +164,7 @@ function Home() {
         </ul>}
       </div>
     }
-  ]  
+  ]
 
   console.log("METADATA", metadata, tokenList)
 
@@ -669,20 +669,21 @@ function Home() {
                       KIDSBEATCANCER.SOL
                     </span>
                   </h3>
-                  <p className="mb-5 lead text-black-50 fw-light">
+                  <p className="mb-5  text-black-50 fw-light">
                     At KidsBeatCancer we want everyone to be able to collaborate with the
                     initiatives we are carrying on. Join our purpose and support our mission by
-                    donating to our &nbsp;
+                    donating to the &nbsp;
                     <strong style={{ color: '#333' }}>
                       kidsbeatcancer.sol
                     </strong>
-                    &nbsp;wallet address or by using&nbsp;
-                    <span className="gradient-text gradient-red-yellow fw-bolder">
-                      JOJO's Piggybank
-                    </span>
-                    :
+                    &nbsp;wallet address or by using &nbsp;
+                    <strong style={{ color: '#333' }}>
+                      JOJO's piggybank
+                    </strong>
+                    . JOJO loves all Solana token so feel free to send SOL, SPL tokens or even NFTs! 
+                    All donations over $10 will receive the JOJO Suporter SE NFT, don't miss it!
                   </p>
-                  <div style={{ padding: '50px', border: '3px solid black', borderRadius: 12, textAlign: 'center' }}>
+                  <div style={{ textAlign: 'center' }}>
                     <DonationPointEl />
                   </div>
                 </div>

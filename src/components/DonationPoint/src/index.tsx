@@ -2,9 +2,7 @@ import { ReactElement } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { TokenListContainer } from "@solana/spl-token-registry";
 import {
-  createTheme,
   ThemeOptions,
-  ThemeProvider,
 } from "@material-ui/core/styles";
 import {
   DonationPointContextProvider,
@@ -24,51 +22,25 @@ import DonationPointCard from "./components/DonationPoint";
 
 export default function DonationPoint(props: DonationPointProps): ReactElement {
   const {
-    containerStyle,
-    contentStyle,
-    tokenContainerStyle,
-    materialTheme,
     provider,
     tokenList,
     tokenMint,
     amount,
   } = props;
 
-  // @ts-ignore
-  const theme = createTheme(
-    materialTheme || {
-      palette: {
-        primary: {
-          main: "#333",
-          contrastText: "#fff",
-        },
-        secondary: {
-          main: "#f00",
-          light: "#fff",
-        },
-        error: {
-          main: "#ff6b6b",
-        },
-      },
-    }
-  );
+
   return (
-    <ThemeProvider theme={theme}>
+   
       <TokenListContextProvider tokenList={tokenList}>
         <TokenContextProvider provider={provider}>
-            <DonationPointContextProvider
-              tokenMint={tokenMint}
-              amount={amount}
-            >
-              <DonationPointCard
-                containerStyle={containerStyle}
-                contentStyle={contentStyle}
-                tokenContainerStyle={tokenContainerStyle}
-              />
-            </DonationPointContextProvider>
+          <DonationPointContextProvider
+            tokenMint={tokenMint}
+            amount={amount}
+          >
+            <DonationPointCard/>
+          </DonationPointContextProvider>
         </TokenContextProvider>
       </TokenListContextProvider>
-    </ThemeProvider>
   );
 }
 
