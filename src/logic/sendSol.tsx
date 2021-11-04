@@ -9,14 +9,15 @@ export async function sendSol(
     fromPubkey: PublicKey,
     toPubkey: PublicKey,
     quantity: number,
-    mintAddress?: string
+    mintAddress: string,
+    isSol: boolean
 ) {
     const signers: Keypair[] = []
 
     const instructions: TransactionInstruction[] = [];
 
 
-    if (!mintAddress) {
+    if (isSol) {
 
         const lamports = LAMPORTS_PER_SOL * quantity
 
@@ -37,11 +38,13 @@ export async function sendSol(
                 signers,
                 'single',
             );            
+
+            console.log(`SENT ${quantity} SOL FROM ${fromPubkey.toBase58()} to ${toPubkey.toBase58()}`)
+
+            return txid       
         } catch (e) {
             console.error(`TX failed ${e}`);
         }
-
-        console.log(`SENT ${quantity} SOL FROM ${fromPubkey.toBase58()} to ${toPubkey.toBase58()}`)
 
     } else {
         console.log("SENDING SPL TOKEN")
@@ -91,11 +94,13 @@ export async function sendSol(
                 signers,
                 'single',
             );            
+
+            console.log(`SENT ${quantity} ${mintAddress} FROM ${fromPubkey.toBase58()} to ${toPubkey.toBase58()}`)
+
+            return txid
         } catch (e) {
             console.error(`TX failed ${e}`);
         }
-
-        console.log(`SENT ${quantity} ${mintAddress} FROM ${fromPubkey.toBase58()} to ${toPubkey.toBase58()}`)
     }
 }
 

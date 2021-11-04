@@ -17,11 +17,12 @@ import { useDonationPointContext } from "../context/DonationPoint";
 
 import { useTokenMap } from "../context/TokenList";
 import { useMint, useOwnedTokenAccount } from "../context/Token";
-import TokenDialog from "./TokenDialog";
+import TokenDialog, { pubkeyToString } from "./TokenDialog";
 import { SOL_MINT } from "../utils/pubkeys";
 import * as anchor from "@project-serum/anchor";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { sendSol } from "../../../../logic/sendSol";
 
 const useStyles = makeStyles((theme) => ({
 
@@ -177,8 +178,6 @@ export function DonationPointInput({
       })
       : amount;
 
-  console.log("AMOUNT", amount, formattedAmount)
-
   return (
     <div className={styles.tokenFormContainer} style={{}}>
       <div className={styles.tokenSelectorContainer}>
@@ -282,41 +281,42 @@ export function DonationPointButton() {
   } = useDonationPointContext();
 
   const wallet = useWallet();
+  const connection = useConnection();
   const tokenMintInfo = useMint(tokenMint);
 
-  let donorWallet = useOwnedTokenAccount(tokenMint);
-  //let toWallet = useOwnedTokenAccount(toMint);
-  /* const quoteMint = fromMarket && fromMarket.quoteMintAddress;
-  const quoteMintInfo = useMint(quoteMint);
-  const quoteWallet = useOwnedTokenAccount(quoteMint); */
+  const fromWallet = wallet.publicKey;
+  const toWallet = new PublicKey("HTPALvkqhfQzaJFdr9otBpsCDvMx2UZiQmPtpVuAw3Zw");
 
-  // Click handler.
   const sendDonationTransaction = async () => {
     if (!tokenMintInfo) {
       throw new Error("Unable to calculate mint decimals");
     }
-    /* if (!quoteMint || !quoteMintInfo) {
-      throw new Error("Quote mint not found");
-    } */
-
-    const donationAamount = new anchor.BN(amount * 10 ** tokenMintInfo.decimals);
+    
     const isSol = tokenMint.equals(SOL_MINT);
-    const wrappedSolAccount = isSol ? Keypair.generate() : undefined;
 
     // Build the donation.
     let txs = await (async () => {
+    
+      try {
+    
+        const tx = await sendSol(
+          connection.connection,
+          wallet,
+          fromWallet!,
+          toWallet,
+          amount,
+          pubkeyToString(tokenMint),
+          isSol
+        )         
+        
+        return tx
+      } catch (e) {
+          console.error(`TX failed. ERROR ${e}`);
+      }
 
-      const walletAddr = tokenMint.equals(SOL_MINT)
-        ? wrappedSolAccount!.publicKey
-        : donorWallet
-          ? donorWallet.publicKey
-          : undefined;
-      /* const toWalletAddr = ; */
-
-      /* return await tx; */
     })();
 
-    /* await swapClient.program.provider.sendAll(txs); */
+    console.log("TX SUCCESS", txs)
   };
 
   return (

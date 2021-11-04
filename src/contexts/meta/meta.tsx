@@ -18,6 +18,11 @@ export interface TokenAccount {
   info: TokenAccountInfo;
 }
 
+interface MetaproviderProps {
+  endpointUrl: string,
+  children: any
+}
+
 const MetaContext = React.createContext<MetaContextState>({
     ...getEmptyMetaState(),
     isLoading: true,
@@ -32,44 +37,14 @@ export const useMeta = () => {
   return context;
 };
   
-export function MetaProvider({ children = null as any }) {
+export const MetaProvider: React.FC<MetaproviderProps> = ({endpointUrl, children}) => {
 
   var [state, setState] = useState([]as any)//<MetaState>(getEmptyMetaState());
   const [metadataLoaded, setMetadataLoaded] = useState(false);
   const [isLoading, setisLoading] = useState(true);
   const [fetchedData, setfetchedData] = useState(false);
-  const [endpointUrl, setEndpointUrl] = useState("")
 
   const wallet = useAnchorWallet();
-
-  const ENDPOINTS = [
-    {
-      name: 'mainnet-beta',
-      endpoint: 'https://api.metaplex.solana.com/',
-    },
-    {
-      name: 'mainnet-beta (Solana)',
-      endpoint: 'https://api.mainnet-beta.solana.com',
-    },
-    {
-      name: 'mainnet-beta (Serum)',
-      endpoint: 'https://solana-api.projectserum.com/',
-    },
-    {
-      name: 'testnet',
-      endpoint: 'https://api.testnet.solana.com',
-    },
-    {
-      name: 'devnet',
-      endpoint: 'https://api.devnet.solana.com',
-    },
-  ];
-
-  /* console.log("META") */
-
-  if (!endpointUrl) {
-    setEndpointUrl(ENDPOINTS[0].endpoint)
-  }
 
   async function update() {
       

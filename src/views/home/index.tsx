@@ -28,29 +28,6 @@ const startDateSeed = parseInt(process.env.REACT_APP_CANDY_START_DATE!, 10);
 
 const txTimeout = 30000; // milliseconds (confirm this works for your project)
 
-function sendSolFromBtn(wallet: any, connection: Connection) {
-
-  const fromWallet = wallet.publicKey;
-  const toWallet = new PublicKey("juan3uxteK3E4ikyTeAg2AYRKzBS7CJ4dkGmx7zyHMv");
-  const quantity = 500
-  const mintAddress = "89CMLuSQdQsta5vyztjB3MfEajMzuRbiHFo9Noew2pHm"
-
-  try {
-
-    sendSol(
-      connection,
-      wallet,
-      fromWallet!,
-      toWallet,
-      quantity,
-      mintAddress
-    )
-  } catch (e) {
-    console.error(`TX failed. ERROR ${e}`);
-  }
-
-}
-
 const pubkeyToString = (key: PublicKey | null | string = '') => {
   return typeof key === 'string' ? key : key?.toBase58() || '';
 };
@@ -166,7 +143,7 @@ function Home() {
     }
   ]
 
-  console.log("METADATA", metadata, tokenList)
+  /* console.log("METADATA", metadata, tokenList) */
 
   return (
     <div>
