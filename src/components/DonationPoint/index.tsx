@@ -18,6 +18,7 @@ import {
 import { DonationPoint } from "./src";
 import * as anchor from "@project-serum/anchor";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useMeta } from "../../contexts/meta/meta";
 
 export const DonationPointEl = () => {
   return (
@@ -40,13 +41,14 @@ function AppInner() {
   // TODO: Add metadata with useMeta
   const { enqueueSnackbar } = useSnackbar();
   const wallet = useWallet();
+  const {endpointUrl}  = useMeta()
   const [tokenList, setTokenList] = useState<TokenListContainer | null>(null);
   const [provider] = useMemo(() => {
     const opts: ConfirmOptions = {
       preflightCommitment: "recent",
       commitment: "recent",
     };
-    const network = "https://solana-api.projectserum.com"
+    const network = endpointUrl
 
     const connection = new Connection(network, opts.preflightCommitment);
     const provider = new NotifyingProvider(

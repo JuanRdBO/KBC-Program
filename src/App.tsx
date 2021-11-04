@@ -29,7 +29,6 @@ import './style/custom.css';
 import { SPLTokenListProvider } from './contexts/TokenList';
 import { MetaProvider } from './contexts/meta/meta';
 
-
 const theme = createTheme({
   palette: {
     type: 'dark',

@@ -190,11 +190,13 @@ export function DonationPointInput({
 
   const formattedAmount =
     mintAccount && amount
-      ? amount.toLocaleString("fullwide", {
+      ? amount.toLocaleString("en-US", {
         maximumFractionDigits: mintAccount.decimals,
         useGrouping: false,
       })
       : amount;
+
+  console.log("AMOUNT", amount, formattedAmount)
 
   return (
     <div className={styles.tokenFormContainer} style={style}>
@@ -202,7 +204,7 @@ export function DonationPointInput({
         <TokenButton mint={tokenMint} onClick={() => setShowTokenDialog(true)} />
         <Typography color="textSecondary" className={styles.balanceContainer}>
           {tokenAccount && mintAccount
-            ? `Balance: ${balance?.toFixed(mintAccount.decimals)}`
+            ? `Balance: ${balance?.toFixed(mintAccount?.decimals || 9)}`
             : `-`}
           {from && !!balance ? (
             <span
