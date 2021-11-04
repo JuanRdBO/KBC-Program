@@ -128,18 +128,12 @@ export function useOwnedTokenAccount(
       listener = provider.connection.onAccountChange(
         tokenAccount.publicKey,
         (info) => {
-          if (info.data.length !== 0) {
-            try {
-              const token = parseTokenAccountData(info.data);
-              if (token.amount !== tokenAccount.account.amount) {
-                const index = _OWNED_TOKEN_ACCOUNTS_CACHE.indexOf(tokenAccount);
-                assert.ok(index >= 0);
-                _OWNED_TOKEN_ACCOUNTS_CACHE[index].account = token;
-                setRefresh((r) => r + 1);
-              }
-            } catch (error) {
-              console.log("Failed to decode token AccountInfo");
-            }
+          const token = parseTokenAccountData(info.data);
+          if (token.amount !== tokenAccount.account.amount) {
+            const index = _OWNED_TOKEN_ACCOUNTS_CACHE.indexOf(tokenAccount);
+            assert.ok(index >= 0);
+            _OWNED_TOKEN_ACCOUNTS_CACHE[index].account = token;
+            setRefresh((r) => r + 1);
           }
         }
       );
@@ -203,5 +197,6 @@ const _OWNED_TOKEN_ACCOUNTS_CACHE: Array<{
 // Cache storing all previously fetched mint infos.
 // @ts-ignore
 const _MINT_CACHE = new Map<string, Promise<MintInfo>>([
+  //@ts-ignore
   [SOL_MINT.toString(), { decimals: 9 }],
 ]);

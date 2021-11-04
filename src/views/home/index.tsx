@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
-import styled from 'styled-components';
 import FairLaunchContainer from "../../components/FairLaunchContainer";
 /* import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -14,30 +12,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 //@ts-ignore
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion';
 import CountUp from 'react-countup';
-import { Box, Input, InputAdornment, InputLabel, OutlinedInputProps, TextField, TextFieldProps, withStyles } from '@material-ui/core';
-
-const DonationTextField = withStyles({
-  root: {
-    '& .MuiInputBase-input': {
-      color: '#000', // Text color
-    },
-    '& .MuiInput-underline:before': {
-      borderBottomColor: 'white', // Semi-transparent underline
-    },
-    '& .MuiInput-underline:hover:before': {
-      borderBottomColor: '#777', // Solid underline on hover
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: '#000', // Solid underline on focus
-    },
-    "&:hover .MuiInputAdornment-root": {
-      color: 'red'
-    },
-    ".MuiInputAdornment-root ": {
-      color: 'blue'
-    }
-  },
-})(TextField);
+import { DonationPointEl } from '../../components/DonationPoint';
 
 const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
   ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
@@ -675,33 +650,8 @@ function Home() {
                     </span>
                     :
                   </p>
-                  <div style={{ padding: '300px 0', border: '3px solid black', borderRadius: 12, textAlign: 'center', margin: 'auto' }}>
-                    <DonationTextField
-                      className='donation-input'
-                      defaultValue={0.4321}
-                      inputProps={{
-                        style: {
-                          textAlign: 'center',
-                          color: 'black',
-                          fontWeight: 800,
-                          fontSize: 32,
-                          width: 180,
-                          margin: 'auto',
-                        },
-                      }}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start" style={{color: 'green !important'}}>
-                            ◎
-                          </InputAdornment>
-                        ),
-                        endAdornment: 
-                          <InputAdornment position="end" style={{color: 'red !important'}}>
-                            SOL
-                          </InputAdornment>
-                        ,
-                      }}
-                    />
+                  <div style={{ padding: '50px', border: '3px solid black', borderRadius: 12, textAlign: 'center' }}>
+                    <DonationPointEl />
                   </div>
                 </div>
               </div>
