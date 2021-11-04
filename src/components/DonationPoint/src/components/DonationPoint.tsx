@@ -196,8 +196,6 @@ export function DonationPointInput({
       })
       : amount;
 
-  console.log("AMOUNT", amount, formattedAmount)
-
   return (
     <div className={styles.tokenFormContainer} style={style}>
       <div className={styles.tokenSelectorContainer}>

@@ -17,6 +17,7 @@ import {
 import { TokenIcon } from "./DonationPoint";
 import { useTokens } from "../context/TokenList";
 import { useMediaQuery } from "@material-ui/core";
+import { useMeta } from "../../../../contexts/meta/meta";
 
 const useStyles = makeStyles((theme) => ({
   dialogContent: {
@@ -46,6 +47,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const pubkeyToString = (key: PublicKey | null | string = '') => {
+  return typeof key === 'string' ? key : key?.toBase58() || '';
+};
+
 export default function TokenDialog({
   open,
   onClose,
@@ -55,6 +60,7 @@ export default function TokenDialog({
   onClose: () => void;
   setMint: (mint: PublicKey) => void;
 }) {
+  const {metadata, isLoading} = useMeta()
   const [tabSelection, setTabSelection] = useState(0);
   const [tokenFilter, setTokenFilter] = useState("");
   const filter = tokenFilter.toLowerCase();
@@ -77,9 +83,15 @@ export default function TokenDialog({
           t.name.toLowerCase().startsWith(filter) ||
           t.address.toLowerCase().startsWith(filter)
       );
+        
+  if (metadata)
+    walletTokens = walletTokens.filter(w => 
+          metadata.some(m => pubkeyToString(m.info.mint) == w.address 
+          || w.name == "Native SOL")
+        )
+      
+  console.log("TOKENS", walletTokens)
 
-  // TODO: Filter so only owned tokens appear
-  
   return (
     <Dialog
       open={open}
