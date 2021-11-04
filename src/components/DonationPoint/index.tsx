@@ -24,7 +24,6 @@ export const DonationPointEl = () => {
     <SnackbarProvider maxSnack={5} autoHideDuration={8000}>
         <AppInner />
     </SnackbarProvider>
-
   );
 };
 
@@ -37,26 +36,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AppInner() {
-  console.log("ENTERED DONATION POINT")
   const styles = useStyles();
+  // TODO: Add metadata with useMeta
   const { enqueueSnackbar } = useSnackbar();
-  const _marketWallet = useWallet();
+  const wallet = useWallet();
   const [tokenList, setTokenList] = useState<TokenListContainer | null>(null);
-
-  const [provider, marketWallet] = useMemo(() => {
+  const [provider] = useMemo(() => {
     const opts: ConfirmOptions = {
       preflightCommitment: "recent",
       commitment: "recent",
     };
     const network = "https://solana-api.projectserum.com"
-    const marketWallet = _marketWallet
-    const provider_url = marketWallet.wallet?.url? marketWallet.wallet?.url : "https://www.sollet.io"
-    console.log("MARKET WALLET", marketWallet)
+
     const connection = new Connection(network, opts.preflightCommitment);
     const provider = new NotifyingProvider(
       connection,
       //@ts-ignore
-      marketWallet,
+      wallet,
       opts,
       (tx, err) => {
         if (err) {
@@ -125,12 +121,14 @@ function AppInner() {
         }
       }
     );
-    return [provider, marketWallet];
-  }, [enqueueSnackbar]);
+    return [provider];
+  }, [enqueueSnackbar, wallet]);
 
   useEffect(() => {
     new TokenListProvider().resolve().then(setTokenList);
   }, [setTokenList]);
+
+  // TODO: compute max sol if balance i sless than 1
 
   return (
     <Grid
@@ -140,9 +138,8 @@ function AppInner() {
       className={styles.root}
     >
       {tokenList &&
-        <DonationPoint provider={provider} tokenList={tokenList}
-          amount={5}
-          tokenMint={new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')}
+        <DonationPoint provider={provider} tokenList={tokenList} amount={1}
+          tokenMint={new PublicKey('Ejmc1UB4EsES5oAaRN63SpoxMJidt3ZGBrqrZk49vjTZ')}
         />}
     </Grid>
   );
@@ -154,13 +151,7 @@ interface AnchorWallet {
   signAllTransactions(txs: Transaction[]): Promise<Transaction[]>;
   publicKey: PublicKey;
 }
-
 // Custom provider to display notifications whenever a transaction is sent.
-//
-// Note that this is an Anchor wallet/network provider--not a React provider,
-// so all transactions will be flowing through here, which allows us to
-// hook in to display all transactions sent from the `Swap` component
-// as notifications in the parent app.
 class NotifyingProvider extends anchor.Provider {
   // Function to call whenever the provider sends a transaction;
   private onTransaction: (

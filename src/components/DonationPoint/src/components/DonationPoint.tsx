@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styled from 'styled-components';
 import {
   PublicKey,
   Keypair,
@@ -7,7 +8,6 @@ import {
 import {
   makeStyles,
   Card,
-  Button,
   Typography,
   TextField,
   useTheme,
@@ -21,6 +21,7 @@ import TokenDialog from "./TokenDialog";
 import { SOL_MINT } from "../utils/pubkeys";
 import * as anchor from "@project-serum/anchor";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -92,6 +93,15 @@ const useStyles = makeStyles((theme) => ({
     color: 'white'
   },
 }));
+
+const ConnectButton = styled(WalletMultiButton)`
+  height: 60px;
+  margin-top: 30px;
+  margin-bottom: 5px;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+`;
 
 export default function DonationPointCard({
   containerStyle,
@@ -283,16 +293,15 @@ function TokenName({ mint, style }: { mint: PublicKey; style: any }) {
 }
 
 export function DonationPointButton() {
-  const styles = useStyles();
   const {
     tokenMint,
     amount,
   } = useDonationPointContext();
 
-  //const wallet = useWallet();
+  const wallet = useWallet();
   const tokenMintInfo = useMint(tokenMint);
 
-  let wallet = useOwnedTokenAccount(tokenMint);
+  let donorWallet = useOwnedTokenAccount(tokenMint);
   //let toWallet = useOwnedTokenAccount(toMint);
   /* const quoteMint = fromMarket && fromMarket.quoteMintAddress;
   const quoteMintInfo = useMint(quoteMint);
@@ -316,34 +325,33 @@ export function DonationPointButton() {
 
       const walletAddr = tokenMint.equals(SOL_MINT)
         ? wrappedSolAccount!.publicKey
-        : wallet
-          ? wallet.publicKey
+        : donorWallet
+          ? donorWallet.publicKey
           : undefined;
       /* const toWalletAddr = ; */
 
       /* return await tx; */
     })();
 
-
-
     /* await swapClient.program.provider.sendAll(txs); */
   };
+
   return (
-    !wallet ? <Button
-      variant="contained"
-      className={styles.donationButton}
-      onClick={sendDonationTransaction}
-      disabled={false}
-    >
-      Connect Wallet
-    </Button> : <Button
-      variant="contained"
-      className={styles.donationButton}
-      onClick={sendDonationTransaction}
-      // TODO: disabled if no funds or token not avaiable in wallet
-      disabled={false}
-    >
-      Swap
-    </Button>
+
+    !wallet.connected ? (
+      <ConnectButton>
+        Connect
+      </ConnectButton>
+    ) : (
+
+      <button
+        className='flp-button'
+        onClick={sendDonationTransaction}
+        disabled={false}> {
+          // TODO : if amount is greater than balance 
+        }
+        {/* {isSending ?:} */}
+        Donate
+      </button>)
   );
 }

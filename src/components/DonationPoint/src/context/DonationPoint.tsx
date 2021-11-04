@@ -30,8 +30,8 @@ export type DonationPointContext = {
 const _DonationPointContext = React.createContext<null | DonationPointContext>(null);
 
 export function DonationPointContextProvider(props: any) {
-  const [tokenMint, setTokenMint] = useState(props.fromMint ?? SRM_MINT);
-  const [amount, _setAmount] = useState(props.fromAmount ?? 0);
+  const [tokenMint, setTokenMint] = useState(props.tokenMint ?? SRM_MINT);
+  const [amount, _setAmount] = useState(props.amount ?? 0);
   const [isClosingNewAccounts, setIsClosingNewAccounts] = useState(false);
   const [isStrict, setIsStrict] = useState(false);
 

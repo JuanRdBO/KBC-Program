@@ -65,7 +65,7 @@ export function TokenListContextProvider(props: any) {
       a.symbol < b.symbol ? -1 : a.symbol > b.symbol ? 1 : 0
     );
     return tokens;
-  }, [tokenList, tokenMap]);
+  }, [tokenList]);
 
   // Sollet wrapped tokens.
   const [tokensSollet, solletMap] = useMemo(() => {

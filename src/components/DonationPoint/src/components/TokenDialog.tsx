@@ -77,6 +77,9 @@ export default function TokenDialog({
           t.name.toLowerCase().startsWith(filter) ||
           t.address.toLowerCase().startsWith(filter)
       );
+
+  // TODO: Filter so only owned tokens appear
+  
   return (
     <Dialog
       open={open}
