@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
 import styled from 'styled-components';
@@ -10,11 +10,23 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography'; */
 import * as anchor from '@project-serum/anchor';
 import { WalletMultiButton, WalletDisconnectButton } from '@solana/wallet-adapter-react-ui';
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 //@ts-ignore
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion';
 import CountUp from 'react-countup';
+import {TokenName, TokenIcon} from "../../components/TokenInfo"
+import { createMuiTheme, makeStyles } from "@material-ui/core/styles";
+import { Box, Button, Grid, InputAdornment, Paper, TextField } from '@material-ui/core';
 
+import {sendSol} from "../../logic/sendSol"
+import { Connection, PublicKey } from '@solana/web3.js';
+import { Wallet } from '@project-serum/anchor';
+import {
+  TokenListContainer,
+  TokenListProvider,
+} from "@solana/spl-token-registry";
+import { useTokenList } from '../../contexts/TokenList';
+import { useMeta } from '../../contexts/meta/meta';
 
 const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
   ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
@@ -24,15 +36,41 @@ const fairLaunchId = new anchor.web3.PublicKey(
   process.env.REACT_APP_FAIR_LAUNCH_ID!,
 );
 
-const rpcHost = process.env.REACT_APP_SOLANA_RPC_HOST!;
-const connection = new anchor.web3.Connection(rpcHost);
-
 const startDateSeed = parseInt(process.env.REACT_APP_CANDY_START_DATE!, 10);
 
 const txTimeout = 30000; // milliseconds (confirm this works for your project)
 
+function sendSolFromBtn(wallet: any, connection: Connection) {
+
+  const fromWallet = wallet.publicKey;
+  const toWallet = new PublicKey("juan3uxteK3E4ikyTeAg2AYRKzBS7CJ4dkGmx7zyHMv");
+  const quantity = 500
+  const mintAddress = "89CMLuSQdQsta5vyztjB3MfEajMzuRbiHFo9Noew2pHm"
+
+  try {
+
+    sendSol(
+      connection,
+      wallet,
+      fromWallet!,
+      toWallet,
+      quantity,
+      mintAddress
+    )            
+  } catch (e) {
+      console.error(`TX failed. ERROR ${e}`);
+  }
+
+}
+
+const pubkeyToString = (key: PublicKey | null | string = '') => {
+  return typeof key === 'string' ? key : key?.toBase58() || '';
+};
+
 function Home() {
+  const { metadata, isLoading, endpointUrl} = useMeta()
   const wallet = useWallet();
+  const connection = new Connection(endpointUrl, "confirmed");
 
   const data = [
     {
@@ -136,7 +174,10 @@ function Home() {
         </ul>}
       </div>
     }
-  ]
+  ]  
+
+  const mint = new PublicKey("89CMLuSQdQsta5vyztjB3MfEajMzuRbiHFo9Noew2pHm")
+  
   return (
     <div>
 
@@ -700,7 +741,12 @@ function Home() {
                       </span>
                       &nbsp;wallet address or by 
                     </p>
-                    <div style={{height: 700, border: '3px solid black', borderRadius: 12, marginBottom: 100}}></div>
+                    <div style={{height: 700, border: '3px solid black', borderRadius: 12, marginBottom: 100}}>
+
+                    <Button variant="contained" onClick={() => sendSolFromBtn(wallet, connection)}>Send motherfucking SOL</Button>
+
+
+                    </div>
                   </div>
                 </div>
               </div>

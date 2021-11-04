@@ -26,6 +26,8 @@ import './style/font-icons.css';
 import './style/animate.css';
 import './style/fonts.css';
 import './style/custom.css';
+import { SPLTokenListProvider } from './contexts/TokenList';
+import { MetaProvider } from './contexts/meta/meta';
 
 
 const theme = createTheme({
@@ -50,14 +52,18 @@ const App = () => {
     <HashRouter basename={'/'}>
     <ThemeProvider theme={theme}>
       <ConnectionProvider endpoint={endpoint}>
-        <WalletProvider wallets={wallets} autoConnect>
-          <WalletModalProvider logo="images/logo.png" featuredWallets={4}>
-            <Switch>
-              <Route path="/purpose" component={() => <Purpose />} />
-              <Route path="/" component={() => <Home />} />
-            </Switch>
-          </WalletModalProvider>
-        </WalletProvider>
+        <SPLTokenListProvider>
+          <WalletProvider wallets={wallets} autoConnect>
+            <MetaProvider>
+              <WalletModalProvider logo="images/logo.png" featuredWallets={4}>
+                <Switch>
+                  <Route path="/purpose" component={() => <Purpose />} />
+                  <Route path="/" component={() => <Home />} />
+                </Switch>
+              </WalletModalProvider>
+            </MetaProvider>
+          </WalletProvider>
+        </SPLTokenListProvider>
       </ConnectionProvider>
     </ThemeProvider>
     </HashRouter>
