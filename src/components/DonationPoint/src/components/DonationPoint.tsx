@@ -26,111 +26,66 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { sendSol } from "../../../../logic/sendSol";
 import { useSnackbar } from "notistack";
 
-const useStyles = makeStyles((theme) => ({
-
+const useStyles = makeStyles(() => ({
   tab: {
     width: "50%",
   },
   amountInput: {
-    fontSize: 20,
+    fontSize: 60,
     fontWeight: 600,
-    marginRight: '10px'
+    margin: 0,
+    padding: 0,
+    marginRight: '10px',
+
   },
   input: {
     textAlign: "right",
-    color: 'black',
-    border: '1px solid orange',
-    fontSize: 34,
-    width: 150,
-  },
-  tokenFormContainer: {
-    background: "transparent",
-    borderBottom: '4px solid black',
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "10px",
-  },
-  tokenSelectorContainer: {
-    marginLeft: "5px",
-    display: "flex",
-    flexDirection: "column",
-    width: "50%",
-    border: '1px solid pink',
-  },
-  balanceContainer: {
-    display: "flex",
-    alignItems: "center",
-    fontSize: "14px",
-    border: '1px solid green',
-    color: '#333',
-  },
-  maxButton: {
-    marginLeft: 10,
-    color: '#333',
-    fontWeight: 600,
-    fontSize: "12px",
-    cursor: "pointer",
-    border: '1px solid blue',
-  },
-  tokenButton: {
-    display: "flex",
-    alignItems: "center",
-    cursor: "pointer",
-    marginBottom: "10px",
-    color: '#333',
-    border: '1px solid lime',
+    color: '#222',
+    fontSize: 60,
+    fontWeight: 800,
+    fontFamily: 'Heebo',
+    width: 500
   },
 }));
 
 const ConnectButton = styled(WalletMultiButton)`
   height: 60px;
-  margin-top: 30px;
-  margin-bottom: 5px;
+  margin-top: 20px;
+  margin-bottom: 25px;
+  width: 100%;
   color: #333;
   font-size: 16px;
   font-weight: bold;
 `;
 
-export default function DonationPointCard({
-  containerStyle,
-  tokenContainerStyle,
-}: {
-  containerStyle?: any;
-  tokenContainerStyle?: any;
-}) {
+export default function DonationPointCard() {
+  const wallet = useWallet();
+
   return (
-    <Card style={{
-      borderRadius: '50%',
-      border: '4px solid black',
-      background: '#fff',
-      padding: 75,
-    }}>
+    <Card className='piggybank-card'>
       <DonationPointHeader />
-      <DonationPointForm/>
-      <DonationPointButton />
+      {!wallet.connected ? (
+        <ConnectButton>
+          Connect
+        </ConnectButton>
+      ) : (
+        <>
+          <DonationPointForm />
+          <DonationPointButton />
+          <PiggyBankImage/>
+        </>
+      )}
     </Card>
   );
 }
 
 export function DonationPointHeader() {
   return (
-    <div
-      style={{
-        marginBottom: "25px",
-        textAlign: 'center'
-      }}
-    >
-      <Typography
-        className={'gradient-text wallet-adapter-modal-title'}
-        style={{
-          fontSize: 32,
-          fontFamily: 'Heebo',
-          fontWeight: 800,
-          textAlign: 'center'
-        }}
+    <div className='piggybank-header-container' >
+      <div className='gradient-text wallet-adapter-modal-title piggybank-header-text '
       >
         PIGGYBANK
-      </Typography>
+      </div>
     </div>
   );
 }
@@ -175,22 +130,22 @@ export function DonationPointInput({
   const formattedAmount =
     mintAccount && amount
       ? amount.toLocaleString("en-US", {
-        maximumFractionDigits: mintAccount.decimals,
+        maximumFractionDigits: Math.ceil(mintAccount?.decimals / 3) || 3,
         useGrouping: false,
       })
       : amount;
 
   return (
-    <div className={styles.tokenFormContainer} style={{}}>
-      <div className={styles.tokenSelectorContainer}>
+    <div className='piggybank-input' style={{}}>
+      <div className='piggybank-token-selector'>
         <TokenButton mint={tokenMint} onClick={() => setShowTokenDialog(true)} />
-        <Typography color="textSecondary" className={styles.balanceContainer}>
+        <Typography className='piggybank-token-balance' color="textSecondary" >
           {tokenAccount && mintAccount
-            ? `Balance: ${balance?.toFixed(mintAccount?.decimals || 9)}`
+            ? `Balance: ${balance?.toFixed(Math.ceil(mintAccount?.decimals / 3) || 3)}`
             : `-`}
           {from && !!balance ? (
             <span
-              className={styles.maxButton}
+              className='piggybank-max-button'
               onClick={() => setAmount(balance)}
             >
               MAX
@@ -219,6 +174,24 @@ export function DonationPointInput({
   );
 }
 
+function PiggyBankImage() {
+  return (
+    <div className='piggybank-image'>
+      <img
+        src="images/piggybank/piggybank-body.png"
+        alt="piggybank"
+        width='400'
+      />
+      <img
+        src="images/piggybank/piggybank-head5.png"
+        alt="piggybank"
+        width='350'
+        style={{position: 'absolute', left: '27%', bottom: 60}}
+      />
+    </div>
+  );
+}
+
 function TokenButton({
   mint,
   onClick,
@@ -230,9 +203,9 @@ function TokenButton({
   const theme = useTheme();
 
   return (
-    <div onClick={onClick} className={styles.tokenButton}>
-      <TokenIcon mint={mint} style={{ width: theme.spacing(4) }} />
-      <TokenName mint={mint} style={{ fontSize: 14, fontWeight: 700 }} />
+    <div onClick={onClick} className='piggybank-token-button'>
+      <TokenIcon mint={mint} style={{ width: 30, borderRadius: 50 }} />
+      <TokenName mint={mint} style={{ fontSize: 34, fontWeight: 800, fontFamily: 'Heebo' }} />
       <ExpandMore />
     </div>
   );
@@ -333,7 +306,7 @@ export function DonationPointButton() {
     if (!tokenMintInfo) {
       throw new Error("Unable to calculate mint decimals");
     }
-    
+
     const isSol = tokenMint.equals(SOL_MINT);
 
     const SnackbarButton = styled(Button)({
@@ -347,7 +320,7 @@ export function DonationPointButton() {
     })
     // Build the donation.
     let txs = await (async () => {
-    
+
       try {
     
         const {tx, outcome, err} = await sendSol(
@@ -375,21 +348,14 @@ export function DonationPointButton() {
   };
 
   return (
-
-    !wallet.connected ? (
-      <ConnectButton>
-        Connect
-      </ConnectButton>
-    ) : (
-
-      <button
-        className='flp-button'
-        onClick={sendDonationTransaction}
-        disabled={false}> {
-          // TODO : if amount is greater than balance 
-        }
-        {/* {isSending ?:} */}
-        Donate
-      </button>)
+    <button
+      className='flp-button'
+      onClick={sendDonationTransaction}
+      disabled={false}> {
+        // TODO : if amount is greater than balance 
+      }
+      {/* {isSending ?:} */}
+      Donate
+    </button>
   );
 }
