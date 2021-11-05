@@ -924,3 +924,25 @@ Accordion
 .piggybank-image {
   margin-top: 25px;
 }
+
+.piggy-waiting-animation {
+  filter: invert(1);
+  -webkit-animation: waitingForTxApproval 1s infinite;
+  -moz-animation:    waitingForTxApproval 1s infinite;
+  -o-animation:      waitingForTxApproval 1s infinite;
+  animation:         waitingForTxApproval 1s infinite;
+}
+
+@-webkit-keyframes waitingForTxApproval {
+  0%   { -webkit-filter: invert(0); }
+  25%   { -webkit-filter: invert(1); }
+  50%   { -webkit-filter: invert(0); }
+  100% { -webkit-filter: invert(0); }
+}
+
+@keyframes waitingForTxApproval {
+  0%   { -webkit-filter: invert(0); }
+  25%   { -webkit-filter: invert(1); }
+  50%   { -webkit-filter: invert(0); }
+  100% { -webkit-filter: invert(0); }
+}

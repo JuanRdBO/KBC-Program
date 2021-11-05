@@ -59,21 +59,30 @@ border: 2px solid red
 `; // add your styles here
 
 const ValueSlider = styled(Slider)({
-  color: '#C0D5FE',
+  color: 'red',
   height: 8,
   '& > *': {
-    height: 4,
+    height: 3,
+    color: 'black'
   },
   '& .MuiSlider-track': {
     border: 'none',
     height: 4,
   },
   '& .MuiSlider-thumb': {
-    height: 24,
-    width: 24,
-    marginTop: -10,
-    background: 'linear-gradient(180deg, #604AE5 0%, #813EEE 100%)',
-    border: '2px solid currentColor',
+    height: 20,
+    width: 20,
+    marginTop: -8,
+    background: `linear-gradient(
+      110.78deg,
+      rgb(118, 230, 80) -1.13%,
+      rgb(249, 214, 73) 15.22%,
+      rgb(240, 142, 53) 32.09%,
+      rgb(236, 81, 87) 48.96%,
+      rgb(255, 24, 189) 67.94%,
+      rgb(26, 75, 255) 85.34%
+    ) !important`,
+    border: '0px solid currentColor',
     '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
       boxShadow: 'inherit',
     },
@@ -83,7 +92,7 @@ const ValueSlider = styled(Slider)({
   },
   '& .MuiSlider-valueLabel': {
     '& > *': {
-      background: 'linear-gradient(180deg, #604AE5 0%, #813EEE 100%)',
+      background: `black`,
     },
     lineHeight: 1.2,
     fontSize: 12,
@@ -113,8 +122,8 @@ const Header = (props: {
   const { phaseName, desc, date, status } = props;
   return (
     <Grid container justifyContent="center">
-      <Grid xs={6} justifyContent='center' direction="column">
-        <Typography style={{ fontWeight: 800, color: '#333', fontSize: 24, margin: 0, textAlign: 'left' }}>
+      <Grid xs={ phaseName == "JOJO's Candy Machine" ? 12 : 6} justifyContent='center' direction="column">
+        <Typography style={{ fontWeight: 800, color: '#333', fontSize: phaseName == "JOJO's Candy Machine" ? 16 : 24 , margin: 0, textAlign: phaseName == "JOJO's Candy Machine" ? 'center' :'left' }}>
           {phaseName}
         </Typography>
         <Typography variant="body2" style={{ color: '#333', textAlign: 'left' }}>
@@ -124,7 +133,7 @@ const Header = (props: {
       <Grid xs={6} container justifyContent="flex-end"  >
         <PhaseCountdown
           date={toDate(date)}
-          style={{ justifyContent: 'flex-end', border: '2px solid red' }}
+          style={{ justifyContent: 'flex-end', }}
           status={status || 'COMPLETE'}
         />
       </Grid>
@@ -535,66 +544,75 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
           <Paper
             style={{ padding: 24, backgroundColor: '#fff', borderRadius: 6, }}
           >
+
             <Grid container justifyContent="center" direction="column" style={{ background: '#fff' }}>
-              {phase === Phase.Phase0 && (
+              {!wallet.connected ?
                 <Header
-                  phaseName={'Phase 0'}
-                  desc={'Anticipation Phase'}
-                  date={fairLaunch?.state.data.phaseOneStart}
-                />
-              )}
-              {phase === Phase.Phase1 && (
-                <Header
-                  phaseName={'Phase 1'}
-                  desc={'Set price phase'}
-                  date={fairLaunch?.state.data.phaseOneEnd}
-                />
-              )}
-
-              {phase === Phase.Phase2 && (
-                <Header
-                  phaseName={'Phase 2'}
-                  desc={'Grace period'}
-                  date={fairLaunch?.state.data.phaseTwoEnd}
-                />
-              )}
-
-              {phase === Phase.Lottery && (
-                <Header
-                  phaseName={'Phase 3'}
-                  desc={'Raffle in progress'}
-                  date={fairLaunch?.state.data.phaseTwoEnd.add(
-                    fairLaunch?.state.data.lotteryDuration,
+                  phaseName={"JOJO's Candy Machine"}
+                  desc={''}
+                  date={undefined}
+                /> :
+                <>
+                  {phase === Phase.Phase0 && (
+                    <Header
+                      phaseName={'Phase 0'}
+                      desc={'Anticipation Phase'}
+                      date={fairLaunch?.state.data.phaseOneStart}
+                    />
                   )}
-                />
-              )}
+                  {phase === Phase.Phase1 && (
+                    <Header
+                      phaseName={'Phase 1'}
+                      desc={'Set price phase'}
+                      date={fairLaunch?.state.data.phaseOneEnd}
+                    />
+                  )}
 
-              {phase === Phase.Phase3 && !candyMachine && (
-                <Header
-                  phaseName={'Phase 3'}
-                  desc={'Raffle finished!'}
-                  date={fairLaunch?.state.data.phaseTwoEnd}
-                />
-              )}
+                  {phase === Phase.Phase2 && (
+                    <Header
+                      phaseName={'Phase 2'}
+                      desc={'Grace period'}
+                      date={fairLaunch?.state.data.phaseTwoEnd}
+                    />
+                  )}
 
-              {phase === Phase.Phase3 && candyMachine && (
-                <Header
-                  phaseName={'Phase 3'}
-                  desc={'Minting starts in...'}
-                  date={candyMachine?.state.goLiveDate}
-                />
-              )}
+                  {phase === Phase.Lottery && (
+                    <Header
+                      phaseName={'Phase 3'}
+                      desc={'Raffle in progress'}
+                      date={fairLaunch?.state.data.phaseTwoEnd.add(
+                        fairLaunch?.state.data.lotteryDuration,
+                      )}
+                    />
+                  )}
 
-              {phase === Phase.Phase4 && (
-                <Header
-                  phaseName={
-                    candyMachinePredatesFairLaunch ? 'Phase 3' : 'Phase 4'
-                  }
-                  desc={'Candy Time 🍬 🍬 🍬'}
-                  date={candyMachine?.state.goLiveDate}
-                  status="LIVE"
-                />
-              )}
+                  {phase === Phase.Phase3 && !candyMachine && (
+                    <Header
+                      phaseName={'Phase 3'}
+                      desc={'Raffle finished!'}
+                      date={fairLaunch?.state.data.phaseTwoEnd}
+                    />
+                  )}
+
+                  {phase === Phase.Phase3 && candyMachine && (
+                    <Header
+                      phaseName={'Phase 3'}
+                      desc={'Minting starts in...'}
+                      date={candyMachine?.state.goLiveDate}
+                    />
+                  )}
+
+                  {phase === Phase.Phase4 && (
+                    <Header
+                      phaseName={
+                        candyMachinePredatesFairLaunch ? 'Phase 3' : 'Phase 4'
+                      }
+                      desc={'Candy Time 🍬 🍬 🍬'}
+                      date={candyMachine?.state.goLiveDate}
+                      status="LIVE"
+                    />
+                  )}
+                </>}
 
               {fairLaunch && (
                 <Grid
@@ -710,7 +728,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
                       step={step}
                       value={contributed}
                       onChange={(ev, val) => setContributed(val as any)}
-                      valueLabelDisplay="auto"
+                      valueLabelDisplay='auto'
                       style={{
                         width: 'calc(100% - 40px)',
                         marginLeft: 20,
@@ -1127,34 +1145,34 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
           <div style={{ margin: '20px 10px' }}>
             <Grid container direction="row" wrap="nowrap">
               <Grid container md={4} direction="column">
-                <Typography variant="body2" style={{fontSize: 12, color: '#777'}} >
+                <Typography variant="body2" style={{ fontSize: 12, color: '#777' }} >
                   Bids
                 </Typography>
                 <Typography
                   variant="h6"
-                  style={{ fontWeight: 800, fontSize: 28  }}
+                  style={{ fontWeight: 800, fontSize: 28 }}
                 >
                   {fairLaunch?.state.numberTicketsSold.toNumber() || 0}
                 </Typography>
               </Grid>
               <Grid container md={4} direction="column">
-                <Typography variant="body2" style={{fontSize: 12, color: '#777'}}>
+                <Typography variant="body2" style={{ fontSize: 12, color: '#777' }}>
                   Median bid
                 </Typography>
                 <Typography
                   variant="h6"
-                  style={{ fontWeight: 800, fontSize: 28  }}
+                  style={{ fontWeight: 800, fontSize: 28 }}
                 >
                   ◎ {formatNumber.format(median)}
                 </Typography>
               </Grid>
               <Grid container md={4} direction="column">
-                <Typography variant="body2" style={{fontSize: 12, color: '#777'}}>
+                <Typography variant="body2" style={{ fontSize: 12, color: '#777' }}>
                   Total raised
                 </Typography>
                 <Typography
                   variant="h6"
-                  style={{ fontWeight: 800, fontSize: 28  }}
+                  style={{ fontWeight: 800, fontSize: 28 }}
                 >
                   ◎{' '}
                   {formatNumber.format(

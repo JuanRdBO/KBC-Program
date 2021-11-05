@@ -9,7 +9,6 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion';
 import CountUp from 'react-countup';
 
-import { sendSol } from "../../logic/sendSol"
 import { Connection, PublicKey } from '@solana/web3.js';
 
 import { useTokenList } from '../../contexts/TokenList';

@@ -4,7 +4,7 @@ import * as anchor from "@project-serum/anchor";
 import { PublicKey, AccountInfo, ConnectionConfig, Connection } from "@solana/web3.js";
 import { useState } from 'react';
 import { MetaState } from '../contexts/meta/types';
-import { getOrCreateAta } from './sendSol';
+import { getOrCreateAta } from './sendDonation';
 export const METADATA_PREFIX = "metadata";
 
 class Creator {

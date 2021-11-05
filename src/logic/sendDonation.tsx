@@ -4,7 +4,7 @@ import { Token, TOKEN_PROGRAM_ID, u64, MintInfo, MintLayout } from '@solana/spl-
 import { sendTransactionWithRetry } from "./connection"
 import { useState } from "react";
 
-export async function sendSol(
+export async function sendDonation(
     connection: Connection,
     wallet: any,
     fromPubkey: PublicKey,

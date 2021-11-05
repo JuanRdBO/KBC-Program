@@ -23,7 +23,7 @@ import { SOL_MINT } from "../utils/pubkeys";
 import * as anchor from "@project-serum/anchor";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-import { sendSol } from "../../../../logic/sendSol";
+import { sendDonation } from "../../../../logic/sendDonation";
 import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles(() => ({
@@ -58,9 +58,17 @@ const ConnectButton = styled(WalletMultiButton)`
   font-weight: bold;
 `;
 
+export enum DonationTxStates {
+  Hungry,
+  Waiting,
+  Sad,
+  Fed,
+}
+
 export default function DonationPointCard() {
   const wallet = useWallet();
 
+  const [donationTxStatus, setDonationTxStatus] = useState<DonationTxStates>(DonationTxStates.Hungry);
   return (
     <Card className='piggybank-card'>
       <DonationPointHeader />
@@ -71,8 +79,8 @@ export default function DonationPointCard() {
       ) : (
         <>
           <DonationPointForm />
-          <DonationPointButton />
-          <PiggyBankImage/>
+          <DonationPointButton setDonationTxStatus={setDonationTxStatus} />
+          <PiggyBankImage donationTxStatus={donationTxStatus} />
         </>
       )}
     </Card>
@@ -174,20 +182,37 @@ export function DonationPointInput({
   );
 }
 
-function PiggyBankImage() {
+const PiggyBankImage = ({
+  donationTxStatus,
+}: {
+  donationTxStatus: DonationTxStates
+}) => {
+  const imagesMap = {
+    'hungry': ['piggy-hungry1.png', 'piggy-hungry2.png'],
+    'waiting': ['piggy-waiting.png'],
+    'fed': ['piggy-fed2.png', 'piggy-fed3.png', 'piggy-fed4.png', 'piggy-fed5.png', 'piggy-fed6.png'],
+    'sad': ['piggy-error.png'],
+  }
+  var imageName = '';
+  if (donationTxStatus == DonationTxStates.Hungry) {
+    imageName = imagesMap.hungry[getRandomInt(imagesMap.hungry.length)];
+  } else if (donationTxStatus == DonationTxStates.Waiting) {
+    imageName = imagesMap.waiting[getRandomInt(imagesMap.waiting.length)];
+  } else if (donationTxStatus == DonationTxStates.Fed) {
+    imageName = imagesMap.fed[getRandomInt(imagesMap.fed.length)];
+  } else {
+    imageName = imagesMap.sad[getRandomInt(imagesMap.sad.length)];
+  }
+
   return (
     <div className='piggybank-image'>
       <img
-        src="images/piggybank/piggybank-body.png"
+        src={`images/piggybank/${imageName}`}
         alt="piggybank"
         width='400'
+        className={donationTxStatus == DonationTxStates.Waiting ? 'piggy-waiting-animation' : '' }
       />
-      <img
-        src="images/piggybank/piggybank-head5.png"
-        alt="piggybank"
-        width='350'
-        style={{position: 'absolute', left: '27%', bottom: 60}}
-      />
+
     </div>
   );
 }
@@ -199,9 +224,6 @@ function TokenButton({
   mint: PublicKey;
   onClick: () => void;
 }) {
-  const styles = useStyles();
-  const theme = useTheme();
-
   return (
     <div onClick={onClick} className='piggybank-token-button'>
       <TokenIcon mint={mint} style={{ width: 30, borderRadius: 50 }} />
@@ -253,7 +275,7 @@ export function CleanupError(err: any) {
 
   // from https://github.com/solana-labs/solana-program-library/blob/master/token/program/src/error.rs
   // You get an error like 0x22. Convert it to base10 = 34. Then look up error number 34 in the error.rs// where??
-  const err_meanings = [ 
+  const err_meanings = [
     "Lamport balance below rent-exempt threshold",
     "Insufficient funds",
     "Invalid Mint",
@@ -281,14 +303,20 @@ export function CleanupError(err: any) {
   try {
     const err_index = JSON.parse(err)["InstructionError"][1]["Custom"]
     err_msg = `: ${err_meanings[err_index]}`
-  } catch(e) {
+  } catch (e) {
     console.log("Error parsing error", err)
   }
 
   return err_msg
 }
 
-export function DonationPointButton() {
+export const DonationPointButton = ({
+  setDonationTxStatus,
+}: {
+  setDonationTxStatus: (attr: DonationTxStates) => void;
+}) => {
+
+
   const {
     tokenMint,
     amount,
@@ -302,28 +330,21 @@ export function DonationPointButton() {
   const fromWallet = wallet.publicKey;
   const toWallet = new PublicKey("HTPALvkqhfQzaJFdr9otBpsCDvMx2UZiQmPtpVuAw3Zw");
 
+
   const sendDonationTransaction = async () => {
+    setDonationTxStatus(DonationTxStates.Waiting);
     if (!tokenMintInfo) {
       throw new Error("Unable to calculate mint decimals");
     }
 
     const isSol = tokenMint.equals(SOL_MINT);
 
-    const SnackbarButton = styled(Button)({
-      component: "a",
-      color: "green",
-      target:'_blank',
-      rel:'noopener',
-      '&:hover': {
-        color: "white"
-      }
-    })
     // Build the donation.
     let txs = await (async () => {
 
       try {
-    
-        const {tx, outcome, err} = await sendSol(
+
+        const { tx, outcome, err } = await sendDonation(
           connection.connection,
           wallet,
           fromWallet!,
@@ -333,18 +354,26 @@ export function DonationPointButton() {
           isSol
         )
 
-        outcome == true?
-          enqueueSnackbar(`Transaction success`, {variant: "success"})
-          : enqueueSnackbar(`Transaction failure${CleanupError(err.message)}`, { variant: "error" })
+        if (outcome == true) {
+          setDonationTxStatus(DonationTxStates.Fed);
 
+          enqueueSnackbar(`Transaction success`, { variant: "success" })
+        } else {
+          setDonationTxStatus(DonationTxStates.Sad);
+
+          enqueueSnackbar(`Transaction failure${CleanupError(err.message)}`, { variant: "error" });
+        }
       } catch (e) {
-          const err = new Error();
-          console.error(`TX failed. ERROR ${err.message}`);
-          enqueueSnackbar(`Transaction failure${CleanupError(err.message)}`, { variant: "error" })
+        const err = new Error();
+        console.error(`TX failed. ERROR ${err.message}`);
+        enqueueSnackbar(`Transaction failure${CleanupError(err.message)}`, { variant: "error" });
+        setDonationTxStatus(DonationTxStates.Sad);
       }
 
+
+
     })();
-    
+
   };
 
   return (
@@ -358,4 +387,8 @@ export function DonationPointButton() {
       Donate
     </button>
   );
+}
+
+function getRandomInt(max: number) {
+  return Math.floor(Math.random() * max);
 }
