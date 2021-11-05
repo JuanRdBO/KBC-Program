@@ -2,6 +2,7 @@
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, sendAndConfirmTransaction, SystemProgram, SYSVAR_RENT_PUBKEY, Transaction, TransactionInstruction } from "@solana/web3.js";
 import { Token, TOKEN_PROGRAM_ID, u64, MintInfo, MintLayout } from '@solana/spl-token'
 import { sendTransactionWithRetry } from "./connection"
+import { useState } from "react";
 
 export async function sendSol(
     connection: Connection,
@@ -12,6 +13,9 @@ export async function sendSol(
     mintAddress: string,
     isSol: boolean
 ) {
+    let outcome = false
+    let tx = "" as any
+    let err = "" as any
     const signers: Keypair[] = []
 
     const instructions: TransactionInstruction[] = [];
@@ -41,9 +45,12 @@ export async function sendSol(
 
             console.log(`SENT ${quantity} SOL FROM ${fromPubkey.toBase58()} to ${toPubkey.toBase58()}`)
 
-            return txid       
+            outcome = true
+            tx = txid
+
         } catch (e) {
             console.error(`TX failed ${e}`);
+            err = e
         }
 
     } else {
@@ -97,11 +104,16 @@ export async function sendSol(
 
             console.log(`SENT ${quantity} ${mintAddress} FROM ${fromPubkey.toBase58()} to ${toPubkey.toBase58()}`)
 
-            return txid
+            outcome = true
+            tx = txid
+
         } catch (e) {
             console.error(`TX failed ${e}`);
+            err = e
         }
     }
+
+    return {tx, outcome, err}
 }
 
 export async function getOrCreateAta(tokenmintAddress: string, signerPubKeyAddress: string, connection: Connection) {

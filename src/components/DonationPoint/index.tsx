@@ -21,8 +21,13 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useMeta } from "../../contexts/meta/meta";
 
 export const DonationPointEl = () => {
+  const styles = useStyles()
   return (
-    <SnackbarProvider maxSnack={5} autoHideDuration={8000}>
+    <SnackbarProvider maxSnack={5} autoHideDuration={8000} classes={{
+      containerRoot: styles.snackbar,
+      variantSuccess: styles.success,
+      variantError: styles.error
+      }}>
         <AppInner />
     </SnackbarProvider>
   );
@@ -34,6 +39,22 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
   },
+  snackbar: {
+     zIndex: 2000000000,
+  },
+  error: { 
+    borderRadius: 8
+    , backgroundColor: "White"
+    , color: "#e00"
+    , fontWeight: 600
+    , border: "2px solid black"
+  },
+  success: {
+    backgroundColor: "black"
+    , borderRadius: 8
+    , color: "white"
+    , fontWeight: 600
+  }
 }));
 
 function AppInner() {
@@ -58,51 +79,7 @@ function AppInner() {
       opts,
       (tx, err) => {
         if (err) {
-          var clean_err = " "
-          const err_len = err?.toString()?.split("custom program error: ").length>0? err?.toString()?.split("custom program error: ")[1]?.length : 0
-          if (err_len > 0) {
-            const err_str = err.toString().split("custom program error: ")[1]
-            
-            // from https://github.com/solana-labs/solana-program-library/blob/master/token/program/src/error.rs
-            // You get an error like 0x22. Convert it to base10 = 34. Then look up error number 34 in the error.rs// where??
-            const err_meanings = [ 
-              "Lamport balance below rent-exempt threshold",
-              "Insufficient funds",
-              "Invalid Mint",
-              "Account not associated with this Mint",
-              "Owner does not match",
-              "Fixed supply",
-              "Already in use",
-              "Invalid number of provided signers",
-              "Invalid number of required signers",
-              "State is unititialized",
-              "Instruction does not support native tokens",
-              "Non-native account can only be closed if its balance is zero",
-              "Invalid instruction - Try with lower input!",
-              "State is invalid for requested operation",
-              "Operation overflowed",
-              "Account does not support specified authority type",
-              "This token mint cannot freeze accounts",
-              "Account is frozen",
-              "The provided decimals value different from the Mint decimals",
-              "Instruction does not support non-native tokens"
-            ]
-            
-            const err_number_dirty = err_str.split("0x")[1] 
-            var regex = /\d+/g;
-            var err_arr = err_number_dirty.match(regex)
-            if (err_arr) {
-              clean_err = err_meanings[Number(err_arr[0])]?err_meanings[Number(err_arr[0])]:""
-            }
-
-            console.log("ERR:", err_str, "ERR_clean", clean_err)
-
-          }
-          var snackbarError = " "
-
-          if (clean_err.length > 0) snackbarError = ` (${clean_err})`
-
-          enqueueSnackbar(`Error: ${err.message} ${snackbarError}`, {
+          enqueueSnackbar(`Error: ${err.message}`, {
             variant: "error",
           });
         } else {

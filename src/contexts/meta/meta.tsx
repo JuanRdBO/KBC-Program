@@ -49,7 +49,7 @@ export const MetaProvider: React.FC<MetaproviderProps> = ({endpointUrl, children
   async function update() {
       
       if (wallet && !fetchingData) {
-        console.log("UPDATE", fetchingData)
+        /* console.log("UPDATE", fetchingData) */
         fetchingData = true
 
         var metadata = await getMints(wallet.publicKey.toBase58(), endpointUrl);

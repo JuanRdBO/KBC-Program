@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import styled from 'styled-components';
 import {
   PublicKey,
@@ -11,6 +11,7 @@ import {
   Typography,
   TextField,
   useTheme,
+  Button,
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
 import { useDonationPointContext } from "../context/DonationPoint";
@@ -23,6 +24,7 @@ import * as anchor from "@project-serum/anchor";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { sendSol } from "../../../../logic/sendSol";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
 
@@ -274,6 +276,45 @@ function TokenName({ mint, style }: { mint: PublicKey; style: any }) {
   );
 }
 
+export function CleanupError(err: any) {
+
+  // from https://github.com/solana-labs/solana-program-library/blob/master/token/program/src/error.rs
+  // You get an error like 0x22. Convert it to base10 = 34. Then look up error number 34 in the error.rs// where??
+  const err_meanings = [ 
+    "Lamport balance below rent-exempt threshold",
+    "Insufficient funds",
+    "Invalid Mint",
+    "Account not associated with this Mint",
+    "Owner does not match",
+    "Fixed supply",
+    "Already in use",
+    "Invalid number of provided signers",
+    "Invalid number of required signers",
+    "State is unititialized",
+    "Instruction does not support native tokens",
+    "Non-native account can only be closed if its balance is zero",
+    "Invalid instruction - Try with lower input!",
+    "State is invalid for requested operation",
+    "Operation overflowed",
+    "Account does not support specified authority type",
+    "This token mint cannot freeze accounts",
+    "Account is frozen",
+    "The provided decimals value different from the Mint decimals",
+    "Instruction does not support non-native tokens"
+  ]
+
+  let err_msg = ""
+
+  try {
+    const err_index = JSON.parse(err)["InstructionError"][1]["Custom"]
+    err_msg = `: ${err_meanings[err_index]}`
+  } catch(e) {
+    console.log("Error parsing error", err)
+  }
+
+  return err_msg
+}
+
 export function DonationPointButton() {
   const {
     tokenMint,
@@ -283,6 +324,7 @@ export function DonationPointButton() {
   const wallet = useWallet();
   const connection = useConnection();
   const tokenMintInfo = useMint(tokenMint);
+  const { enqueueSnackbar } = useSnackbar();
 
   const fromWallet = wallet.publicKey;
   const toWallet = new PublicKey("HTPALvkqhfQzaJFdr9otBpsCDvMx2UZiQmPtpVuAw3Zw");
@@ -294,12 +336,21 @@ export function DonationPointButton() {
     
     const isSol = tokenMint.equals(SOL_MINT);
 
+    const SnackbarButton = styled(Button)({
+      component: "a",
+      color: "green",
+      target:'_blank',
+      rel:'noopener',
+      '&:hover': {
+        color: "white"
+      }
+    })
     // Build the donation.
     let txs = await (async () => {
     
       try {
     
-        const tx = await sendSol(
+        const {tx, outcome, err} = await sendSol(
           connection.connection,
           wallet,
           fromWallet!,
@@ -307,16 +358,20 @@ export function DonationPointButton() {
           amount,
           pubkeyToString(tokenMint),
           isSol
-        )         
-        
-        return tx
+        )
+
+        outcome == true?
+          enqueueSnackbar(`Transaction success`, {variant: "success"})
+          : enqueueSnackbar(`Transaction failure${CleanupError(err.message)}`, { variant: "error" })
+
       } catch (e) {
-          console.error(`TX failed. ERROR ${e}`);
+          const err = new Error();
+          console.error(`TX failed. ERROR ${err.message}`);
+          enqueueSnackbar(`Transaction failure${CleanupError(err.message)}`, { variant: "error" })
       }
 
     })();
-
-    console.log("TX SUCCESS", txs)
+    
   };
 
   return (
