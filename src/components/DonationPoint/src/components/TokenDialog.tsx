@@ -13,6 +13,7 @@ import {
   Typography,
   Tabs,
   Tab,
+  withStyles,
 } from "@material-ui/core";
 import { TokenIcon } from "./DonationPoint";
 import { useTokens } from "../context/TokenList";
@@ -22,14 +23,17 @@ import { useMeta } from "../../../../contexts/meta/meta";
 const useStyles = makeStyles((theme) => ({
   dialogContent: {
     padding: 0,
+    fontFamily: 'Heebo',
+    paddingBottom: 50
   },
   textField: {
     marginBottom: "8px",
   },
   input: {
-    color: '#fff',
-    border: '1px solid #797A8C'
-
+    color: '#333',
+    border: 'none',
+    borderRadius: 0,
+    fontSize: 12,
   },
   tab: {
     minWidth: "134px",
@@ -37,15 +41,31 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
   },
   tabSelected: {
-    color: 'white',
-    fontWeight: 500,
-    backgroundColor: '#292A3C',
-    borderRadius: "10px",
+    color: 'black',
+    fontWeight: 700,
+    backgroundColor: 'white',
   },
   tabIndicator: {
     opacity: 0,
   },
 }));
+
+const SearchTokenTextField = withStyles({
+  root: {
+    '& .MuiInputBase-input': {
+      color: '#222', // Text color
+    },
+    '& .MuiInput-underline:before': {
+      borderBottomColor: '#999', // Solid underline on hover
+    },
+    '& .MuiInput-underline:hover:before': {
+      borderBottomColor: '#999', // Solid underline on hover
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#222', // Solid underline on focus
+    },
+  },
+})(TextField);
 
 export const pubkeyToString = (key: PublicKey | null | string = '') => {
   return typeof key === 'string' ? key : key?.toBase58() || '';
@@ -60,20 +80,20 @@ export default function TokenDialog({
   onClose: () => void;
   setMint: (mint: PublicKey) => void;
 }) {
-  const {metadata, isLoading} = useMeta()
+  const { metadata, isLoading } = useMeta()
   const [tabSelection, setTabSelection] = useState(0);
   const [tokenFilter, setTokenFilter] = useState("");
   const filter = tokenFilter.toLowerCase();
   const styles = useStyles();
-  const { tokens, tokensSollet, tokensWormhole } =
+  const { tokens/* , tokensSollet, tokensWormhole  */} =
     useTokens();
-  const displayTabs = !useMediaQuery("(max-width:450px)");
-  const selectedTokens =
-    tabSelection === 0
+  const displayTabs = false;//!useMediaQuery("(max-width:450px)");
+  const selectedTokens = tokens
+    /* tabSelection === 0
       ? tokens
       : tabSelection === 1
         ? tokensWormhole
-        : tokensSollet;
+        : tokensSollet */;
   let walletTokens =
     tokenFilter === ""
       ? selectedTokens
@@ -83,12 +103,12 @@ export default function TokenDialog({
           t.name.toLowerCase().startsWith(filter) ||
           t.address.toLowerCase().startsWith(filter)
       );
-        
+
   if (metadata)
-    walletTokens = walletTokens.filter(w => 
-          metadata.some(m => pubkeyToString(m.info.mint) == w.address 
-          || w.name == "Native SOL")
-        )
+    walletTokens = walletTokens.filter(w =>
+      metadata.some(m => pubkeyToString(m.info.mint) == w.address
+        || w.name == "Native SOL")
+    )
 
   return (
     <Dialog
@@ -97,24 +117,27 @@ export default function TokenDialog({
       scroll={"paper"}
       PaperProps={{
         style: {
-          borderRadius: "10px",
+          borderRadius: "16px",
           width: "420px",
-          background: '#18192B',
-          border: '2px solid #292A3C',
-          color: "white",
+          background: '#fff',
+          border: '3px solid #000',
+          color: "#333",
         },
       }}
     >
-      <DialogTitle style={{ fontWeight: "bold" }}>
-        <Typography variant="h6" style={{ paddingBottom: "16px" }}>
+      <DialogTitle>
+        <Typography variant="h6" style={{
+          paddingBottom: "16px", textAlign: 'center',
+          textTransform: 'uppercase', fontSize: 24, fontWeight: 800
+        }} className='gradient-text gradient-red-yellow'>
           Select a token
         </Typography>
-        <TextField
+        <SearchTokenTextField
           className={styles.textField}
-          placeholder={"Search name"}
+          placeholder={"Search token"}
           value={tokenFilter}
           fullWidth
-          variant="outlined"
+          variant="standard"
           InputProps={{
             className: styles.input,
           }}
@@ -150,7 +173,7 @@ export default function TokenDialog({
               classes={{ selected: styles.tabSelected }}
               label="Main"
             />
-            <Tab
+            {/* <Tab
               value={1}
               className={styles.tab}
               classes={{ selected: styles.tabSelected }}
@@ -161,7 +184,7 @@ export default function TokenDialog({
               className={styles.tab}
               classes={{ selected: styles.tabSelected }}
               label="Sollet"
-            />
+            /> */}
           </Tabs>
         </DialogActions>
       )}

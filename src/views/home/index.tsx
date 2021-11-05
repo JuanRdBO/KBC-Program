@@ -337,7 +337,7 @@ function Home() {
                   style={{ textAlign: 'justify' }}
                 >
                   JOJO is the character illustrated in a series of NFTs
-                  collectibles under the name KidsBeatCancer.The NFT
+                  collectibles under the name KidsBeatCancer. The NFT
                   collection comprises 4.321 unique JOJOs, each one of them
                   designed with remarkable traits that combined create a unique
                   and special JOJO.</p>
@@ -348,9 +348,9 @@ function Home() {
                   collection and the main driver for its core team is the tight
                   link and commitment this initiative has with children affected by cancer.
                   Children participated in all the creative layers and are the true
-                  heroes in this story.They designed the background layer for
+                  heroes in this story. They designed the background layer for
                   each of the JOJOs, adding a genuine and authentic dimension to
-                  the character and to the entire collection.Children also lead
+                  the character and to the entire collection. Children also lead
                   some of the fundraising activities that with the support of
                   JOJO and other donations benefit assistance projects for our
                   brave warriors.
@@ -360,11 +360,10 @@ function Home() {
                   className="mb-5 text-black-80 fw-light"
                   style={{ textAlign: 'justify' }}
                 >
-                  Finally, our real life JOJOs, the boys and
-                  girls from the nonprofit SJD Hospital in Barcelona alongside
-                  their doctors and investigators, will receive 33% of the NFT
-                  proceeds, 66% of the royalties that the NFT generates, 100% of
-                  the funds deposited to the KidsBeatCancer.sol wallet and all
+                  Finally, our real life JOJOs alognside
+                  their doctors, investigators and families will receive 66% of the NFT
+                  proceeds, 33% of the royalties that the NFT generates, 100% of
+                  the funds donated to the KidsBeatCancer.sol wallet and all
                   the profits that JOJOs merchandise generate.
                 </p>
               </div>
@@ -514,8 +513,8 @@ function Home() {
 
                         <h3 className="card-title fw-bolder">Social Impact</h3>
                         <p className="card-text mb-0 mt-2 fw-light">
-                          SJD Hospital in Barcelona alongside their medical teams, investigators & families
-                          will receive 33% of the NFT minting proceeds, 66% of the royalties and 100% of
+                          Kids alongside their medical teams, investigators & families
+                          will receive 66% of the NFT minting proceeds, 33% of the royalties and 100% of
                           the funds deposited to the <strong className="gradient-text gradient-red-yellow">KidsBeatCancer.sol</strong> wallet and all the profits
                           from JOJOs merchandise.
                         </p>

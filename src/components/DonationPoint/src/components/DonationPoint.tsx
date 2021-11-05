@@ -205,7 +205,7 @@ function TokenButton({
   return (
     <div onClick={onClick} className='piggybank-token-button'>
       <TokenIcon mint={mint} style={{ width: 30, borderRadius: 50 }} />
-      <TokenName mint={mint} style={{ fontSize: 34, fontWeight: 800, fontFamily: 'Heebo' }} />
+      <TokenName mint={mint} style={{ fontSize: 24, fontWeight: 800, fontFamily: 'Heebo' }} />
       <ExpandMore />
     </div>
   );
