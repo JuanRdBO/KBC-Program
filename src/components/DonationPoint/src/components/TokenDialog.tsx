@@ -27,15 +27,16 @@ const useStyles = makeStyles((theme) => ({
   dialogContent: {
     padding: 0,
     fontFamily: 'Heebo',
+    border: '1px solid #eee'
   },
   tab: {
     color: '#797A8C',
-    width:'200px',
+    width: '200px',
     fontWeight: 500,
   },
   tabSelected: {
     color: 'black',
-    width:'200px',
+    width: '200px',
     fontWeight: 700,
     backgroundColor: 'white',
   },
@@ -86,24 +87,25 @@ export default function TokenDialog({
   if (metadata) walletNfts = metadata.filter(m => m.info.isNFT);
 
   const mediaGrid = (
-    <Grid container spacing={2} style={{ padding: 12 }}>
+    <Grid container spacing={2} style={{ padding: 25 }}>
 
       {walletNfts.length > 0
         ? walletNfts.map((nft, _) => {
           const pubkey = nft.info.mint;
           const image = nft.data.image;
-          
+
           return (
             //{/* <img src={nft.data.image}/> */}
-            image && <Grid item xs={6}  > <Paper onClick={(_) => {
-              console.log('minttt', pubkey);
-              setMint(new PublicKey(pubkey));
-              onClose();
-            }}
-            style={{background: 'transparent', boxShadow: 'none', cursor: 'pointer'}}>
-              <MediaContent key={pubkey} pubkey={pubkey} uri={image} preview={false} style={{borderRadius: 20}} />
-              <p style={{margin: '5px 0', fontSize: 14,color: '#111', fontWeight: 700, fontFamily: 'Heebo', textAlign: 'center'}}>{nft.data.name}</p>
-            </Paper>
+            image && <Grid item xs={6}>
+              <Paper onClick={(_) => {
+                console.log('minttt', pubkey);
+                setMint(new PublicKey(pubkey));
+                onClose();
+              }}
+                style={{ background: 'transparent', boxShadow: 'none', cursor: 'pointer' }}>
+                <MediaContent key={pubkey} pubkey={pubkey} uri={image} preview={false} style={{ borderRadius: 20 }} />
+                <p style={{ margin: '5px 0', fontSize: 14, color: '#111', fontWeight: 700, fontFamily: 'Heebo', textAlign: 'center' }}>{nft.data.name}</p>
+              </Paper>
             </Grid>
           );
         })
@@ -124,14 +126,14 @@ export default function TokenDialog({
           background: '#fff',
           border: '3px solid #000',
           color: "#333",
-          transition: 'height 5 ease',
+          height: 600
         },
       }}
     >
 
       <DialogTitle>
         <Typography variant="h6" style={{
-           textAlign: 'center',
+          textAlign: 'center', marginTop: 10,
           textTransform: 'uppercase', fontSize: 24, fontWeight: 800
         }} className='gradient-text gradient-red-yellow'>
           {tabSelection == 0 ? 'Select a token' : 'Select an NFT'}
@@ -204,7 +206,8 @@ function TokenListItem({
     <ListItem
       button
       onClick={() => onClick(mint)}
-      style={{ padding: "10px 20px" }}
+      style={{ padding: "10px 20px"}}
+      className={'listItem'}
     >
       <TokenIcon mint={mint} style={{ width: "30px", borderRadius: "15px" }} />
       <TokenName tokenInfo={tokenInfo} />

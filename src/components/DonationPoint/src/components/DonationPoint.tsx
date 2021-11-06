@@ -209,6 +209,15 @@ const PiggyBankImage = ({
 
   return (
     <div className='piggybank-image'>
+      {donationTxStatus == DonationTxStates.Hungry && <p>
+        Feed me!</p>}
+      {donationTxStatus == DonationTxStates.Waiting && <p>
+        Hmmm...</p>}
+      {donationTxStatus == DonationTxStates.Fed && <p>
+        Yummy! Thank you!</p>}
+      {donationTxStatus == DonationTxStates.Sad && <p>
+        Ups!</p>}
+
       <img
         src={`images/piggybank/${imageName}`}
         alt="piggybank"
