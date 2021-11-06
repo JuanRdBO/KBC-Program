@@ -136,6 +136,8 @@ export function DonationPointInput({
     mintAccount &&
     tokenAccount.account.amount.toNumber() / 10 ** mintAccount.decimals;
 
+  console.log("TOKENACCOUNT", tokenAccount, tokenAccount && mintAccount && tokenAccount.account.amount.toNumber())
+
   const formattedAmount =
     mintAccount && amount
       ? amount.toLocaleString("en-US", {

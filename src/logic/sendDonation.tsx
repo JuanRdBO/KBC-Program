@@ -66,7 +66,7 @@ export async function sendDonation(
 
         const mintInto = deserializeMint(buffData)
 
-        console.log("MINTINFO", mintInto)
+        /* console.log("MINTINFO", mintInto) */
 
         const lamports = Math.pow(10, mintInto.decimals) * quantity
 
@@ -78,11 +78,11 @@ export async function sendDonation(
             wallet
         );
         const fromTokenAccount = fromAta.ataPubKey
-        const fromInstructions = fromAta.instructions
+        /* const fromInstructions = fromAta.instructions
         
         instructions.push(
             ...fromInstructions
-        )
+        ) */
 
         //get the token account of the toWallet Solana address, if it does not exist, create it
         const toAta = await getOrCreateAta(
