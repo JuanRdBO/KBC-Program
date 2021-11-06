@@ -190,7 +190,7 @@ const PiggyBankImage = ({
 }) => {
   const imagesMap = {
     'hungry': ['piggy-hungry1.png', 'piggy-hungry2.png'],
-    'waiting': ['piggy-waiting.png'],
+    'waiting': ['piggy-waiting1.png', 'piggy-waiting2.png'],
     'fed': ['piggy-fed2.png', 'piggy-fed3.png', 'piggy-fed4.png', 'piggy-fed5.png', 'piggy-fed6.png'],
     'sad': ['piggy-error.png'],
   }

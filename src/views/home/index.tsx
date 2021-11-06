@@ -388,7 +388,7 @@ function Home() {
               <div className="col-md-4">
                 <div className="d-flex align-items-center justify-content-center">
                   <div className="counter counter-xlarge text-dark fw-bolder">
-                    <CountUp end={33} duration={2} />
+                    <CountUp end={80} duration={2} />
                   </div>
                   <span style={{ textTransform: 'none' }}>
                     % of Proceeds
@@ -401,7 +401,7 @@ function Home() {
               <div className="col-md-4">
                 <div className="d-flex align-items-center justify-content-center">
                   <div className="counter counter-xlarge text-dark fw-bolder">
-                    <CountUp end={66} duration={2} />
+                    <CountUp end={100} duration={2} />
                   </div>
                   <span style={{ textTransform: 'none' }}>
                     % of Royalties
@@ -513,7 +513,7 @@ function Home() {
                         <h3 className="card-title fw-bolder">Social Impact</h3>
                         <p className="card-text mb-0 mt-2 fw-light">
                           Kids alongside their medical teams, investigators & families
-                          will receive 66% of the NFT minting proceeds, 33% of the royalties and 100% of
+                          will receive 80% of the NFT minting proceeds, 100% of the royalties and 100% of
                           the funds deposited to the <strong className="gradient-text gradient-red-yellow">KidsBeatCancer.sol</strong> wallet and all the profits
                           from JOJOs merchandise.
                         </p>
@@ -536,7 +536,7 @@ function Home() {
                         <p className="card-text mb-0 mt-2 fw-light">
                           Owners of a JOJO will be gifted the Paid Version of
                           the <strong className="gradient-text gradient-red-yellow">JOJO Canvas</strong> app, a tablet and smartphone app with a set of digital
-                          JOJO parts ready to be combined, painted and decorated.Users will be
+                          JOJO parts ready to be combined, painted and decorated! Users will be
                           able to create their own 2<sup>nd</sup> generation JOJO and mint it as an NFT to store it on-chain
                           forever!
                         </p>
@@ -558,8 +558,9 @@ function Home() {
                         <h3 className="card-title fw-bolder">Merchandise</h3>
                         <p className="card-text mb-0 mt-2 fw-light">
                           KidsBeatCancer will offer merchindise so anyone can
-                          <strong className="gradient-text gradient-red-yellow">&nbsp;join JOJO's cause</strong>. Show everybody you support KidsBeatCancer's cause!All profits
-                          will be donated to child cancer related projects.Help
+                          <strong className="gradient-text gradient-red-yellow">&nbsp;join JOJO's cause</strong>. 
+                          Show everybody you support KidsBeatCancer's cause! All profits
+                          will be donated to projects related with fighting child cancer. Help
                           us reaching more people by giving us merch ideas as
                           well as projects to support on our Discord channel
                           <strong>#jojo-caps</strong>!
@@ -582,10 +583,9 @@ function Home() {
                         <h3 className="card-title fw-bolder">Giveaways</h3>
                         <p className="card-text mb-0 mt-2 fw-light">
                           <ul className="not-styled">
-                            <li className="card-text mb-0 mt-2 fw-light">&#127775; Early Minter <strong>Special Edition</strong> JOJO caps for the first 250 minters</li>
-                            <li className="card-text mb-0 mt-2 fw-light">&#127775; 20 SOL distributed among 5 Minting Wallets</li>
+                            <li className="card-text mb-0 mt-2 fw-light">&#127775; Early Minter <strong>Special Edition</strong> JOJO caps for 250 random minters</li>
                             <li className="card-text mb-0 mt-2 fw-light">&#127775; 10 hidden Solana <strong>Special Edition</strong> JOJO caps to be found during the Solana Breakpoint</li>
-                            <li className="card-text mb-0 mt-2 fw-light">&#127775; Paid Version of the the JOJO Canvas app</li>
+                            <li className="card-text mb-0 mt-2 fw-light">&#127775; 25 free mints for <strong>JOJO Canvas</strong> app</li>
                           </ul>
                         </p>
                         <div className="card-icon">
@@ -607,8 +607,8 @@ function Home() {
                         <p className="card-text mb-0 mt-2 fw-light">
                           The final goal for KidsBeatCancer is to allow all the
                           Solana and Crypto Communinty to join JOJO's cause as
-                          well as empower other projects alike.More JOJOs are
-                          needed and we hope more and more initiatives use this
+                          well as empower other projects alike. More JOJOs are
+                          needed and we hope more and more initiatives use
                           amazing technologies to create new methods for
                           <strong className="gradient-text gradient-red-yellow">&nbsp;improving the world</strong>.
                         </p>
@@ -655,8 +655,8 @@ function Home() {
                     <strong style={{ color: '#333' }}>
                       JOJO's piggybank
                     </strong>
-                    . JOJO loves all Solana token so feel free to send SOL, SPL tokens or even NFTs! 
-                    All donations over $10 will receive the JOJO Suporter SE NFT, don't miss it!
+                    . JOJO loves all Solana tokens so feel free to send SOL, SPL tokens or even NFTs! 
+                    All donors and donations will be registered on chain and the highest 1000 donations appear on <strong>JOJO's Wall of Fame</strong>!
                   </p>
                   <div style={{ textAlign: 'center' }}>
                     <DonationPointEl />

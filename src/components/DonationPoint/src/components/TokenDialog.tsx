@@ -76,11 +76,15 @@ export default function TokenDialog({
           t.address.toLowerCase().startsWith(filter)
       );
 
+
   if (metadata) {
+
     walletTokens = walletTokens.filter(w =>
-      metadata.some(m => pubkeyToString(m.info.mint) == w.address
-        || w.name == "Native SOL")
+      metadata.some(m => pubkeyToString(m.info.mint) == w.address)
     );
+
+    walletTokens.push(...walletTokens.filter(w =>
+      w.name == "Native SOL"))
   }
 
   var walletNfts: Metadata[] = [];
@@ -109,7 +113,7 @@ export default function TokenDialog({
             </Grid>
           );
         })
-          : [...Array(10)].map((_, idx) => <CardLoader key={idx} />) : <div style={{ textAlign: 'center', color: '#ccc', width: '100%',  }}>No NFTs detected in your wallet.</div>}
+          : [...Array(10)].map((_, idx) => <CardLoader key={idx} />) : <div style={{ textAlign: 'center', color: '#ccc', width: '100%', }}>No NFTs detected in your wallet.</div>}
 
     </Grid>
   );

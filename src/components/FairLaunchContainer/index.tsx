@@ -122,8 +122,8 @@ const Header = (props: {
   const { phaseName, desc, date, status } = props;
   return (
     <Grid container justifyContent="center">
-      <Grid xs={ phaseName == "JOJO's Candy Machine" ? 12 : 6} justifyContent='center' direction="column">
-        <Typography style={{ fontWeight: 800, color: '#333', fontSize: phaseName == "JOJO's Candy Machine" ? 16 : 24 , margin: 0, textAlign: phaseName == "JOJO's Candy Machine" ? 'center' :'left' }}>
+      <Grid xs={phaseName == "JOJO's Candy Machine" ? 12 : 6} justifyContent='center' direction="column">
+        <Typography style={{ fontWeight: 800, color: '#333', fontSize: phaseName == "JOJO's Candy Machine" ? 16 : 24, margin: 0, textAlign: phaseName == "JOJO's Candy Machine" ? 'center' : 'left' }}>
           {phaseName}
         </Typography>
         <Typography variant="body2" style={{ color: '#333', textAlign: 'left' }}>
@@ -720,7 +720,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
 
               {[Phase.Phase1, Phase.Phase2].includes(phase) && (
                 <>
-                  <Grid style={{ marginTop: 40, marginBottom: 20, }}>
+                  <Grid style={{ marginTop: 20, marginBottom: 0, }}>
                     <ValueSlider
                       min={min}
                       marks={marks}
@@ -732,13 +732,17 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
                       style={{
                         width: 'calc(100% - 40px)',
                         marginLeft: 20,
-                        height: 30,
+                        marginRight: 20,
+                        height: 0,
                         color: 'black'
                       }}
                     />
                   </Grid>
                 </>
               )}
+              {yourSOLBalance && <div className='' style={{marginBottom: 20, fontFamily: 'Heebo', fontWeight: 700, fontSize: 14}}>
+                SOL Balance: {(yourSOLBalance/LAMPORTS_PER_SOL).toFixed(2)} 
+              </div>}
 
               {!wallet.connected ? (
                 <ConnectButton>
@@ -759,7 +763,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
                         }
                       >
                         {isMinting ? (
-                          <CircularProgress />
+                          <CircularProgress style={{ color: 'black' }} />
                         ) : !fairLaunch?.ticket.data ? (
                           'Place bid'
                         ) : (
@@ -780,7 +784,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
                             fairLaunch?.ticket.data?.state.punched !== undefined
                           }
                         >
-                          {isMinting ? <CircularProgress /> : 'Punch Ticket'}
+                          {isMinting ? <CircularProgress style={{ color: 'black' }} /> : 'Punch Ticket'}
                         </button>
                       )}
 
@@ -794,7 +798,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
                             fairLaunch?.ticket.data?.state.withdrawn !== undefined
                           }
                         >
-                          {isMinting ? <CircularProgress /> : 'Withdraw'}
+                          {isMinting ? <CircularProgress style={{ color: 'black' }} /> : 'Withdraw'}
                         </button>
                       )}
                     </>
@@ -822,7 +826,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
                               ) : candyMachine?.state.isSoldOut ? (
                                 'SOLD OUT'
                               ) : isMinting ? (
-                                <CircularProgress />
+                                <CircularProgress style={{ color: 'black' }} />
                               ) : (
                                 'MINT'
                               )}
@@ -840,7 +844,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
                             fairLaunch?.ticket.data?.state.withdrawn !== undefined
                           }
                         >
-                          {isMinting ? <CircularProgress /> : 'Withdraw'}
+                          {isMinting ? <CircularProgress style={{ color: 'black' }} /> : 'Withdraw'}
                         </button>
                       )}
                     </>
@@ -951,7 +955,7 @@ const FairLaunchContainer = (props: FairLaunchContainerProps) => {
                               }
                             >
                               {isMinting ? (
-                                <CircularProgress />
+                                <CircularProgress style={{ color: 'black' }} />
                               ) : Date.now() / 1000 <
                                 fairLaunch.state.data.antiRugSetting.selfDestructDate.toNumber() ? (
                                 <span>
