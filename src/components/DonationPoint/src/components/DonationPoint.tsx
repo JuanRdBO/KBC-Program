@@ -135,7 +135,7 @@ export function DonationPointInput({
     tokenAccount &&
     mintAccount &&
     tokenAccount.account.amount.toNumber() / 10 ** mintAccount.decimals;
-    
+
   const formattedAmount =
     mintAccount && amount
       ? amount.toLocaleString("en-US", {
@@ -206,24 +206,28 @@ const PiggyBankImage = ({
   }
 
   return (
-    <div className='piggybank-image'>
-      {donationTxStatus == DonationTxStates.Hungry && <p>
-        Feed me!</p>}
-      {donationTxStatus == DonationTxStates.Waiting && <p>
-        Hmmm...</p>}
-      {donationTxStatus == DonationTxStates.Fed && <p>
-        Yummy! Thank you!</p>}
-      {donationTxStatus == DonationTxStates.Sad && <p>
-        Ups!</p>}
+    <>
 
-      <img
-        src={`images/piggybank/${imageName}`}
-        alt="piggybank"
-        width='400'
-        className={donationTxStatus == DonationTxStates.Waiting ? 'piggy-waiting-animation' : ''}
-      />
+      <div className='piggybank-image'>
+        <div className='piggybank-image-title'>
+        {donationTxStatus == DonationTxStates.Hungry && <div>
+          Do you want to donate?<br/>It's for a good cause!</div>}
+        {donationTxStatus == DonationTxStates.Waiting && <p>
+          Waiting for approval...</p>}
+        {donationTxStatus == DonationTxStates.Fed && <p>
+          Amazing! Thanks for your donation.</p>}
+        {donationTxStatus == DonationTxStates.Sad && <p>
+          Something went wrong...</p>}
+          </div>
+        <img
+          src={`images/piggybank/${imageName}`}
+          alt="piggybank"
+          width='400'
+          className={donationTxStatus == DonationTxStates.Waiting ? 'piggy-waiting-animation' : donationTxStatus == DonationTxStates.Fed ? 'piggy-success-animation' : ''}
+        />
 
-    </div>
+      </div>
+    </>
   );
 }
 

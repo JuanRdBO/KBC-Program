@@ -30,9 +30,7 @@ import { SPLTokenListProvider } from './contexts/TokenList';
 import { MetaProvider } from './contexts/meta/meta';
 
 const theme = createTheme({
-  palette: {
-    type: 'dark',
-  },
+
   props: {
     MuiButtonBase: {
       // The properties to apply
@@ -66,7 +64,7 @@ const ENDPOINTS = [
 ];
 
 const App = () => {
-  const endpointUrl = ENDPOINTS[4].endpoint
+  const endpointUrl = ENDPOINTS[0].endpoint
 
   const endpoint = useMemo(() => endpointUrl, []);
 
