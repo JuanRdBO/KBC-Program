@@ -3,6 +3,7 @@ import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, sendAndConfirmTransac
 import { Token, TOKEN_PROGRAM_ID, u64, MintInfo, MintLayout } from '@solana/spl-token'
 import { sendTransactionWithRetry } from "./connection"
 import { useState } from "react";
+import { Wallet } from "@solana/wallet-adapter-wallets";
 
 export async function sendDonation(
     connection: Connection,
@@ -70,18 +71,33 @@ export async function sendDonation(
         const lamports = Math.pow(10, mintInto.decimals) * quantity
 
         // SEND SPL TOKEN
-        const fromTokenAccount = await getOrCreateAta(
+        const fromAta = await getOrCreateAta(
             mintAddress,
             fromPubkey.toBase58(),
-            connection
+            connection,
+            wallet
         );
+        const fromTokenAccount = fromAta.ataPubKey
+        const fromInstructions = fromAta.instructions
+        
+        instructions.push(
+            ...fromInstructions
+        )
 
         //get the token account of the toWallet Solana address, if it does not exist, create it
-        const toTokenAccount = await getOrCreateAta(
+        const toAta = await getOrCreateAta(
             mintAddress,
             toPubkey.toBase58(),
-            connection
+            connection,
+            wallet
         );
+        const toTokenAccount = toAta.ataPubKey
+        const toInstructions = toAta.instructions
+        
+        instructions.push(
+            ...toInstructions
+        )
+
         instructions.push(
             Token.createTransferInstruction(
                 TOKEN_PROGRAM_ID,
@@ -116,7 +132,7 @@ export async function sendDonation(
     return {tx, outcome, err}
 }
 
-export async function getOrCreateAta(tokenmintAddress: string, signerPubKeyAddress: string, connection: Connection) {
+export async function getOrCreateAta(tokenmintAddress: string, signerPubKeyAddress: string, connection: Connection, fromWallet: any) {
 
     const SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID: PublicKey = new PublicKey(
         'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
@@ -134,23 +150,28 @@ export async function getOrCreateAta(tokenmintAddress: string, signerPubKeyAddre
             SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
         )
     )[0];
-    const settleInstructions: TransactionInstruction[] = [];
+    const signers: Keypair[] = []
+    var instructions: TransactionInstruction[] = [];
 
     const existingAta = await connection.getAccountInfo(ata);
 
     // create a new ATA if there is none
     console.log('Looking for existing ata?', existingAta);
     if (!existingAta) {
-        createAssociatedTokenAccountInstruction(
-            settleInstructions,
-            toPublicKey(ata),
-            toPublicKey(signerPubKeyAddress),
-            toPublicKey(signerPubKeyAddress),
-            tokenMint,
-        );
+        instructions.push(
+                createAssociatedTokenAccountInstruction(
+                instructions,
+                toPublicKey(ata),
+                toPublicKey(fromWallet.publicKey),
+                toPublicKey(signerPubKeyAddress),
+                tokenMint,
+            )
+        )
     }
 
-    return new PublicKey(ata)
+    const ataPubKey = new PublicKey(ata)
+
+    return {ataPubKey, instructions}
 }
 
 const PubKeysInternedMap = new Map<string, PublicKey>();
@@ -216,13 +237,13 @@ export function createAssociatedTokenAccountInstruction(
             isWritable: false,
         },
     ];
-    instructions.push(
+    return (
         new TransactionInstruction({
             keys,
             programId: SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
             data: Buffer.from([]),
-        }),
-    );
+        })
+    )
 }
   
 export const deserializeMint = (data: Buffer) => {
