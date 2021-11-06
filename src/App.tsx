@@ -33,6 +33,13 @@ const theme = createTheme({
   palette: {
     type: 'dark',
   },
+  props: {
+    MuiButtonBase: {
+      // The properties to apply
+      disableRipple: true // No more ripple, on the whole application 💣!
+    }
+  }
+  
 });
 
 const ENDPOINTS = [

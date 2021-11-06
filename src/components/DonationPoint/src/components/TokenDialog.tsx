@@ -28,8 +28,6 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
     fontFamily: 'Heebo',
   },
-
-
   tab: {
     color: '#797A8C',
     width:'200px',
@@ -126,6 +124,7 @@ export default function TokenDialog({
           background: '#fff',
           border: '3px solid #000',
           color: "#333",
+          transition: 'height 5 ease',
         },
       }}
     >
@@ -135,7 +134,7 @@ export default function TokenDialog({
            textAlign: 'center',
           textTransform: 'uppercase', fontSize: 24, fontWeight: 800
         }} className='gradient-text gradient-red-yellow'>
-          Select a token
+          {tabSelection == 0 ? 'Select a token' : 'Select an NFT'}
         </Typography>
         {/* <SearchTokenTextField
           className={styles.textField}
