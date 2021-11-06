@@ -64,7 +64,7 @@ const ENDPOINTS = [
 ];
 
 const App = () => {
-  const endpointUrl = ENDPOINTS[0].endpoint
+  const endpointUrl = ENDPOINTS[4].endpoint
 
   const endpoint = useMemo(() => endpointUrl, []);
 

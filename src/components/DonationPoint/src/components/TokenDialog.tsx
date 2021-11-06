@@ -90,7 +90,7 @@ export default function TokenDialog({
     <Grid container spacing={2} style={{ padding: 25 }}>
 
       {walletNfts.length > 0
-        ? walletNfts.map((nft, _) => {
+        ? !isLoading ? walletNfts.map((nft, _) => {
           const pubkey = nft.info.mint;
           const image = nft.data.image;
 
@@ -109,7 +109,7 @@ export default function TokenDialog({
             </Grid>
           );
         })
-        : [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
+          : [...Array(10)].map((_, idx) => <CardLoader key={idx} />) : <div style={{ textAlign: 'center', color: '#ccc', width: '100%',  }}>No NFTs detected in your wallet.</div>}
 
     </Grid>
   );
@@ -206,7 +206,7 @@ function TokenListItem({
     <ListItem
       button
       onClick={() => onClick(mint)}
-      style={{ padding: "10px 20px"}}
+      style={{ padding: "10px 20px" }}
       className={'listItem'}
     >
       <TokenIcon mint={mint} style={{ width: "30px", borderRadius: "15px" }} />
