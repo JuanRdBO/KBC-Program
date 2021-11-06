@@ -13,12 +13,17 @@ import {
   Typography,
   Tabs,
   Tab,
+  Grid,
   withStyles,
+  Paper,
 } from "@material-ui/core";
 import { TokenIcon } from "./DonationPoint";
 import { useTokens } from "../context/TokenList";
 import { useMediaQuery } from "@material-ui/core";
 import { useMeta } from "../../../../contexts/meta/meta";
+import { MediaContent } from "../../../MediaContent";
+import { CardLoader } from "../../../MyLoader";
+import { Metadata } from "../../../../logic/get-mints";
 
 const useStyles = makeStyles((theme) => ({
   dialogContent: {
@@ -85,30 +90,55 @@ export default function TokenDialog({
   const [tokenFilter, setTokenFilter] = useState("");
   const filter = tokenFilter.toLowerCase();
   const styles = useStyles();
-  const { tokens/* , tokensSollet, tokensWormhole  */} =
+  const { tokens/* , tokensSollet, tokensWormhole  */ } =
     useTokens();
-  const displayTabs = false;//!useMediaQuery("(max-width:450px)");
-  const selectedTokens = tokens
-    /* tabSelection === 0
-      ? tokens
-      : tabSelection === 1
-        ? tokensWormhole
-        : tokensSollet */;
+  const displayTabs = true;
   let walletTokens =
     tokenFilter === ""
-      ? selectedTokens
-      : selectedTokens.filter(
+      ? tokens
+      : tokens.filter(
         (t: { symbol: string; name: string; address: string; }) =>
           t.symbol.toLowerCase().startsWith(filter) ||
           t.name.toLowerCase().startsWith(filter) ||
           t.address.toLowerCase().startsWith(filter)
       );
 
-  if (metadata)
+  if (metadata) {
     walletTokens = walletTokens.filter(w =>
       metadata.some(m => pubkeyToString(m.info.mint) == w.address
         || w.name == "Native SOL")
-    )
+    );
+  }
+
+  var walletNfts: Metadata[] = [];
+  if (metadata) walletNfts = metadata.filter(m => m.info.isNFT);
+
+  const mediaGrid = (
+    <Grid container spacing={2} style={{ padding: 12 }}>
+
+      {walletNfts.length > 0
+        ? walletNfts.map((nft, _) => {
+          const pubkey = nft.info.mint;
+          const image = nft.data.image;
+          
+          return (
+            //{/* <img src={nft.data.image}/> */}
+            image && <Grid item xs={6}  > <Paper onClick={(_) => {
+              console.log('minttt', pubkey);
+              setMint(new PublicKey(pubkey));
+              onClose();
+            }}
+            style={{background: 'transparent', boxShadow: 'none', cursor: 'pointer'}}>
+              <MediaContent key={pubkey} pubkey={pubkey} uri={image} preview={false} style={{borderRadius: 20}} />
+              <p style={{margin: '5px 0', fontSize: 14,color: '#111', fontWeight: 700, fontFamily: 'Heebo', textAlign: 'center'}}>{nft.data.name}</p>
+            </Paper>
+            </Grid>
+          );
+        })
+        : [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
+
+    </Grid>
+  );
 
   return (
     <Dialog
@@ -125,6 +155,7 @@ export default function TokenDialog({
         },
       }}
     >
+
       <DialogTitle>
         <Typography variant="h6" style={{
           paddingBottom: "16px", textAlign: 'center',
@@ -145,18 +176,19 @@ export default function TokenDialog({
         />
       </DialogTitle>
       <DialogContent className={styles.dialogContent} dividers={true}>
-        <List disablePadding>
-          {walletTokens.map((tokenInfo: TokenInfo) => (
-            <TokenListItem
-              key={tokenInfo.address}
-              tokenInfo={tokenInfo}
-              onClick={(mint) => {
-                setMint(mint);
-                onClose();
-              }}
-            />
-          ))}
-        </List>
+        {tabSelection === 0 ?
+          <List disablePadding>
+            {walletTokens.map((tokenInfo: TokenInfo) => (
+              <TokenListItem
+                key={tokenInfo.address}
+                tokenInfo={tokenInfo}
+                onClick={(mint) => {
+                  setMint(mint);
+                  onClose();
+                }}
+              />
+            ))}
+          </List> : mediaGrid}
       </DialogContent>
       {displayTabs && (
         <DialogActions>
@@ -171,20 +203,15 @@ export default function TokenDialog({
               value={0}
               className={styles.tab}
               classes={{ selected: styles.tabSelected }}
-              label="Main"
+              label="Tokens"
             />
-            {/* <Tab
+            <Tab
               value={1}
               className={styles.tab}
               classes={{ selected: styles.tabSelected }}
-              label="Wormhole"
+              label="NFTs"
             />
-            <Tab
-              value={2}
-              className={styles.tab}
-              classes={{ selected: styles.tabSelected }}
-              label="Sollet"
-            /> */}
+
           </Tabs>
         </DialogActions>
       )}

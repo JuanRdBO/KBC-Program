@@ -59,8 +59,8 @@ const ENDPOINTS = [
 ];
 
 const App = () => {
-  const endpointUrl = ENDPOINTS[4].endpoint
-  
+  const endpointUrl = ENDPOINTS[0].endpoint
+
   const endpoint = useMemo(() => endpointUrl, []);
 
   const wallets = useMemo(
@@ -72,18 +72,20 @@ const App = () => {
     <HashRouter basename={'/'}>
       <ThemeProvider theme={theme}>
         <ConnectionProvider endpoint={endpoint}>
-          <SPLTokenListProvider>
-            <WalletProvider wallets={wallets} autoConnect>
-              <MetaProvider endpointUrl={endpointUrl}>
+          <WalletProvider wallets={wallets} autoConnect>
+            <MetaProvider endpointUrl={endpointUrl}>
+              <SPLTokenListProvider>
+
                 <WalletModalProvider logo="images/logo.png" featuredWallets={4}>
                   <Switch>
                     <Route path="/purpose" component={() => <Purpose />} />
                     <Route path="/" component={() => <Home />} />
                   </Switch>
                 </WalletModalProvider>
-              </MetaProvider>
-            </WalletProvider>
-          </SPLTokenListProvider>
+              </SPLTokenListProvider>
+
+            </MetaProvider>
+          </WalletProvider>
         </ConnectionProvider>
       </ThemeProvider>
     </HashRouter>

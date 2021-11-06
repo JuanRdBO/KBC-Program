@@ -316,7 +316,7 @@ function Home() {
                     <span
                       className="display-4 fw-bolder gradient-text gradient-red-yellow text-white d-inline-block mx-4 h-op-08 op-ts"
                     >
-                      #activities
+                      #treatments
                     </span>
                   </div>
                 </div>

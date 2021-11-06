@@ -25,6 +25,7 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { sendDonation } from "../../../../logic/sendDonation";
 import { useSnackbar } from "notistack";
+import { useMeta } from "../../../../contexts/meta/meta";
 
 const useStyles = makeStyles(() => ({
   tab: {
@@ -210,7 +211,7 @@ const PiggyBankImage = ({
         src={`images/piggybank/${imageName}`}
         alt="piggybank"
         width='400'
-        className={donationTxStatus == DonationTxStates.Waiting ? 'piggy-waiting-animation' : '' }
+        className={donationTxStatus == DonationTxStates.Waiting ? 'piggy-waiting-animation' : ''}
       />
 
     </div>
@@ -234,8 +235,13 @@ function TokenButton({
 }
 
 export function TokenIcon({ mint, style }: { mint: PublicKey; style: any }) {
+  const { metadata } = useMeta();
   const tokenMap = useTokenMap();
   let tokenInfo = tokenMap.get(mint.toString());
+
+
+  var image = '';
+  if (metadata && !tokenInfo) image = metadata.filter(m => m.info.mint == mint.toBase58())[0].data.image!;
   return (
     <div
       style={{
@@ -247,16 +253,22 @@ export function TokenIcon({ mint, style }: { mint: PublicKey; style: any }) {
       {tokenInfo?.logoURI ? (
         <img alt="Logo" style={style} src={tokenInfo?.logoURI} />
       ) : (
-        <div style={style}></div>
+        <img alt="Logo" style={style} src={image} />
       )}
     </div>
   );
 }
 
 function TokenName({ mint, style }: { mint: PublicKey; style: any }) {
+  const { metadata } = useMeta();
+
+
   const tokenMap = useTokenMap();
   const theme = useTheme();
   let tokenInfo = tokenMap.get(mint.toString());
+
+  var symbol = '';
+  if (metadata && !tokenInfo) symbol = metadata.filter(m => m.info.mint == mint.toBase58())[0].data.symbol;
 
   return (
     <Typography
@@ -266,7 +278,7 @@ function TokenName({ mint, style }: { mint: PublicKey; style: any }) {
         ...style,
       }}
     >
-      {tokenInfo?.symbol}
+      {tokenInfo ? tokenInfo.symbol : symbol}
     </Typography>
   );
 }
@@ -328,7 +340,7 @@ export const DonationPointButton = ({
   const { enqueueSnackbar } = useSnackbar();
 
   const fromWallet = wallet.publicKey;
-  const toWallet = new PublicKey("HTPALvkqhfQzaJFdr9otBpsCDvMx2UZiQmPtpVuAw3Zw");
+  const toWallet = new PublicKey("HFKQaLAZjS5SepN34onhppugvmfXJTjSyqQNVZhv8LMu");
 
 
   const sendDonationTransaction = async () => {

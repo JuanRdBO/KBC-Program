@@ -1212,6 +1212,11 @@
     eip1193-provider "^1.0.1"
     js-sha3 "^0.8.0"
 
+"@cloudflare/stream-react@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@cloudflare/stream-react/-/stream-react-1.4.0.tgz#a45751c3412ccf2768788122efabb76427e490cd"
+  integrity sha512-rnNNPiy7kkeR+JGIgob9SdYW+BUNe7n7+nhDz6zrWNSxSbq9IXZRv8bQbgUnBKYjOTOlqP25boCQzC74gkugtQ==
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.npmjs.org/@cnakazawa/watch/-/watch-1.0.4.tgz"
@@ -1616,6 +1621,11 @@
   version "1.1.2"
   resolved "https://registry.npmjs.org/@gar/promisify/-/promisify-1.1.2.tgz"
   integrity sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==
+
+"@google/model-viewer@^1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@google/model-viewer/-/model-viewer-1.9.2.tgz#aa57d36b172a16622ce27397dc0250670160ff86"
+  integrity sha512-bFn6TJPvPHZDPQ0vYOx1O57A5t4cVjpxaYyYeq2OqOpbZ6+Rkq1PLdyYx8Do7Id1ZPr6WqOaIAxajZ7Jy56G/g==
 
 "@hapi/address@2.x.x":
   version "2.1.4"
@@ -10603,6 +10613,11 @@ react-async-hook@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/react-async-hook/-/react-async-hook-4.0.0.tgz#1f0467586654e1f33b7433bd98c300a0c5f9b3d0"
   integrity sha512-97lgjFkOcHCTYSrsKBpsXg3iVWM0LnzedB749iP76sb3/8Ouu4nHIkCLEOrQWHVYqrYxjF05NN6GHoXWFkB3Kw==
+
+react-content-loader@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/react-content-loader/-/react-content-loader-6.0.3.tgz#32e28ca7120e0a2552fc26655d0d4448cc1fc0c5"
+  integrity sha512-CIRgTHze+ls+jGDIfCitw27YkW2XcaMpsYORTUdBxsMFiKuUYMnlvY76dZE4Lsaa9vFXVw+41ieBEK7SJt0nug==
 
 react-countdown@^2.3.2:
   version "2.3.2"
