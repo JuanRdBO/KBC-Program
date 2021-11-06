@@ -311,12 +311,19 @@ export function CleanupError(err: any) {
   ]
 
   let err_msg = ""
+  // if error explicitly named, set it here
+  if (err.includes("Error: ")) {
+    const err_str = err.replace("Error: ", "").replace("Transaction failed: ", "")
+    err_msg = `: ${err_str}`
+  } else {
+    // if error in a "custom" format, set it here
+    try {
+      const err_index = JSON.parse(err)["InstructionError"][1]["Custom"]
+      err_msg = `: ${err_meanings[err_index]}`
+    } catch (e) {
+      console.log("Error parsing error", err)
+    }
 
-  try {
-    const err_index = JSON.parse(err)["InstructionError"][1]["Custom"]
-    err_msg = `: ${err_meanings[err_index]}`
-  } catch (e) {
-    console.log("Error parsing error", err)
   }
 
   return err_msg
