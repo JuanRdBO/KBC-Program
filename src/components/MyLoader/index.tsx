@@ -6,7 +6,7 @@ export const CardLoader = () => (
     speed={2}
     width={223}
     height={400}
-    viewBox="0 0 250 400"
+    viewBox="0 0 250 300"
     backgroundColor="#0c0c0c"
     foregroundColor="#595959"
   >

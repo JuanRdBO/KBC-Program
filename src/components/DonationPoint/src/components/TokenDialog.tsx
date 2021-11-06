@@ -7,14 +7,12 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
   List,
   ListItem,
   Typography,
   Tabs,
   Tab,
   Grid,
-  withStyles,
   Paper,
 } from "@material-ui/core";
 import { TokenIcon } from "./DonationPoint";
@@ -29,24 +27,17 @@ const useStyles = makeStyles((theme) => ({
   dialogContent: {
     padding: 0,
     fontFamily: 'Heebo',
-    paddingBottom: 50
   },
-  textField: {
-    marginBottom: "8px",
-  },
-  input: {
-    color: '#333',
-    border: 'none',
-    borderRadius: 0,
-    fontSize: 12,
-  },
+
+
   tab: {
-    minWidth: "134px",
     color: '#797A8C',
+    width:'200px',
     fontWeight: 500,
   },
   tabSelected: {
     color: 'black',
+    width:'200px',
     fontWeight: 700,
     backgroundColor: 'white',
   },
@@ -54,23 +45,6 @@ const useStyles = makeStyles((theme) => ({
     opacity: 0,
   },
 }));
-
-const SearchTokenTextField = withStyles({
-  root: {
-    '& .MuiInputBase-input': {
-      color: '#222', // Text color
-    },
-    '& .MuiInput-underline:before': {
-      borderBottomColor: '#999', // Solid underline on hover
-    },
-    '& .MuiInput-underline:hover:before': {
-      borderBottomColor: '#999', // Solid underline on hover
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: '#222', // Solid underline on focus
-    },
-  },
-})(TextField);
 
 export const pubkeyToString = (key: PublicKey | null | string = '') => {
   return typeof key === 'string' ? key : key?.toBase58() || '';
@@ -158,12 +132,12 @@ export default function TokenDialog({
 
       <DialogTitle>
         <Typography variant="h6" style={{
-          paddingBottom: "16px", textAlign: 'center',
+           textAlign: 'center',
           textTransform: 'uppercase', fontSize: 24, fontWeight: 800
         }} className='gradient-text gradient-red-yellow'>
           Select a token
         </Typography>
-        <SearchTokenTextField
+        {/* <SearchTokenTextField
           className={styles.textField}
           placeholder={"Search token"}
           value={tokenFilter}
@@ -173,7 +147,7 @@ export default function TokenDialog({
             className: styles.input,
           }}
           onChange={(e) => setTokenFilter(e.target.value)}
-        />
+        /> */}
       </DialogTitle>
       <DialogContent className={styles.dialogContent} dividers={true}>
         {tabSelection === 0 ?
@@ -242,12 +216,12 @@ function TokenListItem({
 function TokenName({ tokenInfo }: { tokenInfo: TokenInfo }) {
   return (
     <div style={{ marginLeft: "16px" }}>
-      <Typography style={{ fontWeight: "bold" }}>
+      <Typography style={{ fontWeight: 800, fontFamily: 'Heebo', fontSize: 24 }}>
         {tokenInfo?.symbol}
       </Typography>
-      <Typography color="textSecondary" style={{ fontSize: "14px", color: '#797A8C' }}>
+      {/* <Typography color="textSecondary" style={{ fontSize: "14px", color: '#797A8C' }}>
         {tokenInfo?.name}
-      </Typography>
+      </Typography> */}
     </div>
   );
 }
