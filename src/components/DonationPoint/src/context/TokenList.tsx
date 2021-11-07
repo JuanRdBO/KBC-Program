@@ -18,7 +18,7 @@ export const SPL_REGISTRY_SOLLET_TAG = "wrapped-sollet";
 // Tag in the spl-token-registry for wormhole wrapped tokens.
 export const SPL_REGISTRY_WORM_TAG = "wormhole";
 
-const SOL_TOKEN_INFO = {
+export const SOL_TOKEN_INFO = {
   chainId: 101,
   address: SOL_MINT.toString(),
   name: "Native SOL",

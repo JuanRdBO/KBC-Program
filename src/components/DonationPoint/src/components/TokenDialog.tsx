@@ -17,7 +17,6 @@ import {
 } from "@material-ui/core";
 import { TokenIcon } from "./DonationPoint";
 import { useTokens } from "../context/TokenList";
-import { useMediaQuery } from "@material-ui/core";
 import { useMeta } from "../../../../contexts/meta/meta";
 import { MediaContent } from "../../../MediaContent";
 import { CardLoader } from "../../../MyLoader";
@@ -80,12 +79,14 @@ export default function TokenDialog({
   if (metadata) {
 
     walletTokens = walletTokens.filter(w =>
-      metadata.some(m => pubkeyToString(m.info.mint) == w.address)
+      metadata.some(m => pubkeyToString(m.info.mint) === w.address)
     );
 
-    walletTokens.push(...walletTokens.filter(w =>
-      w.name == "Native SOL"))
+    
   }
+
+  walletTokens.push(...walletTokens.filter(w =>
+    w.name === "Native SOL"))
 
   var walletNfts: Metadata[] = [];
   if (metadata) walletNfts = metadata.filter(m => m.info.isNFT);
@@ -140,7 +141,7 @@ export default function TokenDialog({
           textAlign: 'center', marginTop: 10,
           textTransform: 'uppercase', fontSize: 24, fontWeight: 800
         }} className='gradient-text gradient-red-yellow'>
-          {tabSelection == 0 ? 'Select a token' : 'Select an NFT'}
+          {tabSelection === 0 ? 'Select a token' : 'Select an NFT'}
         </Typography>
         {/* <SearchTokenTextField
           className={styles.textField}

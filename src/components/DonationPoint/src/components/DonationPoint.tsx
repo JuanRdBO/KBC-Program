@@ -1,9 +1,7 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import styled from 'styled-components';
 import {
   PublicKey,
-  Keypair,
-
 } from "@solana/web3.js";
 import {
   makeStyles,
@@ -11,7 +9,6 @@ import {
   Typography,
   TextField,
   useTheme,
-  Button,
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
 import { useDonationPointContext } from "../context/DonationPoint";
@@ -20,7 +17,6 @@ import { useTokenMap } from "../context/TokenList";
 import { useMint, useOwnedTokenAccount } from "../context/Token";
 import TokenDialog, { pubkeyToString } from "./TokenDialog";
 import { SOL_MINT } from "../utils/pubkeys";
-import * as anchor from "@project-serum/anchor";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { sendDonation } from "../../../../logic/sendDonation";
@@ -195,11 +191,11 @@ const PiggyBankImage = ({
     'sad': ['piggy-error.png'],
   }
   var imageName = '';
-  if (donationTxStatus == DonationTxStates.Hungry) {
+  if (donationTxStatus === DonationTxStates.Hungry) {
     imageName = imagesMap.hungry[getRandomInt(imagesMap.hungry.length)];
-  } else if (donationTxStatus == DonationTxStates.Waiting) {
+  } else if (donationTxStatus === DonationTxStates.Waiting) {
     imageName = imagesMap.waiting[getRandomInt(imagesMap.waiting.length)];
-  } else if (donationTxStatus == DonationTxStates.Fed) {
+  } else if (donationTxStatus === DonationTxStates.Fed) {
     imageName = imagesMap.fed[getRandomInt(imagesMap.fed.length)];
   } else {
     imageName = imagesMap.sad[getRandomInt(imagesMap.sad.length)];
@@ -210,20 +206,20 @@ const PiggyBankImage = ({
 
       <div className='piggybank-image'>
         <div className='piggybank-image-title'>
-        {donationTxStatus == DonationTxStates.Hungry && <div>
-          Do you want to donate?<br/>It's for a good cause!</div>}
-        {donationTxStatus == DonationTxStates.Waiting && <p>
-          Waiting for approval...</p>}
-        {donationTxStatus == DonationTxStates.Fed && <p>
-          Amazing! Thanks for your donation.</p>}
-        {donationTxStatus == DonationTxStates.Sad && <p>
-          Something went wrong...</p>}
-          </div>
+          {donationTxStatus === DonationTxStates.Hungry && <div>
+            Do you want to donate?<br />It's for a good cause!</div>}
+          {donationTxStatus === DonationTxStates.Waiting && <p>
+            Waiting for approval...</p>}
+          {donationTxStatus === DonationTxStates.Fed && <p>
+            Amazing! Thanks for your donation.</p>}
+          {donationTxStatus === DonationTxStates.Sad && <p>
+            Something went wrong...</p>}
+        </div>
         <img
           src={`images/piggybank/${imageName}`}
           alt="piggybank"
           width='400'
-          className={donationTxStatus == DonationTxStates.Waiting ? 'piggy-waiting-animation' : donationTxStatus == DonationTxStates.Fed ? 'piggy-success-animation' : ''}
+          className={donationTxStatus === DonationTxStates.Waiting ? 'piggy-waiting-animation' : donationTxStatus === DonationTxStates.Fed ? 'piggy-success-animation' : ''}
         />
 
       </div>
@@ -254,7 +250,7 @@ export function TokenIcon({ mint, style }: { mint: PublicKey; style: any }) {
 
 
   var image = '';
-  if (metadata && !tokenInfo) image = metadata.filter(m => m.info.mint == mint.toBase58())[0].data.image!;
+  if (metadata && !tokenInfo) image = metadata.filter(m => m.info.mint === mint.toBase58())[0].data.image!;
   return (
     <div
       style={{
@@ -281,7 +277,7 @@ function TokenName({ mint, style }: { mint: PublicKey; style: any }) {
   let tokenInfo = tokenMap.get(mint.toString());
 
   var symbol = '';
-  if (metadata && !tokenInfo) symbol = metadata.filter(m => m.info.mint == mint.toBase58())[0].data.symbol;
+  if (metadata && !tokenInfo) symbol = metadata.filter(m => m.info.mint = mint.toBase58())[0].data.symbol;
 
   return (
     <Typography
@@ -372,7 +368,7 @@ export const DonationPointButton = ({
     const isSol = tokenMint.equals(SOL_MINT);
 
     // Build the donation.
-    let txs = await (async () => {
+     await (async () => {
 
       try {
 
@@ -386,7 +382,7 @@ export const DonationPointButton = ({
           isSol
         )
 
-        if (outcome == true) {
+        if (outcome === true) {
           setDonationTxStatus(DonationTxStates.Fed);
 
           enqueueSnackbar(`Transaction success`, { variant: "success" })
@@ -401,11 +397,7 @@ export const DonationPointButton = ({
         enqueueSnackbar(`Transaction failure${CleanupError(err.message)}`, { variant: "error" });
         setDonationTxStatus(DonationTxStates.Sad);
       }
-
-
-
     })();
-
   };
 
   return (

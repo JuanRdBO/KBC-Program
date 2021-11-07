@@ -4,14 +4,13 @@ import FairLaunchContainer from "../../components/FairLaunchContainer";
 
 import * as anchor from '@project-serum/anchor';
 import { WalletMultiButton, WalletDisconnectButton } from '@solana/wallet-adapter-react-ui';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useWallet } from '@solana/wallet-adapter-react';
 //@ts-ignore
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion';
 import CountUp from 'react-countup';
 
-import { Connection, PublicKey } from '@solana/web3.js';
+import { Connection } from '@solana/web3.js';
 
-import { useTokenList } from '../../contexts/TokenList';
 import { useMeta } from '../../contexts/meta/meta';
 import { DonationPointEl } from '../../components/DonationPoint';
 
@@ -27,57 +26,61 @@ const startDateSeed = parseInt(process.env.REACT_APP_CANDY_START_DATE!, 10);
 
 const txTimeout = 30000; // milliseconds (confirm this works for your project)
 
-const pubkeyToString = (key: PublicKey | null | string = '') => {
-  return typeof key === 'string' ? key : key?.toBase58() || '';
-};
+
 
 function Home() {
-  const { metadata, isLoading, endpointUrl } = useMeta()
-  const tokenList = useTokenList()
+  const { endpointUrl } = useMeta()
   const wallet = useWallet();
   const connection = new Connection(endpointUrl, "confirmed");
 
 
   const data = [
     {
+      "title": "What's KidsBeatCancer?",
+      "content": `KidsBeatCancer is a non-profit project created by four blockchain enthusiasts 
+      aiming to bring the best of this technology to the world while making a social impact with 
+      it. The multidisciplinary team is experienced in graphic design, music, marketing and 
+      programming and truly motivated to grow, evolve and bridge the traditional and crypto world
+       by providing new meaningful solutions and helpful tools .
+      `
+    },
+    {
+      "title": "What’s the link between KidsBeatCancer and JOJO?",
+      "content": `KidsBeatCancer is the project and the JOJO NFT collection is the first initiative launched through it.
+      `
+    },
+    {
       "title": "What are JOJOs?",
-      "content": `JOJO is the character illustrated in a series of NFTs collectibles
-        under the name KidsBeatCancer.The NFT collection comprises 4.321 unique
-        JOJOs, each one of them designed with remarkable traits that combined create
-        a unique and special JOJO.`
+      "content": `JOJO is the character illustrated in a series of NFTs collectibles under 
+      the KidsBeatCancer Project. The NFT collection comprises 8.421 unique JOJOs, each 
+      one of them designed with remarkable traits that combined create a unique and special 
+      JOJO. The NFT collection is registered and stored on the Solana Blockchain.`
     }, {
       "title": "What happens if I purchase a JOJO?",
-      "content": `You make a change, and not only in your wallet where you will see your JOJO.You enter
-        the KidsBeatCancer community where your voice will
-        be heard regarding this and other initiatives alike, you are gifted with a paid version of
-        the JOJO Canvas app, you enter a 20 SOL raffle and, last but not least, you are donating 33% of the purchase
-        to fight & beat child cancer!`
+      "content": `First of all, when you purchase a JOJO, you become a JOJO member! Enjoy it! 
+      You are free to use it as a profile picture, to show your support, to print it, to send 
+      it as a gift, to sell it, etc. The JOJO is fully yours and no one can ever do anything 
+      about it! However, purchasing a JOJO means much more. You make a change but not only 
+      in your wallet where you will see your JOJO. You enter the KidsBeatCancer DAO, where your 
+      voice and vote set the future initiatives KidsBeatCancer collaborates with, you qualify 
+      for numerous events and experiences and, above all, your purchase directly supports 
+      researchers, doctors and the real life JOJOs, the children diagnosed with cancer.`
     }, {
       "title": "What can I do with my JOJO?",
       "content": `You are JOJO and JOJO is you. Enjoy it! You are free to use it as a profile picture, to show your support, to print it, to send it
         as a gift (hopefully to a good friend), to sell it, to keep it...But it's fully yours
         and noone can ever do anything about it!`
     }, {
-      "title": "Who is the team behind KidsBeatCancer?",
-      "content": <div>KidsBeatCancer has been created by 4 people from Barcelona who
-        joined because they were all open and motivated to
-        work on something meaningful and fun. If you are too,
-        <a href="mailto:jojo@kidsbeatcancer.org" className="h-op-07" style={{ color: "black" }}>
-          <strong> contact us</strong>.
-        </a> Let's make good things happen!</div>
-    }, {
       "title": "Why should I get a JOJO?",
       "content": <div>When you purchase a JOJO you will be contributing to research projects to fight
-        child cancer and activities for the children themselves.Moreover, you will be
-        rewarded with Exclusive Passes and IRL Passes!
+        child cancer and activities for the children themselves. Moreover, you will be
+        rewarded with Exclusive Passes and IRL experiences and events!
 
         Check {<ScrollLink
           to="future" spy={true} smooth={true} offset={0} duration={500} style={{ color: "black" }}>
           <strong>JOJOs Future</strong>
         </ScrollLink>} to see what's comming and how you can be rewarded for long-term owning a JOJO.
-
-        Also, by owning a JOJO you will be eligible to enter Merchandise, NFT and SOL
-        giveaways that will start once the minting is completed!</div>
+      </div>
     }, {
       "title": "Are there any reserved JOJO's?",
       "content": `We have reserved 321 JOJOs for the centers and institutions that will help this
@@ -222,9 +225,9 @@ function Home() {
             </div>
             <div className="mx-auto" style={{ maxWidth: 600 }}>
               <p className="lead fw-normal text-dark mb-5">
-                Get a JOJO and join this adventure to help kids beat cancer!
+                The world’s first blockchain backed non-profit initiative powered by Solana.
+                Meet JOJO and join our adventure to help kids beat cancer!
               </p>
-
               <Link
                 to="/purpose"
                 className="button button-dark button-hero h-translatey-3 tf-ts button-reveal overflow-visible bg-dark text-end"
@@ -275,18 +278,13 @@ function Home() {
                 <div className="col-lg-8">
                   <div>
                     <h3 className="fw-bolder h1 mb-4">
-                      JOIN OUR MOVEMENT, BECOME A &nbsp;
+                      JOIN OUR MOVEMENT, BECOME A&nbsp;
                       <span className="gradient-text gradient-red-yellow">
                         JOJO
                       </span>
                     </h3>
                     <p className="mb-5 lead text-black-50 fw-light">
-                      JOJO represents the bravest and strongest warriors of our
-                      time, the children who face a daily battle against
-                      cancer, with its ups and downs, but always with a smile on
-                      their faces.We want to keep seeing the hope and joy in their
-                      eyes for a better tomorrow and the unbeatable desire to live
-                      and enjoy life.
+                      JOJO is the character illustrated in a series of NFTs collectibles under the KidsBeatCancer project. The NFT collection comprises 4.321 unique JOJOs, each one of them designed with remarkable traits that combined create a unique and special JOJO.
                     </p>
                   </div>
                 </div>
@@ -335,11 +333,8 @@ function Home() {
                   className="mb-3 text-black-80 fw-light"
                   style={{ textAlign: 'justify' }}
                 >
-                  JOJO is the character illustrated in a series of NFTs
-                  collectibles under the name KidsBeatCancer. The NFT
-                  collection comprises 4.321 unique JOJOs, each one of them
-                  designed with remarkable traits that combined create a unique
-                  and special JOJO.</p>
+                  JOJO represents the bravest and strongest warriors of our time, the children who face a daily battle against cancer, but always with a smile on their faces and the unbeatable desire to enjoy life to its fullest.
+                </p>
                 <p
                   className="mb-3 text-black-80 fw-light"
                   style={{ textAlign: 'justify' }}
@@ -356,14 +351,9 @@ function Home() {
                 </p>
 
                 <p
-                  className="mb-5 text-black-80 fw-light"
+                  className="mb-3 text-black-80 fw-light"
                   style={{ textAlign: 'justify' }}
-                >
-                  Finally, our real life JOJOs alognside
-                  their doctors, investigators and families will receive 66% of the NFT
-                  proceeds, 33% of the royalties that the NFT generates, 100% of
-                  the funds donated to the KidsBeatCancer.sol wallet and all
-                  the profits that JOJOs merchandise generate.
+                > All this implication gives the JOJO NFT collection a much bigger purpose than itself, a purpose that exceeds personal interests or objectives, and the team behind is committed fully to it. That’s why 90% of the proceeds generated by the JOJO NFT launch are destined to non-profit institutions like de SJD Pediatric Cancer Center and also to fund future social initiatives of the KidsBeatCancer Foundation. Moreover, royalties generated by secondary sales are sent fully to the donation wallet KidsBeatCancer.sol, which you can use to donate as well. Finally all JOJO merchandise profits are also destined 100% to cancer fight causes.
                 </p>
               </div>
             </div>
@@ -372,41 +362,49 @@ function Home() {
           {/* Numbers */}
           <div className="container" style={{ maxWidth: '1000px' }}>
             <div className="row col-mb-30 mb-3">
-              <div className="col-md-4">
+              <div className="col-md-6">
                 <div className="d-flex align-items-center justify-content-center">
                   <div className="counter counter-xlarge text-dark fw-bolder">
                     <CountUp end={4321} duration={2} />
                   </div>
                   <span style={{ textTransform: 'none' }}>
-                    JOJOs
-                    <br />
-                    Available
+                    available JOJOs in this first generation
+                    NFT collection
                   </span>
                 </div>
               </div>
 
-              <div className="col-md-4">
+              <div className="col-md-6">
                 <div className="d-flex align-items-center justify-content-center">
                   <div className="counter counter-xlarge text-dark fw-bolder">
-                    <CountUp end={80} duration={2} />
+                    <CountUp end={90} duration={2} />
                   </div>
                   <span style={{ textTransform: 'none' }}>
-                    % of Proceeds
-                    <br />
-                    as Donations
+                    % of proceeds are destined to research programs, to fight
+                    cancer and fund childhood cancer projects
                   </span>
                 </div>
               </div>
 
-              <div className="col-md-4">
+              <div className="col-md-6">
                 <div className="d-flex align-items-center justify-content-center">
                   <div className="counter counter-xlarge text-dark fw-bolder">
                     <CountUp end={100} duration={2} />
                   </div>
                   <span style={{ textTransform: 'none' }}>
-                    % of Royalties
-                    <br />
-                    as Donations
+                    % of royalties donated to KidsBeatCancer.sol wallet,
+                    a non-profit fund
+                  </span>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="d-flex align-items-center justify-content-center">
+                  <div className="counter counter-xlarge text-dark fw-bolder">
+                    <CountUp end={100} duration={2} />
+                  </div>
+                  <span style={{ textTransform: 'none' }}>
+                    % of Merchandise profits used to support childhood
+                    cancer projects
                   </span>
                 </div>
               </div>
@@ -471,11 +469,8 @@ function Home() {
                     JOJOs Adventure With <span className="gradient-text gradient-red-yellow">KidsBeatCancer</span>
                   </h3>
                   <p className="center">
-                    Want to be part of JOJOs adventure in a more active way?<br />
-                    <a href="mailto:jojo@kidsbeatcancer.org" className="h-op-07" style={{ color: 'black' }}>
-                      <strong>Contact us&nbsp; </strong>
-                    </a>
-                    and let's create more meaningful initiatives!
+                    When you join the KidsBeatCancer family you also get access <br />to a variety of
+                    exclusive events and experiences.
                   </p>
                 </div>
               </div>
@@ -489,11 +484,12 @@ function Home() {
                       <div className="card-body  h-invert-image">
                         <h3 className="card-title fw-bolder">Exclusive Pass</h3>
                         <p className="card-text mb-0 mt-2 fw-light">
-                          All JOJO NFT owners will have early access to the KidsBeatCancer
-                          <strong className="gradient-text gradient-red-yellow">&nbsp;merchandise pre-sale</strong>
-                          , as well as an exclusive pass to the Kids Playground
-                          where holders will have a voice and decide over
-                          future initiatives regarding this and upcoming projects.
+                          Early access to the KidsBeatCancer non-profit
+                          <strong className="gradient-text gradient-red-yellow">&nbsp;merchandise pre-sale&nbsp;</strong>
+                          and exclusive voting rights in the KidsBeatCancer
+                          <strong className="gradient-text gradient-red-yellow">&nbsp;DAO&nbsp;</strong>
+                          , where JOJO NFT holders will
+                          have the power to decide over new campaigns the KidsBeatCancer Foundation should support.
                         </p>
                         <div className="card-icon">
                           <img src="images/tickets.png" alt="" />
@@ -512,10 +508,9 @@ function Home() {
 
                         <h3 className="card-title fw-bolder">Social Impact</h3>
                         <p className="card-text mb-0 mt-2 fw-light">
-                          Kids alongside their medical teams, investigators & families
-                          will receive 80% of the NFT minting proceeds, 100% of the royalties and 100% of
-                          the funds deposited to the <strong className="gradient-text gradient-red-yellow">KidsBeatCancer.sol</strong> wallet and all the profits
-                          from JOJOs merchandise.
+                          When joining the KidsBeatCancer family, you don’t only help children and their families.
+                          You also support the KidsBeatCancer team and non-profit institutions investigate for
+                          better treatments, build proper infrastructures and train future professionals.
                         </p>
                         <div className="card-icon">
                           <img src="images/handshake.png" alt="" />
@@ -534,11 +529,7 @@ function Home() {
 
                         <h3 className="card-title fw-bolder">IRL Passes</h3>
                         <p className="card-text mb-0 mt-2 fw-light">
-                          Owners of a JOJO will be gifted the Paid Version of
-                          the <strong className="gradient-text gradient-red-yellow">JOJO Canvas</strong> app, a tablet and smartphone app with a set of digital
-                          JOJO parts ready to be combined, painted and decorated! Users will be
-                          able to create their own 2<sup>nd</sup> generation JOJO and mint it as an NFT to store it on-chain
-                          forever!
+                          JOJO NFT owners will be gifted a minting through the <strong className="gradient-text gradient-red-yellow">JOJO Canvas</strong>  app, set to design and customize your own 2nd generation JOJO NFT. The app will enable anyone to create their own JOJO and store it on-chain forever.
                         </p>
                         <div className="card-icon">
                           <img src="images/phone.png" alt="" />
@@ -557,13 +548,7 @@ function Home() {
 
                         <h3 className="card-title fw-bolder">Merchandise</h3>
                         <p className="card-text mb-0 mt-2 fw-light">
-                          KidsBeatCancer will offer merchindise so anyone can
-                          <strong className="gradient-text gradient-red-yellow">&nbsp;join JOJO's cause</strong>. 
-                          Show everybody you support KidsBeatCancer's cause! All profits
-                          will be donated to projects related with fighting child cancer. Help
-                          us reaching more people by giving us merch ideas as
-                          well as projects to support on our Discord channel
-                          <strong>#jojo-caps</strong>!
+                          Another way to support <strong className="gradient-text gradient-red-yellow">&nbsp;join JOJO's cause</strong> while looking cooler than ever is by purchasing the KidsBeatCancer merchandise. Wear the KidsBeatCancer customized T-shirts, sweaters and caps knowing all the profits go towards helping the right cause.
                         </p>
                         <div className="card-icon">
                           <img src="images/cap.png" alt="" />
@@ -578,15 +563,11 @@ function Home() {
                     className="card d-flex align-items-end flex-column p-1 border-0 h-gradient-red-yellow"
                   >
                     <div className="mt-auto p-3" style={{ backgroundColor: 'white', borderRadius: '2px' }}>
-                      <div className="card-body  h-invert-image pb-0">
+                      <div className="card-body  h-invert-image">
 
                         <h3 className="card-title fw-bolder">Giveaways</h3>
                         <p className="card-text mb-0 mt-2 fw-light">
-                          <ul className="not-styled">
-                            <li className="card-text mb-0 mt-2 fw-light">&#127775; Early Minter <strong>Special Edition</strong> JOJO caps for 250 random minters</li>
-                            <li className="card-text mb-0 mt-2 fw-light">&#127775; 10 hidden Solana <strong>Special Edition</strong> JOJO caps to be found during the Solana Breakpoint</li>
-                            <li className="card-text mb-0 mt-2 fw-light">&#127775; 25 free mints for <strong>JOJO Canvas</strong> app</li>
-                          </ul>
+                          Own a JOJO and get the chance to participate in exclusive contests, events and giveaways. Special edition JOJO caps, NFTs and JOJO canvas app free mintings are some of the multiple prizes JOJO owners will be eligible to receive.
                         </p>
                         <div className="card-icon">
                           <img src="images/gift.png" alt="" />
@@ -605,11 +586,7 @@ function Home() {
 
                         <h3 className="card-title fw-bolder">Keep Beating</h3>
                         <p className="card-text mb-0 mt-2 fw-light">
-                          The final goal for KidsBeatCancer is to allow all the
-                          Solana and Crypto Communinty to join JOJO's cause as
-                          well as empower other projects alike. More JOJOs are
-                          needed and we hope more and more initiatives use
-                          amazing technologies to create new methods for
+                          JOJO is the first initiative of the KidsBeatCancer Foundation, but not the last. At  KidsBeatCancer we aim to create new initiatives and support more projects that use these technologies to create new methods for
                           <strong className="gradient-text gradient-red-yellow">&nbsp;improving the world</strong>.
                         </p>
                         <div className="card-icon">
@@ -645,9 +622,7 @@ function Home() {
                     </span>
                   </h3>
                   <p className="mb-5  text-black-50 fw-light">
-                    At KidsBeatCancer we want everyone to be able to collaborate with the
-                    initiatives we are carrying on. Join our purpose and support our mission by
-                    donating to the &nbsp;
+                    We want everyone to be able to collaborate with the initiatives and campaigns we support. Join our cause by donating to the
                     <strong style={{ color: '#333' }}>
                       kidsbeatcancer.sol
                     </strong>
@@ -655,8 +630,9 @@ function Home() {
                     <strong style={{ color: '#333' }}>
                       JOJO's piggybank
                     </strong>
-                    . JOJO loves all Solana tokens so feel free to send SOL, SPL tokens or even NFTs! 
-                    All donors and donations will be registered on chain and the highest 1000 donations appear on <strong>JOJO's Wall of Fame</strong>!
+                    . JOJO loves all Solana tokens so feel free to send SOL, SPL tokens or even NFTs!
+                    The top 1.000 donors will be featured on the
+                    <strong>&nbsp;JOJO's Wall of Fame</strong>!
                   </p>
                   <div style={{ textAlign: 'center' }}>
                     <DonationPointEl />
