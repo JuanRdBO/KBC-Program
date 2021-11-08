@@ -1,38 +1,101 @@
 {
-    "version": "0.0.0",
-    "name": "donorhalloffame",
-    "instructions": [
-      {
-        "name": "entryPoint",
-        "accounts": [
+  "version": "0.0.0",
+  "name": "donorhalloffame",
+  "instructions": [
+    {
+      "name": "entryPoint",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "addDonor",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "twitterHandle",
+          "type": "string"
+        },
+        {
+          "name": "donorName",
+          "type": "string"
+        },
+        {
+          "name": "donatedSol",
+          "type": "u32"
+        },
+        {
+          "name": "donatedToken",
+          "type": "publicKey"
+        },
+        {
+          "name": "donatedAmount",
+          "type": "u32"
+        },
+        {
+          "name": "isNft",
+          "type": "bool"
+        },
+        {
+          "name": "arweaveLink",
+          "type": "string"
+        },
+        {
+          "name": "userAddress",
+          "type": "publicKey"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "BaseAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
-            "name": "baseAccount",
-            "isMut": true,
-            "isSigner": true
+            "name": "totalDonors",
+            "type": "u64"
           },
           {
-            "name": "user",
-            "isMut": true,
-            "isSigner": true
-          },
-          {
-            "name": "systemProgram",
-            "isMut": false,
-            "isSigner": false
+            "name": "donorList",
+            "type": {
+              "vec": {
+                "defined": "DonorStruct"
+              }
+            }
           }
-        ],
-        "args": []
-      },
-      {
-        "name": "addDonor",
-        "accounts": [
-          {
-            "name": "baseAccount",
-            "isMut": true,
-            "isSigner": false
-          }
-        ],
-        "args": [
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "DonorStruct",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
             "name": "twitterHandle",
             "type": "string"
@@ -46,6 +109,26 @@
             "type": "u32"
           },
           {
+            "name": "userAddress",
+            "type": "publicKey"
+          },
+          {
+            "name": "donatedTokens",
+            "type": {
+              "vec": {
+                "defined": "DonatedTokens"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "DonatedTokens",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
             "name": "donatedToken",
             "type": "publicKey"
           },
@@ -54,85 +137,18 @@
             "type": "u32"
           },
           {
-            "name": "userAddress",
-            "type": "publicKey"
+            "name": "isNft",
+            "type": "bool"
+          },
+          {
+            "name": "arweaveLink",
+            "type": "string"
           }
         ]
       }
-    ],
-    "accounts": [
-      {
-        "name": "BaseAccount",
-        "type": {
-          "kind": "struct",
-          "fields": [
-            {
-              "name": "totalDonors",
-              "type": "u64"
-            },
-            {
-              "name": "donorList",
-              "type": {
-                "vec": {
-                  "defined": "DonorStruct"
-                }
-              }
-            }
-          ]
-        }
-      }
-    ],
-    "types": [
-      {
-        "name": "DonorStruct",
-        "type": {
-          "kind": "struct",
-          "fields": [
-            {
-              "name": "twitterHandle",
-              "type": "string"
-            },
-            {
-              "name": "donorName",
-              "type": "string"
-            },
-            {
-              "name": "donatedSol",
-              "type": "u32"
-            },
-            {
-              "name": "userAddress",
-              "type": "publicKey"
-            },
-            {
-              "name": "donatedTokens",
-              "type": {
-                "vec": {
-                  "defined": "DonatedTokens"
-                }
-              }
-            }
-          ]
-        }
-      },
-      {
-        "name": "DonatedTokens",
-        "type": {
-          "kind": "struct",
-          "fields": [
-            {
-              "name": "donatedToken",
-              "type": "publicKey"
-            },
-            {
-              "name": "donatedAmount",
-              "type": "u32"
-            }
-          ]
-        }
-      }
-    ],
-    "metadata": {
-      "address": "EyGzKZaHeUgeqKR9WbeKtsSqPnnE3D7G9NX6bTDWrGdP"
     }
+  ],
+  "metadata": {
+    "address": "13GyyY88tFKDB5Ezdiyhv1wyXW1hNipnHWL2sVcLrUpi"
   }
+}

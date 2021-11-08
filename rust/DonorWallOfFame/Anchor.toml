@@ -1,5 +1,5 @@
 [programs.localnet]
-donor_wall_of_fame = "EyGzKZaHeUgeqKR9WbeKtsSqPnnE3D7G9NX6bTDWrGdP"
+donor_wall_of_fame = "13GyyY88tFKDB5Ezdiyhv1wyXW1hNipnHWL2sVcLrUpi"
 
 [registry]
 url = "https://anchor.projectserum.com"
@@ -9,4 +9,4 @@ cluster = "devnet"
 wallet = "/Users/juanruizdebustillo/.config/solana/id.json"
 
 [scripts]
-test = "mocha -t 1000000 tests/"
+test = "node tests/DonorWallOfFame.js"

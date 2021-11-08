@@ -41,6 +41,8 @@ const main = async() => {
     5,
     random_nft,
     10,
+    true,
+    "test_arweave_link",
     provider.wallet.publicKey, {
     accounts: {
       baseAccount: baseAccount.publicKey,
@@ -53,6 +55,8 @@ const main = async() => {
     10,
     random_nft,
     20,
+    true,
+    "test_arweave_link",
     provider.wallet.publicKey, {
     accounts: {
       baseAccount: baseAccount.publicKey,

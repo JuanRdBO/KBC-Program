@@ -1,6 +1,6 @@
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
-import { AccountInfo } from "@solana/web3.js";
-import React, { useContext, useState } from "react";
+import { AccountInfo, PublicKey } from "@solana/web3.js";
+import React, { useContext, useEffect, useState } from "react";
 import { getMints } from "../../logic/get-mints";
 import { MetaContextState, MetaState } from "./types";
 import { AccountInfo as TokenAccountInfo} from '@solana/spl-token';
@@ -31,7 +31,6 @@ const MetaContext = React.createContext<MetaContextState>({
     update: () => [],
   });
 
-  
 export const useMeta = () => {
   const context = useContext(MetaContext);
   return context;
@@ -49,6 +48,7 @@ export const MetaProvider: React.FC<MetaproviderProps> = ({endpointUrl, children
   async function update() {
       
       if (wallet && !fetchingData) {
+        
         /* console.log("UPDATE", fetchingData) */
         fetchingData = true
 

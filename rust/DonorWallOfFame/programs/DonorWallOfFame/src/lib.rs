@@ -1,7 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("EyGzKZaHeUgeqKR9WbeKtsSqPnnE3D7G9NX6bTDWrGdP");
-
+declare_id!("13GyyY88tFKDB5Ezdiyhv1wyXW1hNipnHWL2sVcLrUpi");
 
 #[program]
 pub mod donorhalloffame {
@@ -21,6 +20,8 @@ pub mod donorhalloffame {
         donated_sol: u32,
         donated_token: Pubkey,
         donated_amount: u32,
+        is_nft: bool,
+        arweave_link: String,
         user_address: Pubkey
     ) -> ProgramResult {
         // Get a reference to the account and increment total_gifs.
@@ -28,7 +29,9 @@ pub mod donorhalloffame {
         
         let donated_tokens_map = DonatedTokens {
             donated_token: donated_token,
-            donated_amount: donated_amount
+            donated_amount: donated_amount,
+            is_nft: is_nft,
+            arweave_link: arweave_link,
         };
 
         // See if donor already donated
@@ -108,7 +111,9 @@ pub struct DonorStruct {
 #[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct DonatedTokens {
     donated_token: Pubkey,
-    donated_amount: u32
+    donated_amount: u32,
+    is_nft: bool,
+    arweave_link: String
 }
 
 // Tell Solana what we want to store on this account.

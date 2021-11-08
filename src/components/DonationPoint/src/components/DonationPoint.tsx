@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from 'styled-components';
 import {
+  Connection,
   PublicKey,
 } from "@solana/web3.js";
 import {
@@ -22,6 +23,32 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { sendDonation } from "../../../../logic/sendDonation";
 import { useSnackbar } from "notistack";
 import { useMeta } from "../../../../contexts/meta/meta";
+import {
+  Program, Provider, web3
+} from '@project-serum/anchor';
+
+import kp from '../../../../keyUtils/keypair.json';
+import idl from '../../../../keyUtils/idl.json';
+import { getDonorList } from "../../../../logic/getDonors";
+
+
+const arr = Object.values(kp._keypair.secretKey)
+const secret = new Uint8Array(arr)
+const baseAccount = web3.Keypair.fromSecretKey(secret)
+
+console.log("baseAccount", baseAccount.publicKey.toBase58())
+
+// Get our program's id form the IDL file.
+const programID = new PublicKey(idl.metadata.address);
+
+// Control's how we want to acknowledge when a trasnaction is "done".
+const opts = {
+  preflightCommitment: "processed"
+}
+
+interface Window {
+  solana: any
+}
 
 const useStyles = makeStyles(() => ({
   tab: {
@@ -349,18 +376,22 @@ export const DonationPointButton = ({
     tokenMint,
     amount,
   } = useDonationPointContext();
-
+  const {endpointUrl} = useMeta();
   const wallet = useWallet();
   const connection = useConnection();
   const tokenMintInfo = useMint(tokenMint);
   const { enqueueSnackbar } = useSnackbar();
+
+  const [donorList, setDonorList] = useState([] as any);
 
   const fromWallet = wallet.publicKey;
   const toWallet = new PublicKey("HFKQaLAZjS5SepN34onhppugvmfXJTjSyqQNVZhv8LMu");
 
 
   const sendDonationTransaction = async () => {
+
     setDonationTxStatus(DonationTxStates.Waiting);
+
     if (!tokenMintInfo) {
       throw new Error("Unable to calculate mint decimals");
     }
@@ -386,6 +417,52 @@ export const DonationPointButton = ({
           setDonationTxStatus(DonationTxStates.Fed);
 
           enqueueSnackbar(`Transaction success`, { variant: "success" })
+
+          const getProvider = () => {
+            //@ts-ignore
+            const connection = new Connection(endpointUrl, opts.preflightCommitment);
+            const provider = new Provider(
+              //@ts-ignore
+              connection, window.solana, opts.preflightCommitment,
+            );
+            return provider;
+          }
+
+          try {
+            const provider = getProvider();
+            //@ts-ignore
+            const program = new Program(idl, programID, provider);
+            let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+            console.log("Donor list", account)
+            //@ts-ignore
+            setDonorList(account.donorList)
+            
+            const d = await getDonorList(endpointUrl)
+            setDonorList(d)
+            console.log("DONORS", donorList, d)
+
+            await program.rpc.addDonor(
+              "@if__name__main", 
+              "Joan Ruiz de Bustillo",
+              isSol? amount: 0,
+              isSol? new PublicKey("So11111111111111111111111111111111111111111"):tokenMint,
+              isSol? 0: amount,
+              false,
+              "test_arweave_link",
+              provider.wallet.publicKey, {
+              accounts: {
+                baseAccount: baseAccount.publicKey,
+              },
+            });
+            account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+            console.log("New Donor list", account)
+
+          } catch (error) {
+            console.log("Error getting donor list", error)
+            setDonorList(null);
+            /* createDonorAccount(); */
+          }
+
         } else {
           setDonationTxStatus(DonationTxStates.Sad);
 
