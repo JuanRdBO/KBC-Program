@@ -75,18 +75,19 @@ export default function TokenDialog({
           t.address.toLowerCase().startsWith(filter)
       );
 
-
+  let displayTokens: TokenInfo[] = [];
+  
   if (metadata) {
-
-    walletTokens = walletTokens.filter(w =>
+    displayTokens = walletTokens.filter(w =>
       metadata.some(m => pubkeyToString(m.info.mint) === w.address)
     );
-
-    
   }
 
-  walletTokens.push(...walletTokens.filter(w =>
-    w.name === "Native SOL"))
+  if(!displayTokens.some(w => w.name === "Native SOL"))
+    displayTokens.push(
+        ...walletTokens.filter(w =>
+        w.name === "Native SOL")
+    )
 
   var walletNfts: Metadata[] = [];
   if (metadata) walletNfts = metadata.filter(m => m.info.isNFT);
@@ -158,7 +159,7 @@ export default function TokenDialog({
       <DialogContent className={styles.dialogContent} dividers={true}>
         {tabSelection === 0 ?
           <List disablePadding>
-            {walletTokens.map((tokenInfo: TokenInfo) => (
+            {displayTokens.map((tokenInfo: TokenInfo) => (
               <TokenListItem
                 key={tokenInfo.address}
                 tokenInfo={tokenInfo}

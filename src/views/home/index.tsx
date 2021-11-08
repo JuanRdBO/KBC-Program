@@ -9,10 +9,15 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { AccordionWrapper, AccordionItem } from 'custom-react-accordion';
 import CountUp from 'react-countup';
 
-import { Connection } from '@solana/web3.js';
+import { Connection, PublicKey } from '@solana/web3.js';
 
 import { useMeta } from '../../contexts/meta/meta';
 import { DonationPointEl } from '../../components/DonationPoint';
+import {
+  Program, Provider, web3
+} from '@project-serum/anchor';
+import kp from '../../keyUtils/keypair.json';
+import idl from '../../keyUtils/idl.json';
 
 const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
   ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
@@ -27,6 +32,24 @@ const startDateSeed = parseInt(process.env.REACT_APP_CANDY_START_DATE!, 10);
 const txTimeout = 30000; // milliseconds (confirm this works for your project)
 
 
+// SystemProgram is a reference to the Solana runtime!
+const { SystemProgram, Keypair } = web3;
+
+const arr = Object.values(kp._keypair.secretKey)
+const secret = new Uint8Array(arr)
+const baseAccount = web3.Keypair.fromSecretKey(secret)
+
+// Get our program's id form the IDL file.
+const programID = new PublicKey(idl.metadata.address);
+
+// Control's how we want to acknowledge when a trasnaction is "done".
+const opts = {
+  preflightCommitment: "processed"
+}
+
+interface Window {
+  solana: any
+}
 
 function Home() {
   const { endpointUrl } = useMeta()

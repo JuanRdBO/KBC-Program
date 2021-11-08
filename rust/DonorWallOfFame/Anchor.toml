@@ -1,0 +1,12 @@
+[programs.localnet]
+donor_wall_of_fame = "EyGzKZaHeUgeqKR9WbeKtsSqPnnE3D7G9NX6bTDWrGdP"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "devnet"
+wallet = "/Users/juanruizdebustillo/.config/solana/id.json"
+
+[scripts]
+test = "mocha -t 1000000 tests/"
