@@ -13,7 +13,13 @@ import { Connection, PublicKey } from '@solana/web3.js';
 
 import { useMeta } from '../../contexts/meta/meta';
 import { DonationPointEl } from '../../components/DonationPoint';
-import { getProvider, Program, web3 } from '@project-serum/anchor';
+import {
+  Program, Provider, web3
+} from '@project-serum/anchor';
+import kp from '../../keyUtils/keypair.json';
+import idl from '../../keyUtils/idl.json';
+import { useEffect, useState } from 'react';
+import { Container, Grid, Paper } from '@material-ui/core';
 
 const candyMachineId = process.env.REACT_APP_CANDY_MACHINE_ID
   ? new anchor.web3.PublicKey(process.env.REACT_APP_CANDY_MACHINE_ID)
@@ -28,7 +34,29 @@ const startDateSeed = parseInt(process.env.REACT_APP_CANDY_START_DATE!, 10);
 const txTimeout = 30000; // milliseconds (confirm this works for your project)
 
 
+// SystemProgram is a reference to the Solana runtime!
+const { SystemProgram, Keypair } = web3;
+
+const arr = Object.values(kp._keypair.secretKey)
+const secret = new Uint8Array(arr)
+const baseAccount = web3.Keypair.fromSecretKey(secret)
+
+console.log("baseAccount", baseAccount.publicKey.toBase58())
+
+// Get our program's id form the IDL file.
+const programID = new PublicKey(idl.metadata.address);
+
+// Control's how we want to acknowledge when a trasnaction is "done".
+const opts = {
+  preflightCommitment: "processed"
+}
+
+interface Window {
+  solana: any
+}
+
 function Home() {
+  const [donorList, setDonorList] = useState([] as any);
   const { endpointUrl } = useMeta()
   const wallet = useWallet();
   const connection = new Connection(endpointUrl, "confirmed");
@@ -145,6 +173,62 @@ function Home() {
     }
   ]
 
+  const getProvider = () => {
+    console.log("connecting to", endpointUrl)
+    //@ts-ignore
+    const connection = new Connection(endpointUrl, opts.preflightCommitment);
+    const provider = new Provider(
+      //@ts-ignore
+      connection, window.solana, opts.preflightCommitment,
+    );
+    return provider;
+  }
+
+  const getDonorList = async () => {
+    try {
+      const provider = getProvider();
+      //@ts-ignore
+      const program = new Program(idl, programID, provider);
+      const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+      //@ts-ignore
+      setDonorList(account.donorList)
+
+    } catch (error) {
+      setDonorList(null);
+      createDonorAccount();
+    }
+  }
+
+  const createDonorAccount = async () => {
+    try {
+      const provider = getProvider();
+      //@ts-ignore
+      const program = new Program(idl, programID, provider);
+      console.log("ping")
+      await program.rpc.entryPoint({
+        accounts: {
+          baseAccount: baseAccount.publicKey,
+          user: provider.wallet.publicKey,
+          systemProgram: SystemProgram.programId,
+        },
+        signers: [baseAccount]
+      });
+      console.log("Created a new BaseAccount w/ address:", baseAccount.publicKey.toString())
+      await getDonorList();
+      console.log("Donor list", donorList)
+
+    } catch (error) {
+      console.log("Error creating BaseAccount account:", error)
+    }
+  }
+
+  useEffect(() => {
+    if (wallet) {
+      console.log('Fetching Donor list...');
+      getDonorList()
+    }
+  }, [wallet.publicKey]);
+
   return (
     <div>
 
@@ -240,11 +324,56 @@ function Home() {
               </ScrollLink>
             </div>
             <div className="">
-              <FairLaunchContainer candyMachineId={candyMachineId}
+              {/* <FairLaunchContainer candyMachineId={candyMachineId}
                 fairLaunchId={fairLaunchId}
                 connection={connection}
                 startDate={startDateSeed}
-                txTimeout={txTimeout} />
+                txTimeout={txTimeout} /> */}
+              <Container style={{ marginTop: 55 }}>
+
+                <Container maxWidth="xs" style={{ position: 'relative', }}>
+                  <div className='gradient-red-yellow border-0 ' style={{ borderRadius: 10, padding: 3, border: '3px solid black', }}>
+                    <Paper
+                      style={{ padding: 24, backgroundColor: '#fff', borderRadius: 6, }}
+                    >
+                      <Grid container justifyContent="center" direction="column" style={{ background: '#fff' }}>
+                        <p className='card-title fw-bolder' style={{fontSize: 22, }}>GET A JOJO HERE!</p>
+                        <p className='card-text mt-2 mb-4 fw-light'>Soon you will be able to collaborate with KidsBeatCancer and get a 1st Generation JOJO NFT. Follow our social media for more news!</p>
+                        <div className="row col-mb-10 ">
+  
+                          <div className="col-3 h-invert-image">
+                            <img
+                              src="images/head 6.png"
+                              alt="KidsBeatCancer"
+                            />
+                          </div>
+
+                          <div className="col-3 h-invert-image">
+                            <img
+                              src="images/head 3.png"
+                              alt="KidsBeatCancer"
+                            />
+                          </div>
+
+                          <div className="col-3  h-invert-image">
+                            <img
+                              src="images/head 4.png"
+                              alt="KidsBeatCancer"
+                            />
+                          </div>
+
+                          <div className="col-3  h-invert-image">
+                            <img
+                              src="images/head 5.png"
+                              alt="KidsBeatCancer"
+                            />
+                          </div>
+                        </div>
+                      </Grid>
+                    </Paper>
+                  </div>
+                </Container>
+              </Container>
             </div>
           </div>
         </div>
