@@ -433,13 +433,13 @@ export const DonationPointButton = ({
             //@ts-ignore
             const program = new Program(idl, programID, provider);
             let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-            console.log("Donor list", account)
+             console.log("Donor list", account)
             //@ts-ignore
             setDonorList(account.donorList)
             
             const d = await getDonorList(endpointUrl)
             setDonorList(d)
-            console.log("DONORS", donorList, d)
+            console.log("DONORS", donorList, d) 
 
             await program.rpc.addDonor(
               "@if__name__main", 
@@ -454,11 +454,11 @@ export const DonationPointButton = ({
                 baseAccount: baseAccount.publicKey,
               },
             });
-            account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-            console.log("New Donor list", account)
+            /* account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+            console.log("New Donor list", account) */
 
           } catch (error) {
-            console.log("Error getting donor list", error)
+            console.log("Error getting donor list2", error)
             setDonorList(null);
             /* createDonorAccount(); */
           }
