@@ -425,7 +425,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "donor_wall_of_fame"
+name = "donorhalloffame"
 version = "0.1.0"
 dependencies = [
  "anchor-lang",

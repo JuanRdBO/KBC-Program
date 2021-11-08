@@ -19,6 +19,7 @@ import { DonationPoint } from "./src";
 import * as anchor from "@project-serum/anchor";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useMeta } from "../../contexts/meta/meta";
+import { SOL_MINT } from "./src/utils/pubkeys";
 
 export const DonationPointEl = () => {
   const styles = useStyles()
@@ -118,7 +119,7 @@ function AppInner() {
     >
       {tokenList &&
         <DonationPoint provider={provider} tokenList={tokenList} amount={1}
-          tokenMint={new PublicKey('Ejmc1UB4EsES5oAaRN63SpoxMJidt3ZGBrqrZk49vjTZ')}
+          tokenMint={SOL_MINT}
         />}
     </Grid>
   );

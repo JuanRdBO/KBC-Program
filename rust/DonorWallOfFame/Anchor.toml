@@ -1,5 +1,5 @@
-[programs.localnet]
-donor_wall_of_fame = "13GyyY88tFKDB5Ezdiyhv1wyXW1hNipnHWL2sVcLrUpi"
+[programs.devnet]
+donorhalloffame = "Ay5HUSmsEJNiTuWCN9hr6WDGE5uMkBWwtTXBfRpA8r9q"
 
 [registry]
 url = "https://anchor.projectserum.com"

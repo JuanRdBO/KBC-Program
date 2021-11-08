@@ -18,7 +18,7 @@ export const USDT_MINT = new PublicKey(
 
 // Arbitrary mint to represent SOL (not wrapped SOL).
 export const SOL_MINT = new PublicKey(
-  'Ejmc1UB4EsES5oAaRN63SpoxMJidt3ZGBrqrZk49vjTZ',
+  'So21111111111111111111111111111111111111111',
 );
 
 export const WRAPPED_SOL_MINT = new PublicKey(

@@ -1,10 +1,10 @@
 
 import {
     Program, Provider, web3
-  } from '@project-serum/anchor';
-  import kp from '../keyUtils/keypair.json';
-  import idl from '../keyUtils/idl.json';
-import { Connection, PublicKey, clusterApiUrl} from '@solana/web3.js';
+} from '@project-serum/anchor';
+import kp from '../keyUtils/keypair.json';
+import idl from '../keyUtils/idl.json';
+import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 
 
 const arr = Object.values(kp._keypair.secretKey)
@@ -18,11 +18,11 @@ const programID = new PublicKey(idl.metadata.address);
 
 // Control's how we want to acknowledge when a trasnaction is "done".
 const opts = {
-  preflightCommitment: "processed"
+    preflightCommitment: "processed"
 }
 
 interface Window {
-  solana: any
+    solana: any
 }
 
 /* export async function getDonationList() {
@@ -95,14 +95,14 @@ const getProvider = () => {
 } */
 
 export const getDonorList = async (endpointUrl: string) => {
-    
+
     const getProvider = () => {
         console.log("connecting to", endpointUrl)
         //@ts-ignore
         const connection = new Connection(endpointUrl, opts.preflightCommitment);
         const provider = new Provider(
-          //@ts-ignore
-          connection, window.solana, opts.preflightCommitment,
+            //@ts-ignore
+            connection, window.solana, opts.preflightCommitment,
         );
         return provider;
     }
@@ -114,8 +114,8 @@ export const getDonorList = async (endpointUrl: string) => {
         console.log("Donor list", account)
         //@ts-ignore
         return account.donorList
-      } catch (error) {
+    } catch (error) {
         console.log("Error getting donor list", error)
-      }
-  }
+    }
+}
 

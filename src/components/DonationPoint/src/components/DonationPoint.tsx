@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {
   Connection,
   PublicKey,
+  SystemProgram,
 } from "@solana/web3.js";
 import {
   makeStyles,
@@ -24,11 +25,12 @@ import { sendDonation } from "../../../../logic/sendDonation";
 import { useSnackbar } from "notistack";
 import { useMeta } from "../../../../contexts/meta/meta";
 import {
+  BN,
   Program, Provider, web3
 } from '@project-serum/anchor';
 
 import kp from '../../../../keyUtils/keypair.json';
-import idl from '../../../../keyUtils/idl.json';
+/* import idl from '../../../../keyUtils/idl.json'; */
 import { getDonorList } from "../../../../logic/getDonors";
 
 
@@ -39,7 +41,9 @@ const baseAccount = web3.Keypair.fromSecretKey(secret)
 console.log("baseAccount", baseAccount.publicKey.toBase58())
 
 // Get our program's id form the IDL file.
-const programID = new PublicKey(idl.metadata.address);
+const programID = new PublicKey(
+  "Ay5HUSmsEJNiTuWCN9hr6WDGE5uMkBWwtTXBfRpA8r9q"
+);
 
 // Control's how we want to acknowledge when a trasnaction is "done".
 const opts = {
@@ -370,13 +374,12 @@ export const DonationPointButton = ({
 }: {
   setDonationTxStatus: (attr: DonationTxStates) => void;
 }) => {
-
-
   const {
     tokenMint,
     amount,
   } = useDonationPointContext();
-  const {endpointUrl} = useMeta();
+
+  const {endpointUrl, metadata} = useMeta();
   const wallet = useWallet();
   const connection = useConnection();
   const tokenMintInfo = useMint(tokenMint);
@@ -403,15 +406,16 @@ export const DonationPointButton = ({
 
       try {
 
-        const { tx, outcome, err } = await sendDonation(
+ /*        const { tx, outcome, err } = await sendDonation(
           connection.connection,
           wallet,
           fromWallet!,
           toWallet,
           amount,
           pubkeyToString(tokenMint),
-          isSol
-        )
+          isSol    
+        ) */
+        let outcome = true;
 
         if (outcome === true) {
           setDonationTxStatus(DonationTxStates.Fed);
@@ -427,35 +431,47 @@ export const DonationPointButton = ({
             );
             return provider;
           }
-
+          
           try {
             const provider = getProvider();
-            //@ts-ignore
+            const LAMPORTS_PER_TOKEN = Math.pow(10, tokenMintInfo.decimals || 0)
+            // to do this, initialize idl with  anchor idl init --filepath target/idl/donorhalloffame.json 13GyyY88tFKDB5Ezdiyhv1wyXW1hNipnHWL2sVcLrUpi
+            const idl = await Program.fetchIdl(programID, provider);
             const program = new Program(idl, programID, provider);
             let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+
              console.log("Donor list", account)
             //@ts-ignore
             setDonorList(account.donorList)
-            
             const d = await getDonorList(endpointUrl)
             setDonorList(d)
-            console.log("DONORS", donorList, d) 
+            console.log("DONORS", donorList, d, tokenMintInfo) 
+            
+            // search for arweave metadata
+            let mintMatch = metadata.filter(m => pubkeyToString(m.info.mint) == pubkeyToString(tokenMint))[0];
+            let arLink = mintMatch?.data? mintMatch.data.uri: "_"
+            let isNft = mintMatch?.info? mintMatch.info.isNFT: false
+            
+            console.log("ARLINK", arLink, mintMatch, metadata)
 
             await program.rpc.addDonor(
-              "@if__name__main", 
-              "Joan Ruiz de Bustillo",
-              isSol? amount: 0,
-              isSol? new PublicKey("So11111111111111111111111111111111111111111"):tokenMint,
-              isSol? 0: amount,
-              false,
-              "test_arweave_link",
+              "@redacted_j",  // TODO: Nico editar variable amb retorn del modal
+              "Jordan Prince", // TODO: Nico editar variable amb retorn del modal
+              isSol? new BN(amount * LAMPORTS_PER_TOKEN) : new BN(0),
+              isSol? SOL_MINT: tokenMint,
+              isSol? new BN(0): new BN(amount * LAMPORTS_PER_TOKEN),
+              isNft, 
+              arLink, 
               provider.wallet.publicKey, {
               accounts: {
                 baseAccount: baseAccount.publicKey,
+                clock: web3.SYSVAR_CLOCK_PUBKEY
               },
             });
-            /* account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-            console.log("New Donor list", account) */
+            account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+            //@ts-ignore
+            setDonorList(account.donorList)
+            console.log("New Donor list", account, donorList)
 
           } catch (error) {
             console.log("Error getting donor list2", error)
@@ -466,7 +482,7 @@ export const DonationPointButton = ({
         } else {
           setDonationTxStatus(DonationTxStates.Sad);
 
-          enqueueSnackbar(`Transaction failure${CleanupError(err.message)}`, { variant: "error" });
+          //enqueueSnackbar(`Transaction failure${CleanupError(err.message)}`, { variant: "error" });
         }
       } catch (e) {
         const err = new Error();

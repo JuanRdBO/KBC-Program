@@ -139,7 +139,11 @@
           },
           {
             "name": "donatedAmount",
-            "type": "u32"
+            "type": {
+              "vec": {
+                "defined": "DonatedAmount"
+              }
+            }
           },
           {
             "name": "isNft",
@@ -148,16 +152,28 @@
           {
             "name": "arweaveLink",
             "type": "string"
-          },
+          }
+        ]
+      }
+    },
+    {
+      "name": "DonatedAmount",
+      "type": {
+        "kind": "struct",
+        "fields": [
           {
             "name": "timestamp",
             "type": "i64"
+          },
+          {
+            "name": "donatedAmount",
+            "type": "u32"
           }
         ]
       }
     }
   ],
   "metadata": {
-    "address": "13GyyY88tFKDB5Ezdiyhv1wyXW1hNipnHWL2sVcLrUpi"
+    "address": "Ay5HUSmsEJNiTuWCN9hr6WDGE5uMkBWwtTXBfRpA8r9q"
   }
 }

@@ -46,6 +46,7 @@ const main = async() => {
     provider.wallet.publicKey, {
     accounts: {
       baseAccount: baseAccount.publicKey,
+      clock: anchor.web3.SYSVAR_CLOCK_PUBKEY
     },
   });
   
@@ -60,6 +61,7 @@ const main = async() => {
     provider.wallet.publicKey, {
     accounts: {
       baseAccount: baseAccount.publicKey,
+      clock: anchor.web3.SYSVAR_CLOCK_PUBKEY
     },
   });
 

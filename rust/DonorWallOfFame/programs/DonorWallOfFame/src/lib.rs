@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("13GyyY88tFKDB5Ezdiyhv1wyXW1hNipnHWL2sVcLrUpi");
+declare_id!("Ay5HUSmsEJNiTuWCN9hr6WDGE5uMkBWwtTXBfRpA8r9q");
 
 #[program]
 pub mod donorhalloffame {
@@ -22,17 +22,12 @@ pub mod donorhalloffame {
         donated_amount: u32,
         is_nft: bool,
         arweave_link: String,
-        user_address: Pubkey
+        user_address: Pubkey,
     ) -> ProgramResult {
+
         // Get a reference to the account and increment total_gifs.
         let base_account = &mut ctx.accounts.base_account;
-        
-        let donated_tokens_map = DonatedTokens {
-            donated_token: donated_token,
-            donated_amount: donated_amount,
-            is_nft: is_nft,
-            arweave_link: arweave_link,
-        };
+        let timestamp = ctx.accounts.clock.unix_timestamp;
 
         // See if donor already donated
         let mut index = 0;
@@ -44,7 +39,20 @@ pub mod donorhalloffame {
                 index = i;
                 index_found = true;
             }
-        }
+        };
+
+        let donated_amount_map = DonatedAmount{ 
+            timestamp: timestamp, 
+            donated_amount: donated_amount,
+        };
+
+        // construct the donated tokens object
+        let donated_tokens_map = DonatedTokens {
+            donated_token: donated_token,
+            donated_amount: [donated_amount_map].to_vec(),
+            is_nft: is_nft,
+            arweave_link: arweave_link,
+        };
 
         if index_found {  // if donor already exists, append to already donated amount
 
@@ -52,7 +60,10 @@ pub mod donorhalloffame {
 
             if base_account.donor_list[index].donated_tokens.iter().any(|p| p.donated_token == donated_token) {
                 // if donor is found, but they donated an already known token, append it to existing amount
-                base_account.donor_list[index].donated_tokens[0].donated_amount += donated_amount;
+                base_account.donor_list[index]
+                .donated_tokens[0]
+                .donated_amount[0]
+                .donated_amount += donated_amount;
             } else {
                 // if donor is found, but they donated a new token, push it
                 base_account.donor_list[index].donated_tokens.push(donated_tokens_map);
@@ -95,7 +106,8 @@ pub struct EntryPoint<'info> {
 #[derive(Accounts)]
 pub struct AddDonor<'info> {
   #[account(mut)]
-  pub base_account: Account<'info, BaseAccount>
+  pub base_account: Account<'info, BaseAccount>,
+  pub clock: Sysvar<'info, Clock>
 }
 
 // Create a custom struct for us to work with.
@@ -110,10 +122,16 @@ pub struct DonorStruct {
 
 #[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct DonatedTokens {
-    donated_token: Pubkey,
-    donated_amount: u32,
-    is_nft: bool,
-    arweave_link: String
+    pub donated_token: Pubkey,
+    pub donated_amount: Vec<DonatedAmount>,
+    pub is_nft: bool,
+    pub arweave_link: String,
+}
+
+#[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
+pub struct DonatedAmount {
+    pub timestamp: i64,
+    pub donated_amount: u32,
 }
 
 // Tell Solana what we want to store on this account.
