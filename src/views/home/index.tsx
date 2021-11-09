@@ -231,7 +231,6 @@ function Home() {
 
   return (
     <div>
-
       {/* Header */}
       <div className="header">
         <div className="logo">
@@ -337,9 +336,9 @@ function Home() {
                       style={{ padding: 24, backgroundColor: '#fff', borderRadius: 6, }}
                     >
                       <Grid container justifyContent="center" direction="column" style={{ background: '#fff' }}>
-                        <p className='card-title fw-bolder' style={{fontSize: 22, }}>GET A JOJO HERE!</p>
+                        <p className='card-title fw-bolder' style={{ fontSize: 22, }}>GET A JOJO HERE!</p>
                         <p className='card-text mt-2 mb-4 fw-light'>Soon you will be able to collaborate with KidsBeatCancer and get a 1st Generation JOJO NFT. Follow our social media for more news!</p>
-                        <div className="row col-mb-10 ">
+                        {/* <div className="row col-mb-10 ">
   
                           <div className="col-3 h-invert-image">
                             <img
@@ -355,18 +354,31 @@ function Home() {
                             />
                           </div>
 
-                          <div className="col-3  h-invert-image">
+                          <div className="col-3 h-invert-image">
                             <img
                               src="images/head 4.png"
                               alt="KidsBeatCancer"
                             />
                           </div>
 
-                          <div className="col-3  h-invert-image">
+                          <div className="col-3 h-invert-image">
                             <img
                               src="images/head 5.png"
                               alt="KidsBeatCancer"
                             />
+                          </div>
+                        </div> */}
+                        <div className="col-12  row align-items-center justify-content-center footer-social" style={{ margin: 'auto' }}>
+                          <div className="col-auto text-center">
+                            <a href="https://discord.com" target='_blank' rel="noreferrer" className="social-icon    si-discord si-dark">
+                              <i className="icon-discord"></i>
+                              <i className="icon-discord"></i>
+                            </a>
+
+                            <a href="https://twitter.com" target='_blank' rel="noreferrer" className="social-icon  si-twitter si-dark">
+                              <i className="icon-twitter"></i>
+                              <i className="icon-twitter"></i>
+                            </a>
                           </div>
                         </div>
                       </Grid>
@@ -508,7 +520,7 @@ function Home() {
                   </div>
                   <span style={{ textTransform: 'none' }}>
                     % of proceeds are destined to research programs, to fight
-                    cancer and fund childhood cancer projects
+                    cancer and fund child cancer projects
                   </span>
                 </div>
               </div>

@@ -26,7 +26,6 @@ interface Window {
 }
 
 /* export async function getDonationList() {
-
     // SystemProgram is a reference to the Solana runtime!
     const { SystemProgram, Keypair } = web3;
     const {endpointUrl} = useMeta();
@@ -95,7 +94,6 @@ const getProvider = () => {
 } */
 
 export const getDonorList = async (endpointUrl: string) => {
-
     const getProvider = () => {
         console.log("connecting to", endpointUrl)
         //@ts-ignore
@@ -111,7 +109,7 @@ export const getDonorList = async (endpointUrl: string) => {
         //@ts-ignore
         const program = new Program(idl, programID, provider);
         const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-        console.log("Donor list", account)
+        //console.log("Donor list", account)
         //@ts-ignore
         return account.donorList
     } catch (error) {

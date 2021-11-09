@@ -32,6 +32,7 @@ import {
 import kp from '../../../../keyUtils/keypair.json';
 /* import idl from '../../../../keyUtils/idl.json'; */
 import { getDonorList } from "../../../../logic/getDonors";
+import DonorsDialog from "./DonorsDialog";
 
 
 const arr = Object.values(kp._keypair.secretKey)
@@ -95,8 +96,9 @@ export enum DonationTxStates {
 
 export default function DonationPointCard() {
   const wallet = useWallet();
-
   const [donationTxStatus, setDonationTxStatus] = useState<DonationTxStates>(DonationTxStates.Hungry);
+  const [donorsList, setDonorsList] = useState([] as any);
+
   return (
     <Card className='piggybank-card'>
       <DonationPointHeader />
@@ -107,10 +109,12 @@ export default function DonationPointCard() {
       ) : (
         <>
           <DonationPointForm />
-          <DonationPointButton setDonationTxStatus={setDonationTxStatus} />
+          <DonationPointButton setDonationTxStatus={setDonationTxStatus} donorsList={donorsList} setDonorsList={setDonorsList} />
           <PiggyBankImage donationTxStatus={donationTxStatus} />
+
         </>
       )}
+      <DonorsDialog donorsList={donorsList} />
     </Card>
   );
 }
@@ -301,8 +305,6 @@ export function TokenIcon({ mint, style }: { mint: PublicKey; style: any }) {
 
 function TokenName({ mint, style }: { mint: PublicKey; style: any }) {
   const { metadata } = useMeta();
-
-
   const tokenMap = useTokenMap();
   const theme = useTheme();
   let tokenInfo = tokenMap.get(mint.toString());
@@ -369,27 +371,27 @@ export function CleanupError(err: any) {
   return err_msg
 }
 
-export const DonationPointButton = ({
-  setDonationTxStatus,
-}: {
+export const DonationPointButton = (props: {
   setDonationTxStatus: (attr: DonationTxStates) => void;
+  donorsList: any;
+  setDonorsList: (attr: any) => void;
 }) => {
+  const { setDonationTxStatus, donorsList, setDonorsList } = props;
   const {
     tokenMint,
     amount,
   } = useDonationPointContext();
 
-  const {endpointUrl, metadata} = useMeta();
+  const { endpointUrl, metadata } = useMeta();
   const wallet = useWallet();
   const connection = useConnection();
   const tokenMintInfo = useMint(tokenMint);
   const { enqueueSnackbar } = useSnackbar();
 
-  const [donorList, setDonorList] = useState([] as any);
+  //const [donorList, setDonorList] = useState([] as any);
 
   const fromWallet = wallet.publicKey;
   const toWallet = new PublicKey("HFKQaLAZjS5SepN34onhppugvmfXJTjSyqQNVZhv8LMu");
-
 
   const sendDonationTransaction = async () => {
 
@@ -402,20 +404,17 @@ export const DonationPointButton = ({
     const isSol = tokenMint.equals(SOL_MINT);
 
     // Build the donation.
-     await (async () => {
-
+    await (async () => {
       try {
-
- /*        const { tx, outcome, err } = await sendDonation(
+        const { tx, outcome, err } = await sendDonation(
           connection.connection,
           wallet,
           fromWallet!,
           toWallet,
           amount,
           pubkeyToString(tokenMint),
-          isSol    
-        ) */
-        let outcome = true;
+          isSol
+        )
 
         if (outcome === true) {
           setDonationTxStatus(DonationTxStates.Fed);
@@ -431,57 +430,57 @@ export const DonationPointButton = ({
             );
             return provider;
           }
-          
+
           try {
             const provider = getProvider();
             const LAMPORTS_PER_TOKEN = Math.pow(10, tokenMintInfo.decimals || 0)
             // to do this, initialize idl with  anchor idl init --filepath target/idl/donorhalloffame.json 13GyyY88tFKDB5Ezdiyhv1wyXW1hNipnHWL2sVcLrUpi
             const idl = await Program.fetchIdl(programID, provider);
+
             const program = new Program(idl, programID, provider);
             let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-
-             console.log("Donor list", account)
+            console.log("Donor list", account);
             //@ts-ignore
-            setDonorList(account.donorList)
-            const d = await getDonorList(endpointUrl)
-            setDonorList(d)
-            console.log("DONORS", donorList, d, tokenMintInfo) 
-            
-            // search for arweave metadata
-            let mintMatch = metadata.filter(m => pubkeyToString(m.info.mint) == pubkeyToString(tokenMint))[0];
-            let arLink = mintMatch?.data? mintMatch.data.uri: "_"
-            let isNft = mintMatch?.info? mintMatch.info.isNFT: false
-            
-            console.log("ARLINK", arLink, mintMatch, metadata)
+            const currentDonorList = await getDonorList(endpointUrl);
+            setDonorsList(currentDonorList);
+            console.log("DONORS", donorsList, currentDonorList, tokenMintInfo);
 
+            // search for arweave metadata
+            let mintMatch = metadata.filter(m => pubkeyToString(m.info.mint) === pubkeyToString(tokenMint))[0];
+            let arLink = mintMatch?.data ? mintMatch.data.uri : "_"
+            let isNft = mintMatch?.info ? mintMatch.info.isNFT : false
+
+            console.log("ARLINK", arLink, mintMatch, metadata)
+            // Add donor to account
             await program.rpc.addDonor(
               "@redacted_j",  // TODO: Nico editar variable amb retorn del modal
               "Jordan Prince", // TODO: Nico editar variable amb retorn del modal
-              isSol? new BN(amount * LAMPORTS_PER_TOKEN) : new BN(0),
-              isSol? SOL_MINT: tokenMint,
-              isSol? new BN(0): new BN(amount * LAMPORTS_PER_TOKEN),
-              isNft, 
-              arLink, 
+              isSol ? new BN(amount * LAMPORTS_PER_TOKEN) : new BN(0),
+              isSol ? SOL_MINT : tokenMint,
+              isSol ? new BN(0) : new BN(amount * LAMPORTS_PER_TOKEN),
+              isNft,
+              arLink,
               provider.wallet.publicKey, {
               accounts: {
                 baseAccount: baseAccount.publicKey,
                 clock: web3.SYSVAR_CLOCK_PUBKEY
               },
             });
+
+            // get updated donor list
             account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+
             //@ts-ignore
             setDonorList(account.donorList)
-            console.log("New Donor list", account, donorList)
+            console.log("New Donor list", account, donorsList)
 
           } catch (error) {
             console.log("Error getting donor list2", error)
-            setDonorList(null);
+            setDonorsList(null);
             /* createDonorAccount(); */
           }
-
         } else {
           setDonationTxStatus(DonationTxStates.Sad);
-
           //enqueueSnackbar(`Transaction failure${CleanupError(err.message)}`, { variant: "error" });
         }
       } catch (e) {
@@ -498,7 +497,7 @@ export const DonationPointButton = ({
       className='flp-button'
       onClick={sendDonationTransaction}
       disabled={false}> {
-        // TODO : if amount is greater than balance 
+        // TODO : if amount is greater than balance
       }
       {/* {isSending ?:} */}
       Donate
@@ -508,4 +507,34 @@ export const DonationPointButton = ({
 
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
+}
+
+export class DonationInfo {
+  name: string;
+  twitterHandle: string;
+  solAmount: number;
+  splMint: PublicKey;
+  splAmount: number;
+  isNft: boolean;
+  arLink: string;
+  pubkey: PublicKey;
+  constructor(args: {
+    name: string;
+    twitterHandle: string;
+    solAmount: number;
+    splMint: PublicKey;
+    splAmount: number;
+    isNft: boolean;
+    arLink: string;
+    pubkey: PublicKey;
+  }) {
+    this.name = args.name
+    this.twitterHandle = args.twitterHandle
+    this.solAmount = args.solAmount
+    this.splMint = args.splMint
+    this.splAmount = args.splAmount
+    this.isNft = args.isNft
+    this.arLink = args.arLink
+    this.pubkey = args.pubkey
+  }
 }
