@@ -1,6 +1,9 @@
 use anchor_lang::prelude::*;
+use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 
 declare_id!("Ay5HUSmsEJNiTuWCN9hr6WDGE5uMkBWwtTXBfRpA8r9q");
+
+const DONOR_PDA_SEED: &[u8] = b"donor";
 
 #[program]
 pub mod donorhalloffame {
@@ -104,7 +107,26 @@ pub mod donorhalloffame {
             ],
         )
     }
+
+    pub fn send_spl(ctx: Context<SendSpl>, amount: u64) -> ProgramResult {
+        // Transferring from initializer to taker
+        let (_pda, bump_seed) = Pubkey::find_program_address(&[DONOR_PDA_SEED], ctx.program_id);
+        let seeds = &[&DONOR_PDA_SEED[..], &[bump_seed]];
+
+        msg!("Sending some tokens...");
+
+        token::transfer(
+            ctx.accounts
+                .into_transfer_to_taker_context()
+                .with_signer(&[&seeds[..]]),
+            amount,
+        )?;
+
+        Ok(())
+    }
 }
+
+
 
 // Attach certain variables to the StartStuffOff context.
 #[derive(Accounts)]
@@ -158,9 +180,36 @@ pub struct SendSol<'info> {
     system_program: Program<'info, System>
 }
 
+#[derive(Accounts)]
+pub struct SendSpl<'info> {
+    #[account(mut)]
+    from: Signer<'info>,
+    #[account(mut)]
+    from_account: Account<'info, TokenAccount>,
+    #[account(mut)]
+    to: AccountInfo<'info>,
+    #[account(mut)]
+    to_account: Account<'info, TokenAccount>,
+    #[account(seeds=[b"donor".as_ref()], bump=253)]
+    pda_account: AccountInfo<'info>,
+    token_program: Program<'info, Token>
+}
+
 
 #[account]
 pub struct BaseAccount {
     pub total_donors: u64,
     pub donor_list: Vec<DonorStruct>
+}
+
+impl<'info> SendSpl<'info> {
+    fn into_transfer_to_taker_context(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
+        let cpi_accounts = Transfer {
+            from: self.from_account.to_account_info().clone(),
+            to: self.to_account.to_account_info().clone(),
+            authority: self.from.to_account_info().clone(),
+        };
+        let cpi_program = self.token_program.to_account_info();
+        CpiContext::new(cpi_program, cpi_accounts)
+    }
 }
