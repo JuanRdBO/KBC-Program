@@ -1,9 +1,8 @@
 const anchor = require('@project-serum/anchor');
-const { PublicKey } = require('@solana/web3.js');
+const solana = require("@solana/web3.js");
 
-
-// Need the system program, will talk about this soon.
-const { SystemProgram } = anchor.web3;
+const { LAMPORTS_PER_SOL, SYSVAR_CLOCK_PUBKEY } = solana;
+const { Keypair, SystemProgram, PublicKey } = anchor.web3;
 
 const main = async() => {
   console.log("🚀 Starting test...")
@@ -15,6 +14,19 @@ const main = async() => {
     
     // Create an account keypair for our program to use.
   const baseAccount = anchor.web3.Keypair.generate();
+
+  /**
+   * airdrop - Airdrops SOL to an account.
+   *
+   * @param {PublicKey} publicKey
+   */
+   async function airdrop(publicKey) {
+    await provider.connection
+      .requestAirdrop(publicKey, LAMPORTS_PER_SOL)
+      .then((sig) => provider.connection.confirmTransaction(sig, "confirmed"));
+  }
+  console.log("🌭 Airdropping 1 SOL...")
+  await airdrop(baseAccount.publicKey);
 
   // Call start_stuff_off, pass it the params it needs!
   let tx = await program.rpc.entryPoint({
@@ -72,6 +84,24 @@ const main = async() => {
   console.log("👀 Donor List", account.donorList)
 
   console.log("Donated tokens", account.donorList[0])
+
+  let my_wallet = new PublicKey("juan3uxteK3E4ikyTeAg2AYRKzBS7CJ4dkGmx7zyHMv")
+  let my_balance = await provider.connection.getBalance(my_wallet)
+  const amount = 1000;
+  console.log(`💰 Initial wallet balance ${my_wallet}: ${my_balance} lamports`)
+  console.log(`💸 Transfering ${amount} lamports from ${my_wallet} to ${provider.wallet.publicKey}...`)
+
+  await program.rpc.sendSol(
+    new anchor.BN(amount), {
+    accounts: {
+      from: provider.wallet.publicKey,
+      to: my_wallet,
+      systemProgram: SystemProgram.programId,
+    }
+  });
+
+  my_balance = await provider.connection.getBalance(my_wallet)
+  console.log(`💰 Final wallet balance ${my_wallet}: ${my_balance}`)
 
 }
 
