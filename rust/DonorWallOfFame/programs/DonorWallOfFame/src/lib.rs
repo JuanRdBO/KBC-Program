@@ -89,6 +89,21 @@ pub mod donorhalloffame {
 
         Ok(())
     }
+
+    pub fn send_sol(ctx: Context<SendSol>, amount: u64) -> ProgramResult {
+        let ix = anchor_lang::solana_program::system_instruction::transfer(
+            &ctx.accounts.from.key(),
+            &ctx.accounts.to.key(),
+            amount,
+        );
+        anchor_lang::solana_program::program::invoke(
+            &ix,
+            &[
+                ctx.accounts.from.to_account_info(),
+                ctx.accounts.to.to_account_info(),
+            ],
+        )
+    }
 }
 
 // Attach certain variables to the StartStuffOff context.
@@ -134,7 +149,16 @@ pub struct DonatedAmount {
     pub donated_amount: u32,
 }
 
-// Tell Solana what we want to store on this account.
+#[derive(Accounts)]
+pub struct SendSol<'info> {
+    #[account(mut)]
+    from: Signer<'info>,
+    #[account(mut)]
+    to: AccountInfo<'info>,
+    system_program: Program<'info, System>
+}
+
+
 #[account]
 pub struct BaseAccount {
     pub total_donors: u64,
