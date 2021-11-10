@@ -16,3 +16,5 @@ default = []
 
 [dependencies]
 anchor-lang = "0.18.0"
+anchor-spl = "0.18.0"
+metaplex-token-metadata = "0.0.1"
