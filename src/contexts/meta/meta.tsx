@@ -14,7 +14,7 @@ var fetchingData = false
 
 
 const DONOR_PROGRAM = new web3.PublicKey(
-  '3Wi6vEe2ZmTyro72Y1wCotVD7zVNS9nQAUqc3jrGMZus',
+  '5H2JKX3762zPTemxAWtW1naY9yTX7i2tiTzyk4Xnrx9t',
 );  
 
 const arr = Object.values(kp._keypair.secretKey)
