@@ -28,9 +28,9 @@ pub mod donorhalloffame {
         ctx: Context<AddDonor>, 
         twitter_handle: String, 
         donor_name: String, 
-        donated_sol: u64,
+        donated_sol: u32,
         donated_token: Pubkey,
-        donated_amount: u64,
+        donated_amount: u32,
         is_nft: bool,
         arweave_link: String,
         user_address: Pubkey,
@@ -224,7 +224,7 @@ pub struct AddDonor<'info> {
 pub struct DonorStruct {
     pub twitter_handle: String,
     pub donor_name: String,
-    pub donated_sol: u64,
+    pub donated_sol: u32,
     pub user_address: Pubkey,
     pub donated_tokens: Vec<DonatedTokens>
 }
@@ -240,7 +240,7 @@ pub struct DonatedTokens {
 #[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct DonatedAmount {
     pub timestamp: i64,
-    pub donated_amount: u64,
+    pub donated_amount: u32,
 }
 
 #[derive(Accounts)]
