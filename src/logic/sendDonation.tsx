@@ -66,7 +66,6 @@ export async function sendDonation(
 
         const mintInto = deserializeMint(buffData)
 
-        /* console.log("MINTINFO", mintInto) */
 
         const lamports = Math.pow(10, mintInto.decimals) * quantity
 

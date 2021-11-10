@@ -41,8 +41,6 @@ const arr = Object.values(kp._keypair.secretKey)
 const secret = new Uint8Array(arr)
 const baseAccount = web3.Keypair.fromSecretKey(secret)
 
-console.log("baseAccount", baseAccount.publicKey.toBase58())
-
 // Get our program's id form the IDL file.
 const programID = new PublicKey(idl.metadata.address);
 
@@ -251,25 +249,35 @@ function Home() {
         </div>
         <div className="header-links">
           <ul className="header-items">
-            <li className="header-item ">
-              <ScrollLink className="header-link" to="learn" spy={true} smooth={true} offset={0} duration={750}>
+            <li className="header-item current   ">
+              <ScrollLink className="header-link header-home-link" to="learn" spy={true} smooth={true} offset={0} duration={750}>
+                Home
+              </ScrollLink>
+            </li>
+            <li className="header-item   ">
+              <ScrollLink className="header-link header-extra-link" to="learn" spy={true} smooth={true} offset={0} duration={750}>
                 Learn
               </ScrollLink>
             </li>
 
-            <li className="header-item">
-              <ScrollLink className="header-link" to="future" spy={true} smooth={true} offset={0} duration={1250}>
+            <li className="header-item ">
+              <ScrollLink className="header-link header-extra-link" to="future" spy={true} smooth={true} offset={0} duration={1250}>
                 Future
               </ScrollLink>
             </li>
-            <li className="header-item">
-              <ScrollLink className="header-link" to="donate" spy={true} smooth={true} offset={0} duration={1750}>
+            <li className="header-item ">
+              <ScrollLink className="header-link header-extra-link" to="donate" spy={true} smooth={true} offset={0} duration={1750}>
                 Donate
               </ScrollLink>
             </li>
             <li className="header-item">
               <Link className="header-link" to="/purpose">
                 Purpose
+              </Link>
+            </li>
+            <li className="header-item">
+              <Link className="header-link" to="/partners">
+                Partners
               </Link>
             </li>
           </ul>
@@ -761,7 +769,7 @@ function Home() {
                     </span>
                   </h3>
                   <p className="mb-5  text-black-50 fw-light">
-                    We want everyone to be able to collaborate with the initiatives and campaigns we support. Join our cause by donating to the
+                    We want everyone to be able to collaborate with the initiatives and campaigns we support. Join our cause by donating to the&nbsp;
                     <strong style={{ color: '#333' }}>
                       kidsbeatcancer.sol
                     </strong>
@@ -861,7 +869,7 @@ function Home() {
         </div>
       </footer>
 
-      {/* <div id="gotoTop" className="icon-double-angle-up bg-white text-dark rounded-circle shadow"></div> */}
+      <div id="gotoTop"></div>
 
     </div>
 

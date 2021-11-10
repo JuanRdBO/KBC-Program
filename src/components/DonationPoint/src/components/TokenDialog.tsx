@@ -104,7 +104,6 @@ export default function TokenDialog({
             //{/* <img src={nft.data.image}/> */}
             image && <Grid item xs={6}>
               <Paper onClick={(_) => {
-                console.log('minttt', pubkey);
                 setMint(new PublicKey(pubkey));
                 onClose();
               }}

@@ -26,6 +26,11 @@ function Purpose() {
                 Puropse
               </Link>
             </li>
+            <li className="header-item">
+              <Link className="header-link" to="/partners">
+                Partners
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

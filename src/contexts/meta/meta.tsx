@@ -1,6 +1,6 @@
-import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import { AccountInfo, PublicKey, SystemProgram, Connection } from "@solana/web3.js";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext,  useState } from "react";
 import { getMints } from "../../logic/get-mints";
 import { MetaContextState, MetaState } from "./types";
 import { AccountInfo as TokenAccountInfo} from '@solana/spl-token';
@@ -8,6 +8,7 @@ import {Program, Provider, web3 } from "@project-serum/anchor";
 
 import kp from '../../keyUtils/keypair.json';
 import idl from '../../keyUtils/idl.json';
+import { DonorInfo, parseDonorInfo } from "../../components/DonationPoint/src/components/DonationPoint";
 
 var fetchingData = false
 
@@ -20,16 +21,11 @@ const arr = Object.values(kp._keypair.secretKey)
 const secret = new Uint8Array(arr)
 const baseAccount = web3.Keypair.fromSecretKey(secret)
 
-console.log("baseAccount", baseAccount.publicKey.toBase58())
 
 
 // Control's how we want to acknowledge when a trasnaction is "done".
 const opts = {
   preflightCommitment: "processed"
-}
-
-interface Window {
-  solana: any
 }
 
 export const getEmptyMetaState = (): MetaState => ({
@@ -45,13 +41,14 @@ export interface TokenAccount {
 
 interface MetaproviderProps {
   endpointUrl: string,
-  children: any
+  children: any,
 }
 
 const MetaContext = React.createContext<MetaContextState>({
     ...getEmptyMetaState(),
     isLoading: true,
     metadataLoaded: false,
+    donorsInfoList: [],
     // @ts-ignore
     update: () => [],
   });
@@ -66,7 +63,7 @@ export const MetaProvider: React.FC<MetaproviderProps> = ({endpointUrl, children
   var [state, setState] = useState([]as any)//<MetaState>(getEmptyMetaState());
   const [metadataLoaded, setMetadataLoaded] = useState(false);
   const [isLoading, setisLoading] = useState(true);
-  const [fetchedData, setfetchedData] = useState(false);
+  const [donorsInfoList, setDonorsInfoList] = useState<DonorInfo[]>();
 
   const wallet = useAnchorWallet();
 
@@ -108,7 +105,6 @@ export const MetaProvider: React.FC<MetaproviderProps> = ({endpointUrl, children
             const provider = getProvider();
             //@ts-ignore
             const program = new Program(idl, programID, provider);
-            console.log("ping")
             await program.rpc.entryPoint({
               accounts: {
                 baseAccount: baseAccount.publicKey,
@@ -129,19 +125,14 @@ export const MetaProvider: React.FC<MetaproviderProps> = ({endpointUrl, children
           const idl2 = await Program.fetchIdl(DONOR_PROGRAM, provider);
           const program = new Program(idl2, DONOR_PROGRAM, provider);
           let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-
+          setDonorsInfoList(parseDonorInfo(account));
         } catch {
           await createDonorAccount();
         }
-
-        console.log("STATE", metadata)
       }
-      
   }
 
   if (!metadataLoaded) {
-
-    if (!fetchedData)
       console.log("Updating...")
       update()
   }
@@ -153,7 +144,8 @@ export const MetaProvider: React.FC<MetaproviderProps> = ({endpointUrl, children
         // @ts-ignore
         update,
         isLoading,
-        endpointUrl
+        endpointUrl,
+        donorsInfoList,
       }}
     >
       {children}

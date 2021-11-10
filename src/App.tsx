@@ -19,6 +19,7 @@ import { ThemeProvider, createTheme } from '@material-ui/core';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import Home from './views/home';
 import Purpose from './views/purpose';
+import Partners from './views/partners';
 
 import './style/bootstrap.css';
 import './App.css';
@@ -84,6 +85,7 @@ const App = () => {
                 <WalletModalProvider logo="images/logo.png" featuredWallets={4}>
                   <Switch>
                     <Route path="/purpose" component={() => <Purpose />} />
+                    <Route path="/partners" component={() => <Partners />} />
                     <Route path="/" component={() => <Home />} />
                   </Switch>
                 </WalletModalProvider>

@@ -480,8 +480,6 @@ export const getMints = async (
     console.log('Querying metadata...')
   }
 
-  console.log('LOADED!', metadata)
-
   return metadata
 }
 
