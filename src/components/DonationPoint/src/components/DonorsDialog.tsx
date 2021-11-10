@@ -270,7 +270,6 @@ function DonorBasics({
     return (
         <div
             className={'wof-item'}
-
         >
             <ClickAwayListener onClickAway={handleTooltipClose}>
                 <div>
@@ -281,7 +280,7 @@ function DonorBasics({
                         disableHoverListener
                         disableTouchListener
                         title={<DonationsBox donorInfo={donorInfo} />}>
-                        <div onClick={handleTooltipOpen} className="row justify-content-between" style={{ textAlign: 'left', padding: '0px 7px', fontWeight: 600 }}>
+                        <div onClick={handleTooltipOpen} className="row justify-content-between" style={{ textAlign: 'left', padding: '0px 7px', fontWeight: 500 }}>
                             <div className="col-2" style={{ color: '#aaa' }}>
                                 {index}.
                             </div>
@@ -289,7 +288,11 @@ function DonorBasics({
                                 {donorInfo.donorName}
                             </div>
                             <div className="col-4" style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}>
-                                {donorInfo.donatedSol && (donorInfo.donatedSol.toString().slice(0, 1))} SOL
+
+                                {
+                                    //@ts-ignore
+                                    (donorInfo.donatedSol / LAMPORTS_PER_SOL).toFixed(1)
+                                } SOL
                             </div>
                         </div>
                     </DonationsTooltip>
@@ -330,7 +333,6 @@ function DonationsBox({
                 setSymbols([...symbols, responseJson.symbol]);
                 setImages([...images, responseJson.image]);
             }
-            //return responseJson;
         } catch (error) {
             console.error(error);
         }
@@ -341,8 +343,8 @@ function DonationsBox({
             const tokenSymbol = tokens.filter(t => t.address === token.donatedToken.toBase58())[0]?.symbol;
 
             return (
-                <div className="row" style={{ width: 300 }}>
-                    <div className=" col-3" style={{ overflow: 'hidden', }}>
+                <div className="row" style={{ width: 240 }}>
+                    <div className=" col-4" style={{ overflow: 'hidden', }}>
                         {tokenSymbol ? tokenSymbol : symbols[index] ? symbols[index] : 'NFT'}
                     </div>
                     {token.isNft ?
@@ -359,15 +361,7 @@ function DonationsBox({
                                 (donorInfo.donatedSol / LAMPORTS_PER_SOL).toFixed(2) :
                                 donation.donatedAmount.toString()}
                         </div>}
-
-                    <div className="col-2" style={{ textAlign: 'center', }}>
-                        {token.isNft ? '' : tokenSymbol === 'SOL' ?
-                            //@ts-ignore
-                            (donorInfo.donatedSol / LAMPORTS_PER_SOL).toFixed(2) :
-                            donation.donatedAmount.toString()}
-                    </div>
-
-                    <div className=" col-4" >
+                    <div className=" col-5" >
                         {new Date(donation.timestamp.toNumber() * 1000).toLocaleString().split(',')[0]}
                     </div>
                 </div>
@@ -378,7 +372,7 @@ function DonationsBox({
     return (
         <>
             <div >
-                <div className="row" style={{ width: 300, marginBottom: 5, }}>
+                <div className="row" style={{ width: 240, marginBottom: 5, }}>
                     <div className=" col-6" style={{ textAlign: 'left', fontWeight: 700 }}>
                         {donorInfo.donorName}
                     </div>
@@ -386,20 +380,16 @@ function DonationsBox({
                         {donorInfo.twitterHandle}
                     </div>
                 </div>
-                <div className="row" style={{ width: 300, }}>
-                    <div className=" col-3" style={{ overflow: 'hidden', color: '#aaa' }}>
-                        Amount
-                    </div>
-
-                    <div className="col-3" style={{ textAlign: 'center', color: '#aaa' }}>
+                <div className="row" style={{ width: 240, }}>
+                    <div className=" col-4" style={{ overflow: 'hidden', color: '#aaa' }}>
                         Token
                     </div>
 
-                    <div className="col-2" style={{ textAlign: 'center', color: '#aaa' }}>
-                        SOL
+                    <div className="col-3" style={{ textAlign: 'center', color: '#aaa' }}>
+                        #
                     </div>
 
-                    <div className=" col-4" style={{ color: '#aaa' }}>
+                    <div className=" col-5" style={{ color: '#aaa' }}>
                         Date
                     </div>
                 </div>
