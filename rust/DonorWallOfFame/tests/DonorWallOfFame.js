@@ -1,6 +1,8 @@
 const anchor = require('@project-serum/anchor');
 const solana = require("@solana/web3.js");
 const splToken = require("@solana/spl-token");
+const fetch = require('node-fetch')
+const borsh = require('borsh')
 
 const { LAMPORTS_PER_SOL, SYSVAR_CLOCK_PUBKEY } = solana;
 const { Keypair, SystemProgram, PublicKey } = anchor.web3;
@@ -50,7 +52,7 @@ const main = async() => {
 
   // Fetch data from the account.
   let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-  console.log('👀 Donor Count', account.totalDonors.toString())
+/*   console.log('👀 Donor Count', account.totalDonors.toString())
     
   let random_nft = new anchor.web3.PublicKey("6b8ropjXu1tsc6gL6ZpS9XacEvNtoySJ2BCYZTHeVwja")
   let random_nft_2 = new anchor.web3.PublicKey("6b8ropjXu1tsc6gL6ZpS9XacEvNtoySJ2BCYZTHeVwjb")
@@ -91,7 +93,7 @@ const main = async() => {
 
   console.log("👀 Donor List", account.donorList)
 
-  console.log("Donated tokens", account.donorList[0])
+  console.log("Donated tokens", account.donorList[0]) */
 
   let my_balance = await provider.connection.getBalance(user.publicKey)
   const amount = 1000;
@@ -115,7 +117,7 @@ const main = async() => {
     user,
     user.publicKey,
     null,
-    9,
+    0,
     splToken.TOKEN_PROGRAM_ID,
   );
   console.log(`⌛ Created random Mint ${randomMint.publicKey}`)
@@ -155,10 +157,7 @@ const main = async() => {
     program.programId
   );
 
-  console.log("Bump is ", _nonce)
-
-/*   // Check that the new owner is the PDA.
-  assert.ok(_randomInfoAccount.owner.equals(pda)); */
+  // console.log("Bump is ", _nonce) 
 
   await program.rpc.sendSpl(
     new anchor.BN(15), {
@@ -180,6 +179,56 @@ const main = async() => {
   console.log(`⛳ SPL token transfer passed! Account ${initializeRandomMint} has  ${_randomInfoAccount.amount} tokens and ${my_balance/ LAMPORTS_PER_SOL} SOL. 
             Other Account ${initializeRandomMintOnOtherAccount} has ${_randomInfoAccountOnOtherAccount.amount} Tokens`)
 
+  /* console.log(`🦁 Now airdropping a new token...`)
+  console.log(` - User: ${user.publicKey}`) 
+  console.log(` - Base: ${baseAccount.publicKey}`)
+  
+  const [mint, mintBump] = await anchor.web3.PublicKey.findProgramAddress([], program.programId);
+
+  let ourAssociatedTokens = await splToken.Token.getAssociatedTokenAddress(
+    splToken.ASSOCIATED_TOKEN_PROGRAM_ID,
+    splToken.TOKEN_PROGRAM_ID,
+    mint,
+    baseAccount.publicKey,
+  );
+
+  await program.rpc.initMint(mintBump, {
+    accounts: {
+      mint: mint,
+      payer: program.provider.wallet.publicKey,
+      destination: ourAssociatedTokens,
+      systemProgram: anchor.web3.SystemProgram.programId,
+      tokenProgram: splToken.TOKEN_PROGRAM_ID,
+      associatedTokenProgram: splToken.ASSOCIATED_TOKEN_PROGRAM_ID,
+      rent: anchor.web3.SYSVAR_RENT_PUBKEY
+    },
+  });
+
+  let nicelyParsedMint = await fetchMint(mint, program);
+  let nicelyParsedDestinationRightAfterMint = await fetchTokenAccount(ourAssociatedTokens, program);
+
+  console.log(`⏰ Initialized random MintAccount ${nicelyParsedMint.publicKey}`)
+
+  my_balance = await provider.connection.getBalance(user.publicKey)
+  console.log(`⛽ Test passed: Account ${baseAccount.publicKey} has ${nicelyParsedDestinationRightAfterMint.amount} tokens`)
+
+
+  await program.rpc.airdrop(mintBump, {
+    accounts: {
+      mint: mint,
+      destination: ourAssociatedTokens,
+      payer: baseAccount.publicKey,
+      systemProgram: anchor.web3.SystemProgram.programId,
+      tokenProgram: splToken.TOKEN_PROGRAM_ID,
+      associatedTokenProgram: splToken.ASSOCIATED_TOKEN_PROGRAM_ID,
+      rent: anchor.web3.SYSVAR_RENT_PUBKEY
+    }
+  });
+  
+  console.log("DONE")
+
+  nicelyParsedDestinationRightAfterMint = await fetchTokenAccount(ourAssociatedTokens, program);
+  console.log(`⛳ Test passed: Account ${baseAccount.publicKey} has  ${nicelyParsedDestinationRightAfterMint.amount}`) */
 
 }
 
@@ -192,5 +241,16 @@ const runMain = async () => {
     process.exit(1);
   }
 };
+
+async function fetchMint(address, program) {
+  let mintAccountInfo = await program.provider.connection.getAccountInfo(address);
+  return splToken.MintLayout.decode(mintAccountInfo.data);
+}
+
+async function fetchTokenAccount(address, program) {
+  let tokenAccountInfo = await program.provider.connection.getAccountInfo(address);
+  return splToken.AccountLayout.decode(tokenAccountInfo.data);
+}
+
 
 runMain();

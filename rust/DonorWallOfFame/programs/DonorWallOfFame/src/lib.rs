@@ -1,7 +1,15 @@
-use anchor_lang::prelude::*;
-use anchor_spl::token::{self, Token, TokenAccount, Transfer};
+use anchor_spl::{associated_token::AssociatedToken, token::Mint};
 
-declare_id!("Ay5HUSmsEJNiTuWCN9hr6WDGE5uMkBWwtTXBfRpA8r9q");
+use {
+    anchor_lang::{
+        prelude::*
+    },
+    anchor_spl::{
+        token::{self, Token, TokenAccount, Transfer}
+    },
+};
+
+declare_id!("5H2JKX3762zPTemxAWtW1naY9yTX7i2tiTzyk4Xnrx9t");
 
 const DONOR_PDA_SEED: &[u8] = b"donor";
 
@@ -27,6 +35,8 @@ pub mod donorhalloffame {
         arweave_link: String,
         user_address: Pubkey,
     ) -> ProgramResult {
+
+        msg!("Adding a new donor!");
 
         // Get a reference to the account and increment total_gifs.
         let base_account = &mut ctx.accounts.base_account;
@@ -90,10 +100,27 @@ pub mod donorhalloffame {
 
         base_account.total_donors += 1;
 
+/*         let nft_data = NFTData{
+                name: "JOJO participation NFT".to_string(),
+                symbol: "JPN".to_string(),
+                uri:"https://arweave.net/UIar04lo7I_1_ypAk7FPD__TFeq8mFdJ0mIaFzjHGsU".to_string(),
+                seller_fee_basis_points: 1000,
+                creators: [
+                    NFTCreator {
+                        address: "juan3uxteK3E4ikyTeAg2AYRKzBS7CJ4dkGmx7zyHMv".to_string(),
+                        verified: true,
+                        share: 100
+                    }
+                ].to_vec()
+            }; */
+
         Ok(())
     }
 
     pub fn send_sol(ctx: Context<SendSol>, amount: u64) -> ProgramResult {
+
+        msg!("Sending some SOL...");
+
         let ix = anchor_lang::solana_program::system_instruction::transfer(
             &ctx.accounts.from.key(),
             &ctx.accounts.to.key(),
@@ -108,12 +135,29 @@ pub mod donorhalloffame {
         )
     }
 
+    pub fn init_mint(ctx: Context<InitMint>, mint_bump: u8) -> ProgramResult {
+        anchor_spl::token::mint_to(
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                anchor_spl::token::MintTo {
+                    mint: ctx.accounts.mint.to_account_info(),
+                    to: ctx.accounts.destination.to_account_info(),
+                    authority: ctx.accounts.mint.to_account_info(),
+                },
+                &[&[&[], &[mint_bump]]],
+            ),
+            1,
+        )?;
+        Ok(())
+    }
+
     pub fn send_spl(ctx: Context<SendSpl>, amount: u64) -> ProgramResult {
+
+        msg!("Sending some SPL tokens...");
+
         // Transferring from initializer to taker
         let (_pda, bump_seed) = Pubkey::find_program_address(&[DONOR_PDA_SEED], ctx.program_id);
         let seeds = &[&DONOR_PDA_SEED[..], &[bump_seed]];
-
-        msg!("Sending some tokens...");
 
         token::transfer(
             ctx.accounts
@@ -121,6 +165,34 @@ pub mod donorhalloffame {
                 .with_signer(&[&seeds[..]]),
             amount,
         )?;
+
+        Ok(())
+    }
+
+    pub fn airdrop(ctx: Context<AirdropNFT>, mint_bump: u8) -> ProgramResult {
+        msg!(
+            "{} tokens have been minted so far...",
+            ctx.accounts.mint.supply
+        );
+        anchor_spl::token::mint_to(
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                anchor_spl::token::MintTo {
+                    mint: ctx.accounts.mint.to_account_info(),
+                    to: ctx.accounts.destination.to_account_info(),
+                    authority: ctx.accounts.mint.to_account_info(),
+                },
+                &[&[&[], &[mint_bump]]],
+            ),
+            1,
+        )?;
+
+        ctx.accounts.mint.reload()?;
+
+        msg!(
+            "{} tokens have been minted so far...",
+            ctx.accounts.mint.supply
+        );
 
         Ok(())
     }
@@ -190,9 +262,56 @@ pub struct SendSpl<'info> {
     to: AccountInfo<'info>,
     #[account(mut)]
     to_account: Account<'info, TokenAccount>,
-    #[account(seeds=[b"donor".as_ref()], bump=253)]
+    #[account(seeds=[b"donor".as_ref()], bump)]
     pda_account: AccountInfo<'info>,
     token_program: Program<'info, Token>
+}
+
+#[derive(Accounts)]
+#[instruction(mint_bump: u8)]
+pub struct InitMint<'info> {
+    #[account(
+        init,
+        payer = payer,
+        seeds = [],
+        bump = mint_bump,
+        mint::decimals = 0,
+        mint::authority = mint
+    )]
+    pub mint: Account<'info, Mint>,
+
+    #[account(mut)]
+    pub payer: Signer<'info>,
+
+    #[account(init_if_needed, payer = payer, associated_token::mint = mint, associated_token::authority = payer)]
+    pub destination: Account<'info, TokenAccount>,
+
+    pub system_program: Program<'info, System>,
+    pub token_program: Program<'info, Token>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
+    pub rent: Sysvar<'info, Rent>,
+}
+
+#[derive(Accounts)]
+pub struct AirdropNFT<'info> {
+    #[account(mut)]
+    pub mint: Account<'info, Mint>,
+
+    #[account(
+        init_if_needed,
+        payer = payer,
+        associated_token::mint = mint,
+        associated_token::authority = payer
+    )]
+    pub destination: Account<'info, TokenAccount>,
+
+    #[account(mut)]
+    pub payer: Signer<'info>,
+
+    pub system_program: Program<'info, System>,
+    pub token_program: Program<'info, Token>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
+    pub rent: Sysvar<'info, Rent>,
 }
 
 
@@ -208,6 +327,18 @@ impl<'info> SendSpl<'info> {
             from: self.from_account.to_account_info().clone(),
             to: self.to_account.to_account_info().clone(),
             authority: self.from.to_account_info().clone(),
+        };
+        let cpi_program = self.token_program.to_account_info();
+        CpiContext::new(cpi_program, cpi_accounts)
+    }
+}
+
+impl<'info> AirdropNFT<'info> {
+    fn into_transfer_to_taker_context(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
+        let cpi_accounts = Transfer {
+            from: self.mint.to_account_info().clone(),
+            to: self.destination.to_account_info().clone(),
+            authority: self.mint.to_account_info().clone(),
         };
         let cpi_program = self.token_program.to_account_info();
         CpiContext::new(cpi_program, cpi_accounts)
