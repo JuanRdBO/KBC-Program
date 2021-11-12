@@ -1,0 +1,12 @@
+[programs.devnet]
+donor_wall_of_fame = "65zdg2toqMwqJZBgUUdpLNVZ5hXt2teKesYiVUgQ6g4G"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "devnet"
+wallet = "/home/joan/.config/solana/id.json"
+
+[scripts]
+test = "yarn run mocha -t 1000000 tests/"
