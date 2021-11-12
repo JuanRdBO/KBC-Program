@@ -9,7 +9,7 @@ use {
     },
 };
 
-declare_id!("7WhXtFrss1nPQiFN87JzQRpFHSm6dt792BrTc6cFbZSm");
+declare_id!("C1iGD3AZAykXTAcu66HdLKoPF4XcfDY7D6HtMfczTCGr");
 
 const DONOR_PDA_SEED: &[u8] = b"donor";
 
@@ -19,18 +19,13 @@ pub mod donorhalloffame {
 use super::*;
   pub fn entry_point(ctx: Context<EntryPoint>) -> ProgramResult {
     // Get a reference to the account.
-    //let mut base_account = ctx.accounts.base_account.load_mut()?;
-    msg!("initializing base_account...");
-
-    let mut base_account = ctx.accounts.base_account.load_init()?;
+    let base_account = &mut ctx.accounts.base_account;
     // Initialize total_gifs.
     base_account.total_donors = 0;
 
-    msg!("initializing state_account...");
-
     let state_account = &mut ctx.accounts.state_account;
 
-    state_account.base_account = *ctx.accounts.base_account.to_account_info().key;
+    state_account.base_account = base_account.key();
 
     Ok(())
   }
@@ -50,47 +45,68 @@ use super::*;
         msg!("Adding a new donor!");
 
         // Get a reference to the account and increment total_gifs.
-        let mut base_account = ctx.accounts.base_account.load_mut()?;
-        //let base_account = &mut ctx.accounts.base_account;
+        //let mut base_account = ctx.accounts.base_account.load_mut()?;
+        let base_account = &mut ctx.accounts.base_account;
         let timestamp = ctx.accounts.clock.unix_timestamp;
 
-        let ar_link_raw = arweave_link.as_bytes();
-        let mut ar_link_arr = [0u8; 280];
-        ar_link_arr[..ar_link_raw.len()].copy_from_slice(ar_link_raw);
+        // See if donor already donated
+        let mut index = 0;
+        let mut index_found = false;
+/*         let user_address_str: String = String::from(user_address.to_string());
+        for (i, el) in base_account.donor_list.iter().enumerate() {
+            
+            if user_address_str.eq(&el.user_address.to_string()) {
+                index = i;
+                index_found = true;
+            }
+        }; */
+
+        let donated_amount_map = DonatedAmount{ 
+            timestamp: timestamp, 
+            donated_amount: donated_amount,
+        };
+
         // construct the donated tokens object
         let donated_tokens_map = DonatedTokens {
             donated_token: donated_token,
-            donated_amount: donated_amount, // TODO: make it so that only first is filled, others empty but still len 20
-            timestamp: timestamp,
+            donated_amount: [donated_amount_map].to_vec(),
             is_nft: is_nft,
-            arweave_link: ar_link_arr,
+            arweave_link: arweave_link,
         };
 
-        // convert Twitter handle to bytes
-        let twitter_handle_raw = twitter_handle.as_bytes();
-        let mut twitter_handle_arr = [0u8; 280];
-        twitter_handle_arr[..twitter_handle_raw.len()].copy_from_slice(twitter_handle_raw);
+        if index_found {  // if donor already exists, append to already donated amount
 
-        // convert donor name to bytes
-        let donor_name_raw = donor_name.as_bytes();
-        let mut donor_name_arr = [0u8; 280];
-        donor_name_arr[..donor_name_raw.len()].copy_from_slice(donor_name_raw);
-        // Build the struct.
-        let item = DonorStruct {
-            twitter_handle: twitter_handle_arr,
-            donor_name: donor_name_arr,
-            donated_sol: donated_sol,
-            user_address: user_address,
-            donated_token: donated_tokens_map // TODO: make it so that only first is filled, others empty but still len 20
-        };
+            base_account.donor_list[index].donated_sol += donated_sol;
 
-        msg!("Pushing");
-        // Add it to the gif_list vector.
-        //base_account.donor_list.push(item);
+            if base_account.donor_list[index].donated_tokens.iter().any(|p| p.donated_token == donated_token) {
+                // if donor is found, but they donated an already known token, append it to existing amount
+                base_account.donor_list[index]
+                .donated_tokens[0]
+                .donated_amount[0]
+                .donated_amount += donated_amount;
+            } else {
+                // if donor is found, but they donated a new token, push it
+                base_account.donor_list[index].donated_tokens.push(donated_tokens_map);
+            }
 
-        base_account.append(item);
+        } else { // if donor does not exist, append it
 
-        
+            // Build the struct.
+            let item = DonorStruct {
+                twitter_handle: twitter_handle.to_string(),
+                donor_name: donor_name.to_string(),
+                donated_sol: donated_sol,
+                user_address: user_address,
+                donated_tokens: [donated_tokens_map].to_vec()
+            };
+    
+            msg!("Pushing");
+            // Add it to the gif_list vector.
+            //base_account.donor_list.push(item);
+
+            base_account.donor_list.push(item);
+
+        }
 
         msg!("Pushed! Adding...");
         base_account.total_donors += 1;
@@ -200,78 +216,52 @@ use super::*;
 // Attach certain variables to the StartStuffOff context.
 #[derive(Accounts)]
 pub struct EntryPoint<'info> {
-    #[account(
-        init, 
-        payer = user, 
-        seeds=[b"donor"], 
-        bump
-    )]
+    #[account(init, payer = user, seeds=[b"donor"], bump)]
     pub state_account: Account<'info, StateAccount>,
-    #[account(mut)]
-    pub base_account: Loader<'info, BaseAccount>,
+    //#[account(zero)]
+    //pub base_account: AccountLoader<'info, BaseAccount>,
+    pub base_account: Account<'info, BaseAccount>,
     #[account(mut)]
     pub user: Signer<'info>,
-    pub system_program: AccountInfo <'info>
+    pub system_program: Program <'info, System>
 }
 
-// Adding a donor
+// Specify what data you want in the AddGif Context.
+// Getting a handle on the flow of things :)?
 #[derive(Accounts)]
 pub struct AddDonor<'info> {
-  #[account(
-        seeds=[b"donor"],
-        bump, 
-        has_one=base_account
-    )]
+  #[account(seeds=[b"donor"], bump, has_one=base_account)]
   pub state_account: Account<'info, StateAccount>,
-  #[account(zero)]
-  pub base_account: Loader<'info, BaseAccount>,
+  //#[account(zero)]
+  #[account(mut)]
+  pub base_account: Account<'info, BaseAccount>,
   pub clock: Sysvar<'info, Clock>
 }
 
-// Data struct for donor
-#[zero_copy]
+// Create a custom struct for us to work with.
+#[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct DonorStruct {
-    pub twitter_handle: [u8; 280],
-    pub donor_name: [u8; 280],
+    pub twitter_handle: String,
+    pub donor_name: String,
     pub donated_sol: u64,
     pub user_address: Pubkey,
-    pub donated_token: DonatedTokens
+    pub donated_tokens: Vec<DonatedTokens>
 }
 
-#[zero_copy]
+#[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct DonatedTokens {
     pub donated_token: Pubkey,
-    pub donated_amount: u64,
-    pub timestamp: i64,
+    pub donated_amount: Vec<DonatedAmount>,
     pub is_nft: bool,
-    pub arweave_link: [u8; 280],
+    pub arweave_link: String,
 }
 
-#[account]
-#[derive(Default)]
-pub struct StateAccount {
-    pub base_account: Pubkey,
-}
+//#[zero_copy]
+#[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 
-#[account(zero_copy)]
-pub struct BaseAccount {
-    head: u64,
-    tail: u64,
-    pub total_donors: u64,
-    pub donor_list: [DonorStruct; 100]
-}
-
-impl BaseAccount {
-    fn append(&mut self, donor_list_in: DonorStruct) {
-        self.donor_list[BaseAccount::index_of(self.head)] = donor_list_in;
-        if BaseAccount::index_of(self.head + 1) == BaseAccount::index_of(self.tail) {
-            self.tail += 1;
-        }
-        self.head += 1;
-    }
-    fn index_of(counter: u64) -> usize {
-        std::convert::TryInto::try_into(counter % 100).unwrap()
-    }
+pub struct DonatedAmount {
+    pub timestamp: i64,
+    pub donated_amount: u64,
 }
 
 #[derive(Accounts)]
@@ -345,6 +335,19 @@ pub struct AirdropNFT<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
+
+#[account]
+pub struct BaseAccount {
+    pub total_donors: u64,
+    pub donor_list: Vec<DonorStruct>
+}
+
+#[account]
+#[derive(Default)]
+pub struct StateAccount {
+    pub base_account: Pubkey,
+}
+
 impl<'info> SendSpl<'info> {
     fn into_transfer_to_taker_context(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
         let cpi_accounts = Transfer {
@@ -368,4 +371,3 @@ impl<'info> AirdropNFT<'info> {
         CpiContext::new(cpi_program, cpi_accounts)
     }
 }
-

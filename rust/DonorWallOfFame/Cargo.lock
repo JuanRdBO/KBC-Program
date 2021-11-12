@@ -462,6 +462,8 @@ dependencies = [
  "anchor-lang",
  "anchor-spl",
  "metaplex-token-metadata",
+ "serde",
+ "zerovec",
 ]
 
 [[package]]
@@ -1348,3 +1350,9 @@ name = "zeroize"
 version = "1.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d68d9dcec5f9b43a30d38c49f91dfedfaac384cb8f085faca366c26207dd1619"
+
+[[package]]
+name = "zerovec"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "138528540c35fb8f39bab639733dcb6dbd931a247e94b0675169ca7a38eb15db"
