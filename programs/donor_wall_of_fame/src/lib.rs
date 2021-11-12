@@ -1,11 +1,14 @@
 use anchor_lang::prelude::*;
+use anchor_spl::token::{Token, TokenAccount, Transfer};
+
+use anchor_spl::token;
 
 declare_id!("65zdg2toqMwqJZBgUUdpLNVZ5hXt2teKesYiVUgQ6g4G");
 
+const DONOR_PDA_SEED: &[u8] = b"donor";
 
 #[program]
 pub mod donor_wall_of_fame {
-    use anchor_lang::solana_program::{program::invoke, system_instruction};
 
     use super::*;
 
@@ -14,6 +17,9 @@ pub mod donor_wall_of_fame {
         name: String, 
         bump: u8
     ) -> ProgramResult {
+
+        msg!("Creating a new state_account..");        
+        
         ctx.accounts.state_account.name = name;
         ctx.accounts.state_account.authority = *ctx.accounts.authority.key;
         ctx.accounts.state_account.bump = bump;
@@ -25,7 +31,8 @@ pub mod donor_wall_of_fame {
         name: String,
         total_donors: u64
     ) -> ProgramResult {
-        msg!("entered create for base_account..");        
+
+        msg!("Creating a new base_account..");        
         
         let given_name = name.as_bytes();
         let mut name = [0u8; 280];
@@ -87,8 +94,10 @@ pub mod donor_wall_of_fame {
         Ok(())
     }
 
-    pub fn close_account(ctx: Context<CloseAccount>) -> ProgramResult {
+    pub fn close_base_account(ctx: Context<CloseBaseAccount>) -> ProgramResult {
         
+        msg!("Closing a base_account...");
+
         /* Alternative way to close an account:       
 
         let lamports = ctx.accounts.acc_to_close.lamports();
@@ -100,6 +109,42 @@ pub mod donor_wall_of_fame {
             .try_borrow_mut_lamports()? = 0;
 
         **ctx.accounts.authority.try_borrow_mut_lamports()? += lamports; */
+
+        Ok(())
+    }
+
+    pub fn send_sol(ctx: Context<SendSol>, amount: u64) -> ProgramResult {
+
+        msg!("Sending some SOL...");
+
+        let ix = anchor_lang::solana_program::system_instruction::transfer(
+            &ctx.accounts.from.key(),
+            &ctx.accounts.to.key(),
+            amount,
+        );
+        anchor_lang::solana_program::program::invoke(
+            &ix,
+            &[
+                ctx.accounts.from.to_account_info(),
+                ctx.accounts.to.to_account_info(),
+            ],
+        )
+    }    
+    
+    pub fn send_spl(ctx: Context<SendSpl>, amount: u64) -> ProgramResult {
+
+        msg!("Sending some SPL tokens...");
+
+        // Transferring from initializer to taker
+        let (_pda, bump_seed) = Pubkey::find_program_address(&[DONOR_PDA_SEED], ctx.program_id);
+        let seeds = &[&DONOR_PDA_SEED[..], &[bump_seed]];
+
+        token::transfer(
+            ctx.accounts
+                .into_transfer_to_taker_context()
+                .with_signer(&[&seeds[..]]),
+            amount,
+        )?;
 
         Ok(())
     }
@@ -149,6 +194,24 @@ pub struct CreateBaseAccount<'info> {
     base_account: AccountLoader<'info, BaseAccount>,
 }
 
+#[derive(Accounts)]
+pub struct CloseBaseAccount<'info> {
+    #[account(mut)]
+    pub authority: AccountInfo<'info>,
+    #[account(mut, close = authority)]
+    pub acc_to_close: AccountLoader<'info, BaseAccount>,
+    pub donor_program: AccountInfo<'info>,
+}
+
+#[account(zero_copy)]
+pub struct BaseAccount {                // 1 complete donation list = 304 + 929 * 1000 bytes
+    head: u64,                          // 8 bytes
+    tail: u64,                          // 8 bytes
+    pub total_donors: u64,              // 8 bytes
+    pub name: [u8; 280],                // 280 bytes
+    pub donor_list: [DonorStruct; 100]  // 929 bytes * 100 
+}
+
 #[zero_copy]    
 pub struct DonorStruct {                // 1 complete struct = 929 bytes
     pub donor_twitter_handle: [u8; 280],// 1byte * 280
@@ -167,22 +230,40 @@ pub struct DonatedTokens {              // 1 complete struct = 329 bytes
     pub arweave_link: [u8; 280],        // 1 byte * 280
 }
 
-#[account(zero_copy)]
-pub struct BaseAccount {                // 1 complete donation list = 304 + 929 * 1000 bytes
-    head: u64,                          // 8 bytes
-    tail: u64,                          // 8 bytes
-    pub total_donors: u64,              // 8 bytes
-    pub name: [u8; 280],                // 280 bytes
-    pub donor_list: [DonorStruct; 100]  // 929 bytes * 100 
+#[derive(Accounts)]
+pub struct SendSol<'info> {
+    #[account(mut)]
+    from: Signer<'info>,
+    #[account(mut)]
+    to: AccountInfo<'info>,
+    system_program: Program<'info, System>
 }
 
 #[derive(Accounts)]
-pub struct CloseAccount<'info> {
+pub struct SendSpl<'info> {
     #[account(mut)]
-    pub authority: AccountInfo<'info>,
-    #[account(mut, close = authority)]
-    pub acc_to_close: AccountLoader<'info, BaseAccount>,
-    pub donor_program: AccountInfo<'info>,
+    from: Signer<'info>,
+    #[account(mut)]
+    from_account: Account<'info, TokenAccount>,
+    #[account(mut)]
+    to: AccountInfo<'info>,
+    #[account(mut)]
+    to_account: Account<'info, TokenAccount>,
+    #[account(seeds=[b"donor".as_ref()], bump)]
+    pda_account: AccountInfo<'info>,
+    token_program: Program<'info, Token>
+}
+
+impl<'info> SendSpl<'info> {
+    fn into_transfer_to_taker_context(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
+        let cpi_accounts = Transfer {
+            from: self.from_account.to_account_info().clone(),
+            to: self.to_account.to_account_info().clone(),
+            authority: self.from.to_account_info().clone(),
+        };
+        let cpi_program = self.token_program.to_account_info();
+        CpiContext::new(cpi_program, cpi_accounts)
+    }
 }
 
 impl BaseAccount {
