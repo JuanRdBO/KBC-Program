@@ -89,6 +89,8 @@ pub mod donor_wall_of_fame {
 
     pub fn close_account(ctx: Context<CloseAccount>) -> ProgramResult {
         
+        /* Alternative way to close an account:       
+
         let lamports = ctx.accounts.acc_to_close.lamports();
 
         **ctx
@@ -97,7 +99,7 @@ pub mod donor_wall_of_fame {
             .to_account_info()
             .try_borrow_mut_lamports()? = 0;
 
-        **ctx.accounts.authority.try_borrow_mut_lamports()? += lamports;
+        **ctx.accounts.authority.try_borrow_mut_lamports()? += lamports; */
 
         Ok(())
     }
@@ -114,7 +116,7 @@ pub struct AddDonor<'info> {
     #[account(signer)]
     authority: AccountInfo<'info>,
     #[account(mut)]
-    base_account: Loader<'info, BaseAccount>,
+    base_account: AccountLoader<'info, BaseAccount>,
     pub clock: Sysvar<'info, Clock>
 }
 
@@ -144,7 +146,7 @@ pub struct StateAccount {
 #[derive(Accounts)]
 pub struct CreateBaseAccount<'info> {
     #[account(zero)]
-    base_account: Loader<'info, BaseAccount>,
+    base_account: AccountLoader<'info, BaseAccount>,
 }
 
 #[zero_copy]    
@@ -178,8 +180,8 @@ pub struct BaseAccount {                // 1 complete donation list = 304 + 929 
 pub struct CloseAccount<'info> {
     #[account(mut)]
     pub authority: AccountInfo<'info>,
-    #[account(mut)]
-    pub acc_to_close: AccountInfo<'info>,
+    #[account(mut, close = authority)]
+    pub acc_to_close: AccountLoader<'info, BaseAccount>,
     pub donor_program: AccountInfo<'info>,
 }
 
