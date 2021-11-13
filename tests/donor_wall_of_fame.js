@@ -27,7 +27,34 @@ describe('donor_wall_of_fame', () => {
     // creates a receiver wallet to receive SOL and SPL tokens
     let receiver = anchor.web3.Keypair.generate();
 
-  it('Initializes program by creating Big Account', async () => {
+  it("Creates a stateAccount to store list donations", async () => {
+
+    const authority = program.provider.wallet.publicKey;
+    const [stateAccount, bump] = await PublicKey.findProgramAddress(
+      [authority.toBuffer()],
+      program.programId
+    );
+
+    await program.rpc.createStateAccount(
+      "KWC Admin", 
+      bump, {
+      accounts: {
+        stateAccount,
+        authority,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      },
+    });
+
+    // tests
+    const account = await program.account.stateAccount.fetch(stateAccount);
+    assert.ok(account.name === "KWC Admin");
+    assert.ok(account.authority.equals(authority));
+    assert.ok(account.totalDonorLists === 0)
+
+    console.log("StateAccount:", stateAccount.toBase58())
+  });
+
+  it('Initializes program by creating Big baseAccount', async () => {
  
     let airdrop_amount = 5;
     console.log("🌭 Airdropping", airdrop_amount, "SOL to user wallet...")
@@ -62,40 +89,40 @@ describe('donor_wall_of_fame', () => {
     console.log("User has " + user_balance/LAMPORTS_PER_SOL + " SOL.")
 
     // tests that the supplied name matches the returned name
-    const donationList = await program.account.baseAccount.fetch(baseAccount.publicKey);
-    const name = new TextDecoder("utf-8").decode(new Uint8Array(donationList.name));
+    const bigAccount = await program.account.baseAccount.fetch(baseAccount.publicKey);
+    const name = new TextDecoder("utf-8").decode(new Uint8Array(bigAccount.name));
     assert.ok(name.startsWith("KBC donation list")); // [u8; 280] => trailing zeros.
   });
 
-  it("Creates a stateAccount to add donations", async () => {
+  it("Updating stateAccount to add new donation list", async () => {
 
+    // fetches stateAccount
     const authority = program.provider.wallet.publicKey;
     const [stateAccount, bump] = await PublicKey.findProgramAddress(
       [authority.toBuffer()],
       program.programId
     );
 
-    await program.rpc.createStateAccount(
-      "KWC Admin", 
-      bump, {
+    // Updates stateAccount
+    await program.rpc.addDonationList(
+      baseAccount.publicKey, {
       accounts: {
         stateAccount,
-        authority,
-        systemProgram: anchor.web3.SystemProgram.programId,
+        authority
       },
     });
-
     // tests
     const account = await program.account.stateAccount.fetch(stateAccount);
     assert.ok(account.name === "KWC Admin");
     assert.ok(account.authority.equals(authority));
+    console.log("ACC", account)
 
   });
 
   it("Adds donors", async () => {
 
     const authority = program.provider.wallet.publicKey;
-    const user = (
+    const stateAccount = (
       await PublicKey.findProgramAddress(
         [authority.toBuffer()],
         program.programId
@@ -114,7 +141,7 @@ describe('donor_wall_of_fame', () => {
         false,
         "_", {
         accounts: {
-          user,
+          stateAccount,
           authority,
           baseAccount: baseAccount.publicKey,
           clock: anchor.web3.SYSVAR_CLOCK_PUBKEY

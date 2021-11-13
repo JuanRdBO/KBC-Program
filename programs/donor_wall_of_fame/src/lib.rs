@@ -3,7 +3,7 @@ use anchor_spl::token::{Token, TokenAccount, Transfer};
 
 use anchor_spl::token;
 
-declare_id!("65zdg2toqMwqJZBgUUdpLNVZ5hXt2teKesYiVUgQ6g4G");
+declare_id!("6HSmobk9iVpjkBZiv59hb97X2upZoPsc8EieWgrTqyuA");
 
 const DONOR_PDA_SEED: &[u8] = b"donor";
 
@@ -23,6 +23,22 @@ pub mod donor_wall_of_fame {
         ctx.accounts.state_account.name = name;
         ctx.accounts.state_account.authority = *ctx.accounts.authority.key;
         ctx.accounts.state_account.bump = bump;
+        ctx.accounts.state_account.total_donor_lists = 0;
+        Ok(())
+    }
+    
+    pub fn add_donation_list(
+        ctx: Context<AddDonationList>,
+        donation_list: Pubkey
+    ) -> ProgramResult {
+        let state_account = &mut ctx.accounts.state_account;
+
+        msg!("Adding a new donation list to state_account...");
+
+        // Pushes new list into donation list record
+        state_account.donor_lists.push(donation_list);
+        state_account.total_donor_lists += 1;
+
         Ok(())
     }
 
@@ -84,7 +100,7 @@ pub mod donor_wall_of_fame {
             };
 
             DonorStruct {
-                donor_user_address: *ctx.accounts.user.to_account_info().key,
+                donor_user_address: *ctx.accounts.state_account.to_account_info().key,
                 donor_name: donor_name,
                 donor_twitter_handle: donor_twitter_handle,
                 donated_sol: donated_sol,
@@ -154,15 +170,29 @@ pub mod donor_wall_of_fame {
 pub struct AddDonor<'info> {
     #[account(
         seeds = [authority.key().as_ref()],
-        bump = user.bump,
+        bump = state_account.bump,
         has_one = authority,
     )]
-    user: Account<'info, StateAccount>,
+    state_account: Account<'info, StateAccount>, // this is a pda of the authority (provider wallet)
     #[account(signer)]
     authority: AccountInfo<'info>,
     #[account(mut)]
     base_account: AccountLoader<'info, BaseAccount>,
     pub clock: Sysvar<'info, Clock>
+}
+
+
+#[derive(Accounts)]
+pub struct AddDonationList<'info> {
+    #[account(
+        mut,
+        seeds = [authority.key().as_ref()],
+        bump = state_account.bump,
+        has_one = authority,
+    )]
+    state_account: Account<'info, StateAccount>, // this is a pda of the authority (provider wallet)
+    #[account(signer)]
+    authority: AccountInfo<'info>
 }
 
 #[derive(Accounts)]
@@ -173,7 +203,7 @@ pub struct CreateStateAccount<'info> {
         seeds = [authority.key().as_ref()],
         bump = bump,
         payer = authority,
-        space = 320,
+        space = 5000,     // Each State Account can hold ~150 list references and costs 0.03 SOL
     )]
     state_account: Account<'info, StateAccount>,
     #[account(signer)]
@@ -186,6 +216,8 @@ pub struct StateAccount {
     name: String,
     authority: Pubkey,
     bump: u8,
+    total_donor_lists: u8,
+    donor_lists: Vec<Pubkey> // Each State Account can hold ~100 list references
 }
 
 #[derive(Accounts)]
@@ -209,6 +241,7 @@ pub struct BaseAccount {                // 1 complete donation list = 304 + 929 
     tail: u64,                          // 8 bytes
     pub total_donors: u64,              // 8 bytes
     pub name: [u8; 280],                // 280 bytes
+    pub space: u64,
     pub donor_list: [DonorStruct; 100]  // 929 bytes * 100 
 }
 
