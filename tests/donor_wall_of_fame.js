@@ -236,7 +236,7 @@ describe('donor_wall_of_fame', () => {
     // mint 100 tokens to the receiver address
     let mintAmount = 100
     await randomMint.mintTo(
-      receiverWalletTokenAccount,
+      providerWalletTokenAccount,
       receiver.publicKey,
       [receiver],
       mintAmount
@@ -263,17 +263,13 @@ describe('donor_wall_of_fame', () => {
       program.programId
     );
 
-    let tx = await program.rpc.sendSpl(
-      new anchor.BN(33), {
+    let tx = await program.rpc.sendSpl(new anchor.BN(30), {
       accounts: {
-        from: receiver.publicKey, 
-        fromAccount: receiverWalletTokenAccount, 
-        to: program.provider.wallet.publicKey, 
-        toAccount: providerWalletTokenAccount, 
-        pdaAccount: _pda,   // We do this to make the program execute the tx, not us
+        authority: provider.wallet.publicKey,
+        to: receiverWalletTokenAccount,
+        from: providerWalletTokenAccount,
         tokenProgram: splToken.TOKEN_PROGRAM_ID,
       },
-      signers: [receiver]
     });
 
     console.log("📝 SPL token transfer transaction signature:", tx);

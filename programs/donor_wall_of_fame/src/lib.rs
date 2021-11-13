@@ -146,23 +146,9 @@ pub mod donor_wall_of_fame {
             ],
         )
     }    
-    
-    pub fn send_spl(ctx: Context<SendSpl>, amount: u64) -> ProgramResult {
 
-        msg!("Sending some SPL tokens...");
-
-        // Transferring from initializer to taker
-        let (_pda, bump_seed) = Pubkey::find_program_address(&[DONOR_PDA_SEED], ctx.program_id);
-        let seeds = &[&DONOR_PDA_SEED[..], &[bump_seed]];
-
-        token::transfer(
-            ctx.accounts
-                .into_transfer_to_taker_context()
-                .with_signer(&[&seeds[..]]),
-            amount,
-        )?;
-
-        Ok(())
+    pub fn send_spl(ctx: Context<SendSPL>, amount: u64) -> ProgramResult {
+        token::transfer(ctx.accounts.into(), amount)
     }
 }
 
@@ -272,31 +258,30 @@ pub struct SendSol<'info> {
     system_program: Program<'info, System>
 }
 
-#[derive(Accounts)]
-pub struct SendSpl<'info> {
-    #[account(mut)]
-    from: Signer<'info>,
-    #[account(mut)]
-    from_account: Account<'info, TokenAccount>,
-    #[account(mut)]
-    to: AccountInfo<'info>,
-    #[account(mut)]
-    to_account: Account<'info, TokenAccount>,
-    #[account(seeds=[b"donor".as_ref()], bump)]
-    pda_account: AccountInfo<'info>,
-    token_program: Program<'info, Token>
-}
-
-impl<'info> SendSpl<'info> {
-    fn into_transfer_to_taker_context(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
+impl<'a, 'b, 'c, 'info> From<&mut SendSPL<'info>>
+for CpiContext<'a, 'b, 'c, 'info, Transfer<'info>> {
+    fn from(
+        accounts: &mut SendSPL<'info>
+    ) -> CpiContext<'a, 'b, 'c, 'info, Transfer<'info>> {
         let cpi_accounts = Transfer {
-            from: self.from_account.to_account_info().clone(),
-            to: self.to_account.to_account_info().clone(),
-            authority: self.from.to_account_info().clone(),
+            from: accounts.from.clone(),
+            to: accounts.to.clone(),
+            authority: accounts.authority.clone(),
         };
-        let cpi_program = self.token_program.to_account_info();
+        let cpi_program = accounts.token_program.clone();
         CpiContext::new(cpi_program, cpi_accounts)
     }
+}
+
+#[derive(Accounts)]
+pub struct SendSPL<'info> {
+    #[account(signer)]
+    pub authority: AccountInfo<'info>,
+    #[account(mut)]
+    pub from: AccountInfo<'info>,
+    #[account(mut)]
+    pub to: AccountInfo<'info>,
+    pub token_program: AccountInfo<'info>,
 }
 
 impl BaseAccount {
