@@ -7,6 +7,7 @@ const { BN } = require('bn.js');
 const { LAMPORTS_PER_SOL, SYSVAR_CLOCK_PUBKEY } = solana;
 const { Keypair, SystemProgram, PublicKey } = anchor.web3;
 
+
 describe('donor_wall_of_fame', () => {
 
 
@@ -135,6 +136,7 @@ describe('donor_wall_of_fame', () => {
       await program.rpc.addDonor(
         "@if__name__main",
         "Juan Ruiz de Bustillo",
+        new BN(0),
         new BN(0),
         kekwCoin,
         new BN(i),

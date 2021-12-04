@@ -3,7 +3,8 @@ use anchor_spl::token::{Token, TokenAccount, Transfer};
 
 use anchor_spl::token;
 
-declare_id!("6HSmobk9iVpjkBZiv59hb97X2upZoPsc8EieWgrTqyuA");
+declare_id!("G8W9VCtAUDxj1oZ8oiuq4d3yTwwgnt7wrQcQ3Esvbk8V");
+
 
 const DONOR_PDA_SEED: &[u8] = b"donor";
 
@@ -65,6 +66,7 @@ pub mod donor_wall_of_fame {
         donor_twitter_handle: String, 
         donor_name: String, 
         donated_sol: u64,
+        donated_usdc: u64,
         donated_token: Pubkey,
         donated_amount: u64,
         is_nft: bool,
@@ -104,6 +106,7 @@ pub mod donor_wall_of_fame {
                 donor_name: donor_name,
                 donor_twitter_handle: donor_twitter_handle,
                 donated_sol: donated_sol,
+                donated_usdc: donated_usdc,
                 donated_token: donated_token_struct
             }
         });
@@ -228,14 +231,15 @@ pub struct BaseAccount {                // 1 complete donation list = 304 + 929 
     pub total_donors: u64,              // 8 bytes
     pub name: [u8; 280],                // 280 bytes
     pub space: u64,
-    pub donor_list: [DonorStruct; 100]  // 929 bytes * 100 
+    pub donor_list: [DonorStruct; 1000]  // 937 bytes * 1000 
 }
 
 #[zero_copy]    
-pub struct DonorStruct {                // 1 complete struct = 929 bytes
+pub struct DonorStruct {                // 1 complete struct = 937 bytes
     pub donor_twitter_handle: [u8; 280],// 1byte * 280
     pub donor_name: [u8; 280],          // 1byte * 280
     pub donated_sol: u64,               // 8bytes
+    pub donated_usdc: u64,              // 8bytes
     pub donor_user_address: Pubkey,     // 32 bytes
     pub donated_token: DonatedTokens    // 329 bytes
 }
