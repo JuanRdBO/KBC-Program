@@ -1,12 +1,12 @@
-[programs.devnet]
+[programs.mainnet]
 donor_wall_of_fame = "G8W9VCtAUDxj1oZ8oiuq4d3yTwwgnt7wrQcQ3Esvbk8V"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "devnet"
-wallet = "/Users/juanruizdebustillo/.config/solana/kbc.json"
+cluster = "mainnet"
+wallet = "/Users/juanruizdebustillo/.config/solana/id.json"
 
 [scripts]
 test = "yarn run mocha -t 1000000 tests/"
