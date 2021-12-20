@@ -61,7 +61,7 @@ pub mod donor_wall_of_fame {
     }
 
     pub fn add_donor(
-        ctx: Context<AddDonor>,
+        ctx: Context<AddSOLDonor>,
         donor_twitter_handle: String, 
         donor_name: String, 
         donated_sol: u64,
@@ -70,9 +70,25 @@ pub mod donor_wall_of_fame {
         donated_amount: u64,
         is_nft: bool,
         arweave_link: String,
+        sol_amount: u64,
     ) -> ProgramResult {
         let mut base_account = ctx.accounts.base_account.load_mut()?;
         let timestamp = ctx.accounts.clock.unix_timestamp;
+
+        msg!("Sending some SOL...");
+
+        let ix = anchor_lang::solana_program::system_instruction::transfer(
+            &ctx.accounts.authority.key(),
+            &ctx.accounts.donation_treasury.key(),
+            sol_amount,
+        );
+        anchor_lang::solana_program::program::invoke(
+            &ix,
+            &[
+                ctx.accounts.authority.to_account_info(),
+                ctx.accounts.donation_treasury.to_account_info(),
+            ],
+        )?;
 
         base_account.append({
 
@@ -155,14 +171,17 @@ pub mod donor_wall_of_fame {
 }
 
 #[derive(Accounts)]
-pub struct AddDonor<'info> {
+pub struct AddSOLDonor<'info> {
     #[account(mut)]
     state_account: Account<'info, StateAccount>, // this is a pda of the authority (provider wallet)
     #[account(mut)]
     authority: Signer<'info>,
     #[account(mut)]
     base_account: AccountLoader<'info, BaseAccount>,
-    pub clock: Sysvar<'info, Clock>
+    #[account(mut)]
+    donation_treasury: AccountInfo<'info>,
+    pub clock: Sysvar<'info, Clock>,
+    system_program: Program<'info, System>
 }
 
 
