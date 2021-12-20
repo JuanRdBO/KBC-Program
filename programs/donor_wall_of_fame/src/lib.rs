@@ -13,6 +13,7 @@ pub mod donor_wall_of_fame {
     pub fn create_state_account(
         ctx: Context<CreateStateAccount>, 
         name: String, 
+        donation_treasury: Pubkey,
         bump: u8
     ) -> ProgramResult {
 
@@ -21,6 +22,7 @@ pub mod donor_wall_of_fame {
         ctx.accounts.state_account.name = name;
         ctx.accounts.state_account.authority = *ctx.accounts.authority.key;
         ctx.accounts.state_account.bump = bump;
+        ctx.accounts.state_account.donation_treasury = donation_treasury.key();
         ctx.accounts.state_account.total_donor_lists = 0;
         Ok(())
     }
@@ -178,7 +180,7 @@ pub struct AddDonationList<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(name: String, bump: u8)]
+#[instruction(name: String, donation_treasury: Pubkey, bump: u8)]
 pub struct CreateStateAccount<'info> {
     #[account(
         init,
@@ -197,6 +199,7 @@ pub struct CreateStateAccount<'info> {
 pub struct StateAccount {
     name: String,
     authority: Pubkey,
+    donation_treasury: Pubkey,
     bump: u8,
     total_donor_lists: u8,
     donor_lists: Vec<Pubkey> // Each State Account can hold ~100 list references

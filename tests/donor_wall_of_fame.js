@@ -22,14 +22,14 @@ describe("donor_wall_of_fame", () => {
   // Creating big account
   const baseAccount = anchor.web3.Keypair.generate();
 
-  // creates a receiver wallet to receive SOL and SPL tokens
+  // creates a receiver wallet to receive SOL and SPL tokens (donations)
   let receiver = anchor.web3.Keypair.generate();
 
   it("Creates a stateAccount to store list donations", async () => {
     const authority = program.provider.wallet.publicKey;
     const [stateAccount, bump] = await PublicKey.findProgramAddress([authority.toBuffer()], program.programId);
 
-    await program.rpc.createStateAccount("KWC Admin", bump, {
+    await program.rpc.createStateAccount("KWC Admin", receiver.publicKey, bump, {
       accounts: {
         stateAccount,
         authority,
@@ -134,6 +134,48 @@ describe("donor_wall_of_fame", () => {
   });
 
   it("Random guy adds donors (simple donation)", async () => {
+    const authorityKeypair = Keypair.generate();
+
+    await airdrop(authorityKeypair.publicKey, 5, provider);
+
+    const authority = authorityKeypair.publicKey;
+    const stateAccount = (
+      await PublicKey.findProgramAddress([program.provider.wallet.publicKey.toBuffer()], program.programId)
+    )[0];
+
+    let kekwCoin = new PublicKey("2QK9vxydd7WoDwvVFT5JSU8cwE9xmbJSzeqbRESiPGMG");
+    console.log("Adding a new donation...");
+    for (let i = 0; i < 1; i++) {
+      await program.rpc.addDonor(
+        "@if__name__main",
+        "Juan Ruiz de Bustillo",
+        new BN(0),
+        new BN(0),
+        kekwCoin,
+        new BN(i),
+        false,
+        "_",
+        {
+          accounts: {
+            stateAccount,
+            authority,
+            baseAccount: baseAccount.publicKey,
+            clock: anchor.web3.SYSVAR_CLOCK_PUBKEY,
+          },
+          signers: [authorityKeypair],
+        }
+      );
+      console.log("Donated " + i + " times..");
+    }
+
+    // Check the donor list state is as expected.
+    const donorList = await program.account.baseAccount.fetch(baseAccount.publicKey);
+    const name = new TextDecoder("utf-8").decode(new Uint8Array(donorList.name));
+    console.log("DonationList name is " + name);
+    assert.ok(name.startsWith("KBC donation list")); // [u8; 280] => trailing zeros.
+  });
+
+  it("Random guy adds donors (Also donates some SOL)", async () => {
     const authorityKeypair = Keypair.generate();
 
     await airdrop(authorityKeypair.publicKey, 5, provider);
