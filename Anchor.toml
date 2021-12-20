@@ -1,12 +1,12 @@
-[programs.mainnet]
-donor_wall_of_fame = "G8W9VCtAUDxj1oZ8oiuq4d3yTwwgnt7wrQcQ3Esvbk8V"
+[programs.localnet]
+donor_wall_of_fame = "2fNH7WXYfHdsZ52bshh85oXwg9FtEcNKVmV9fx2fvndx"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "mainnet"
-wallet = "/Users/juanruizdebustillo/.config/solana/id.json"
+cluster = "localnet"
+wallet = "/home/joan/.config/solana/id.json"
 
 [scripts]
 test = "yarn run mocha -t 1000000 tests/"

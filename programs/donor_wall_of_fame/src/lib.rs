@@ -3,10 +3,7 @@ use anchor_spl::token::{Token, TokenAccount, Transfer};
 
 use anchor_spl::token;
 
-declare_id!("G8W9VCtAUDxj1oZ8oiuq4d3yTwwgnt7wrQcQ3Esvbk8V");
-
-
-const DONOR_PDA_SEED: &[u8] = b"donor";
+declare_id!("2fNH7WXYfHdsZ52bshh85oXwg9FtEcNKVmV9fx2fvndx");
 
 #[program]
 pub mod donor_wall_of_fame {
@@ -157,14 +154,10 @@ pub mod donor_wall_of_fame {
 
 #[derive(Accounts)]
 pub struct AddDonor<'info> {
-    #[account(
-        seeds = [authority.key().as_ref()],
-        bump = state_account.bump,
-        has_one = authority,
-    )]
+    #[account(mut)]
     state_account: Account<'info, StateAccount>, // this is a pda of the authority (provider wallet)
-    #[account(signer)]
-    authority: AccountInfo<'info>,
+    #[account(mut)]
+    authority: Signer<'info>,
     #[account(mut)]
     base_account: AccountLoader<'info, BaseAccount>,
     pub clock: Sysvar<'info, Clock>
@@ -219,7 +212,13 @@ pub struct CreateBaseAccount<'info> {
 pub struct CloseBaseAccount<'info> {
     #[account(mut)]
     pub authority: AccountInfo<'info>,
-    #[account(mut, close = authority)]
+    #[account(mut)]
+    pub state_account: Account<'info, StateAccount>,
+    #[account(
+        mut,
+        constraint = state_account.authority == *authority.key,
+        close = authority
+    )]
     pub acc_to_close: AccountLoader<'info, BaseAccount>,
     pub donor_program: AccountInfo<'info>,
 }
