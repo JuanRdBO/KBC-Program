@@ -24,15 +24,7 @@ pub mod donor_wall_of_fame {
         ctx: Context<AddDonationList>,
         donation_list: Pubkey
     ) -> ProgramResult {
-        let state_account = &mut ctx.accounts.state_account;
-
-        msg!("Adding a new donation list to state_account...");
-
-        // Pushes new list into donation list record
-        state_account.donor_lists.push(donation_list);
-        state_account.total_donor_lists += 1;
-
-        Ok(())
+        instructions::create_donation_list::handler(ctx, donation_list)
     }
 
     pub fn create_base_account(
@@ -247,18 +239,6 @@ pub struct AddSPLDonor<'info> {
     pub token_program: Program<'info, Token>
 }
 
-#[derive(Accounts)]
-pub struct AddDonationList<'info> {
-    #[account(
-        mut,
-        seeds = [authority.key().as_ref()],
-        bump = state_account.bump,
-        has_one = authority,
-    )]
-    state_account: Account<'info, StateAccount>, // this is a pda of the authority (provider wallet)
-    #[account(signer)]
-    authority: AccountInfo<'info>
-}
 
 
 
