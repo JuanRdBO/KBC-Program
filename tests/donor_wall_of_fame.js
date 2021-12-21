@@ -175,7 +175,7 @@ describe("donor_wall_of_fame", () => {
     assert.ok(name.startsWith("KBC donation list")); // [u8; 280] => trailing zeros.
   }); */
 
-  it("Random guy adds donors (Also donates some SOL)", async () => {
+  /*   it("Random guy adds donors (donates some SOL)", async () => {
     const authorityKeypair = Keypair.generate();
 
     await airdrop(authorityKeypair.publicKey, 5, provider);
@@ -190,7 +190,7 @@ describe("donor_wall_of_fame", () => {
 
     let kekwCoin = new PublicKey("2QK9vxydd7WoDwvVFT5JSU8cwE9xmbJSzeqbRESiPGMG");
     console.log("Adding a new donation...");
-    await program.rpc.addDonor(
+    await program.rpc.addSolDonor(
       "@if__name__main",
       "Juan Ruiz de Bustillo",
       new BN(0),
@@ -215,6 +215,114 @@ describe("donor_wall_of_fame", () => {
 
     receiverAccountBalance = await program.provider.connection.getBalance(receiver.publicKey);
     console.log("receiverAccount has " + receiverAccountBalance / LAMPORTS_PER_SOL + " SOL.");
+
+    // Check the donor list state is as expected.
+    const donorList = await program.account.baseAccount.fetch(baseAccount.publicKey);
+    const name = new TextDecoder("utf-8").decode(new Uint8Array(donorList.name));
+    console.log("DonationList name is " + name);
+    assert.ok(name.startsWith("KBC donation list")); // [u8; 280] => trailing zeros.
+  }); */
+
+  it("Random guy adds donors (donates some KEKW)", async () => {
+    const authorityKeypair = Keypair.generate();
+
+    await airdrop(authorityKeypair.publicKey, 1, provider);
+    await airdrop(receiver.publicKey, 1, provider);
+
+    const authority = authorityKeypair.publicKey;
+    const stateAccount = (
+      await PublicKey.findProgramAddress([program.provider.wallet.publicKey.toBuffer()], program.programId)
+    )[0];
+
+    // *************
+    // creates mint
+    // *************
+    let kekwCoin = await splToken.Token.createMint(
+      provider.connection,
+      authorityKeypair,
+      authorityKeypair.publicKey,
+      null,
+      0,
+      splToken.TOKEN_PROGRAM_ID
+    );
+    console.log(`⌛ Created random Mint ${kekwCoin.publicKey}`);
+
+    // initializing the account for both sender and receiver
+    providerWalletTokenAccount = await kekwCoin.createAccount(authorityKeypair.publicKey);
+
+    receiverWalletTokenAccount = await kekwCoin.createAccount(receiver.publicKey);
+
+    console.log(
+      `⏰ Initialized random MintAccount on provider: ${providerWalletTokenAccount} and on receiver: ${receiverWalletTokenAccount}`
+    );
+
+    // mint 100 tokens to the receiver address
+    let mintAmount = 100;
+    await kekwCoin.mintTo(providerWalletTokenAccount, authorityKeypair.publicKey, [authorityKeypair], mintAmount);
+
+    console.log(`⛄ Minted ${mintAmount} tokens to ${receiver.publicKey}`);
+
+    // Get account info about SPL token wallet balances
+    let providerAccountInfo = await kekwCoin.getAccountInfo(providerWalletTokenAccount);
+    let receiverAccountInfo = await kekwCoin.getAccountInfo(receiverWalletTokenAccount);
+
+    let providerBalance = await provider.connection.getBalance(authorityKeypair.publicKey);
+    let receiverBalance = await provider.connection.getBalance(receiver.publicKey);
+    console.log(`⛽  -> Provider wallet ${authorityKeypair.publicKey} has ${providerAccountInfo.amount} tokens and ${
+      providerBalance / LAMPORTS_PER_SOL
+    } SOL.
+    -> Receiver Wallet ${receiver.publicKey} has ${receiverAccountInfo.amount} Tokens and ${
+      receiverBalance / LAMPORTS_PER_SOL
+    } SOL.`);
+    // ****************
+
+    /*     let tx = await program.rpc.sendSpl(new anchor.BN(30), {
+      accounts: {
+        authority: provider.wallet.publicKey,
+        to: receiverWalletTokenAccount,
+        from: providerWalletTokenAccount,
+        tokenProgram: splToken.TOKEN_PROGRAM_ID,
+      },
+    }); */
+
+    console.log("Adding a new donation...");
+    await program.rpc.addSplDonor(
+      "@if__name__main",
+      "Juan Ruiz de Bustillo",
+      new BN(0),
+      new BN(0),
+      kekwCoin.publicKey, // he it would be SOL mint
+      new BN(0),
+      false,
+      "_",
+      new BN(20),
+      {
+        accounts: {
+          stateAccount,
+          authority,
+          baseAccount: baseAccount.publicKey,
+          donationTreasury: receiver.publicKey,
+          receiverTokenAccount: receiverWalletTokenAccount,
+          providerTokenAccount: providerWalletTokenAccount,
+          systemProgram: SystemProgram.programId,
+          tokenProgram: splToken.TOKEN_PROGRAM_ID,
+        },
+        signers: [authorityKeypair],
+      }
+    );
+
+    // balance after
+    providerAccountInfo = await kekwCoin.getAccountInfo(providerWalletTokenAccount);
+    receiverAccountInfo = await kekwCoin.getAccountInfo(receiverWalletTokenAccount);
+
+    providerBalance = await provider.connection.getBalance(authorityKeypair.publicKey);
+    receiverBalance = await provider.connection.getBalance(receiver.publicKey);
+    console.log(`⛽  -> Provider wallet ${authorityKeypair.publicKey} has ${providerAccountInfo.amount} tokens and ${
+      providerBalance / LAMPORTS_PER_SOL
+    } SOL.
+    -> Receiver Wallet ${receiver.publicKey} has ${receiverAccountInfo.amount} Tokens and ${
+      receiverBalance / LAMPORTS_PER_SOL
+    } SOL.`);
 
     // Check the donor list state is as expected.
     const donorList = await program.account.baseAccount.fetch(baseAccount.publicKey);
