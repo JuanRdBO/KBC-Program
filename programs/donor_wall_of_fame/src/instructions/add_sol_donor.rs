@@ -35,6 +35,8 @@ pub fn handler(
         ],
     )?;
 
+    msg!("Adding new donor...");
+
     base_account.append({
 
         // encode Twttr handle to bytes
@@ -62,7 +64,7 @@ pub fn handler(
         };
 
         DonorStruct {
-            donor_user_address: *ctx.accounts.state_account.to_account_info().key,
+            donor_user_address: *ctx.accounts.authority.to_account_info().key,
             donor_name: donor_name,
             donor_twitter_handle: donor_twitter_handle,
             donated_sol: donated_sol,

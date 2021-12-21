@@ -1,11 +1,11 @@
-[programs.localnet]
-donor_wall_of_fame = "GAvnH5Tetq4kSCsT5x8HpaMSX8EfUN3k9qeEPQ1Jm2aB"
+[programs.devnet]
+donor_wall_of_fame = "FK3H6Bwnm3L8eGFHKrBZpZpRB5SFwfk2mRFX4tnGP6L7"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "/home/joan/.config/solana/id.json"
 
 [scripts]

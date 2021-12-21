@@ -22,7 +22,7 @@ pub fn handler(
 #[instruction(name: String, donation_treasury: Pubkey, bump: u8)]
 pub struct CreateStateAccount<'info> {
     #[account(
-        init,
+        init_if_needed,
         seeds = [authority.key().as_ref()],
         bump = bump,
         payer = authority,
