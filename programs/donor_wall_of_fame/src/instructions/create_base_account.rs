@@ -1,6 +1,6 @@
 
 use anchor_lang::prelude::*;
-use crate::{BaseAccount};
+use crate::BaseAccount;
 
 pub fn handler(
     ctx: Context<CreateBaseAccount>, 

@@ -73,12 +73,3 @@ pub mod donor_wall_of_fame {
 
 }
 
-
-
-
-
-#[error]
-pub enum ErrorCode {
-    #[msg("Not authorized!")]
-    NotAuthorized
-}

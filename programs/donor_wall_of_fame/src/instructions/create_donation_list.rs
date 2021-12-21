@@ -1,10 +1,16 @@
 use anchor_lang::prelude::*;
 
+use crate::state::ErrorCode;
+
 pub fn handler(
     ctx: Context<AddDonationList>,
     donation_list: Pubkey
 ) -> ProgramResult {
     let state_account = &mut ctx.accounts.state_account;
+
+    if state_account.authority.key() != ctx.accounts.authority.key() {
+        return Err(ErrorCode::AuthDonationListErr.into());
+    }
 
     msg!("Adding a new donation list to state_account...");
 
