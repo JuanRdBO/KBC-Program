@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-
+use crate::state::*;
 
 pub fn handler(
     ctx: Context<CreateStateAccount>, 
@@ -32,14 +32,4 @@ pub struct CreateStateAccount<'info> {
     #[account(signer)]
     authority: AccountInfo<'info>,
     system_program: AccountInfo<'info>,
-}
-
-#[account]
-pub struct StateAccount {
-    name: String,
-    authority: Pubkey,
-    donation_treasury: Pubkey,
-    bump: u8,
-    total_donor_lists: u8,
-    donor_lists: Vec<Pubkey> // Each State Account can hold ~100 list references
 }

@@ -5,13 +5,12 @@ pub mod instructions;
 pub mod state;
 
 use instructions::*;
-use state::*;
+use state::{StateAccount, BaseAccount, DonatedTokens, DonorStruct};
 
 declare_id!("2fNH7WXYfHdsZ52bshh85oXwg9FtEcNKVmV9fx2fvndx");
 
 #[program]
 pub mod donor_wall_of_fame {
-
     use super::*;
 
     pub fn create_state_account(
@@ -236,31 +235,9 @@ pub struct AddSPLDonor<'info> {
 
 
 
-#[account]
-pub struct StateAccount {
-    name: String,
-    authority: Pubkey,
-    donation_treasury: Pubkey,
-    bump: u8,
-    total_donor_lists: u8,
-    donor_lists: Vec<Pubkey> // Each State Account can hold ~100 list references
-}
 
 
-#[derive(Accounts)]
-pub struct CloseBaseAccount<'info> {
-    #[account(mut)]
-    pub authority: AccountInfo<'info>,
-    #[account(mut)]
-    pub state_account: Account<'info, StateAccount>,
-    #[account(
-        mut,
-        constraint = state_account.authority == *authority.key,
-        close = authority
-    )]
-    pub acc_to_close: AccountLoader<'info, BaseAccount>,
-    pub donor_program: AccountInfo<'info>,
-}
+
 
 
 
