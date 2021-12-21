@@ -248,17 +248,19 @@ describe("donor_wall_of_fame", () => {
     console.log(`⌛ Created random Mint ${kekwCoin.publicKey}`);
 
     // initializing the account for both sender and receiver
-    providerWalletTokenAccount = await kekwCoin.createAccount(authorityKeypair.publicKey);
-
-    receiverWalletTokenAccount = await kekwCoin.createAccount(receiver.publicKey);
-
-    console.log(
-      `⏰ Initialized random MintAccount on provider: ${providerWalletTokenAccount} and on receiver: ${receiverWalletTokenAccount}`
-    );
+    providerWalletTokenAccount = await (
+      await kekwCoin.getOrCreateAssociatedAccountInfo(authorityKeypair.publicKey)
+    ).address;
 
     // mint 100 tokens to the receiver address
     let mintAmount = 100;
     await kekwCoin.mintTo(providerWalletTokenAccount, authorityKeypair.publicKey, [authorityKeypair], mintAmount);
+
+    receiverWalletTokenAccount = await (await kekwCoin.getOrCreateAssociatedAccountInfo(receiver.publicKey)).address;
+
+    console.log(
+      `⏰ Initialized random MintAccount on provider: ${providerWalletTokenAccount} and on receiver: ${receiverWalletTokenAccount}`
+    );
 
     console.log(`⛄ Minted ${mintAmount} tokens to ${receiver.publicKey}`);
 
