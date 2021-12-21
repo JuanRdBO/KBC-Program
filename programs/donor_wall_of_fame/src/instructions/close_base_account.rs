@@ -3,13 +3,20 @@ use anchor_lang::prelude::*;
 
 use crate::state::*;
 
-pub fn handler(ctx: Context<CloseBaseAccount>) -> ProgramResult {
+pub fn handler(_ctx: Context<CloseBaseAccount>) -> ProgramResult {
         
     msg!("Closing a base_account...");
 
-    /* Alternative way to close an account:       
+    Ok(())
+}
 
-    let lamports = ctx.accounts.acc_to_close.lamports();
+// Alternative way to close an account, if the account was not a AccountLoader type
+// And we want it to be an account loader type, as we zero_copy it.       
+/* pub fn handler2(ctx: Context<CloseBaseAccount>) -> ProgramResult {
+        
+    msg!("Closing a base_account...");
+
+    let mut lamports = ctx.accounts.acc_to_close.load_mut().lamports();
 
     **ctx
         .accounts
@@ -17,10 +24,11 @@ pub fn handler(ctx: Context<CloseBaseAccount>) -> ProgramResult {
         .to_account_info()
         .try_borrow_mut_lamports()? = 0;
 
-    **ctx.accounts.authority.try_borrow_mut_lamports()? += lamports; */
+    **ctx.accounts.authority.try_borrow_mut_lamports()? += lamports;
 
     Ok(())
-}
+} */
+
 
 #[derive(Accounts)]
 pub struct CloseBaseAccount<'info> {
