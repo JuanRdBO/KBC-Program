@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::{StateAccount, BaseAccount, DonatedTokens, DonorStruct};
+use crate::state::*;
 
 pub fn handler(
     ctx: Context<AddSOLDonor>,
@@ -14,6 +15,10 @@ pub fn handler(
 ) -> ProgramResult {
     let mut base_account = ctx.accounts.base_account.load_mut()?;
     let timestamp = ctx.accounts.clock.unix_timestamp;
+
+    if donated_sol <= 0 {
+        return Err(ErrorCode::ZeroDonationErr.into());
+    }
 
     msg!("Sending some SOL...");
 

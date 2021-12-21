@@ -6,7 +6,7 @@ pub mod state;
 use instructions::*;
 use state::{StateAccount, BaseAccount, DonatedTokens, DonorStruct};
 
-declare_id!("2fNH7WXYfHdsZ52bshh85oXwg9FtEcNKVmV9fx2fvndx");
+declare_id!("GAvnH5Tetq4kSCsT5x8HpaMSX8EfUN3k9qeEPQ1Jm2aB");
 
 #[program]
 pub mod donor_wall_of_fame {
@@ -63,6 +63,10 @@ pub mod donor_wall_of_fame {
         arweave_link: String,
     ) -> ProgramResult {
         instructions::add_spl_donor::handler(ctx, donor_twitter_handle, donor_name, donated_sol, donated_usdc, donated_token, donated_amount, is_nft, arweave_link)
+    }
+
+    pub fn close_state_account(ctx: Context<CloseStateAccount>) -> ProgramResult {
+        instructions::close_state_account::handler(ctx)
     }
 
     pub fn close_base_account(ctx: Context<CloseBaseAccount>) -> ProgramResult {
