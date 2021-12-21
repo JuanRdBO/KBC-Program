@@ -1,8 +1,9 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{Token, TokenAccount, Transfer};
 
-use anchor_spl::token;
+pub mod instructions;
 
+use instructions::*;
 declare_id!("2fNH7WXYfHdsZ52bshh85oXwg9FtEcNKVmV9fx2fvndx");
 
 #[program]
@@ -16,15 +17,7 @@ pub mod donor_wall_of_fame {
         donation_treasury: Pubkey,
         bump: u8
     ) -> ProgramResult {
-
-        msg!("Creating a new state_account..");        
-        
-        ctx.accounts.state_account.name = name;
-        ctx.accounts.state_account.authority = *ctx.accounts.authority.key;
-        ctx.accounts.state_account.bump = bump;
-        ctx.accounts.state_account.donation_treasury = donation_treasury.key();
-        ctx.accounts.state_account.total_donor_lists = 0;
-        Ok(())
+        instructions::create_state_account::handler(ctx, name, donation_treasury, bump)
     }
     
     pub fn add_donation_list(
@@ -220,27 +213,6 @@ pub mod donor_wall_of_fame {
         Ok(())
     }
 
-    pub fn send_sol(ctx: Context<SendSol>, amount: u64) -> ProgramResult {
-
-        msg!("Sending some SOL...");
-
-        let ix = anchor_lang::solana_program::system_instruction::transfer(
-            &ctx.accounts.from.key(),
-            &ctx.accounts.to.key(),
-            amount,
-        );
-        anchor_lang::solana_program::program::invoke(
-            &ix,
-            &[
-                ctx.accounts.from.to_account_info(),
-                ctx.accounts.to.to_account_info(),
-            ],
-        )
-    }    
-
-    pub fn send_spl(ctx: Context<SendSPL>, amount: u64) -> ProgramResult {
-        token::transfer(ctx.accounts.into(), amount)
-    }
 }
 
 #[derive(Accounts)]
@@ -288,21 +260,7 @@ pub struct AddDonationList<'info> {
     authority: AccountInfo<'info>
 }
 
-#[derive(Accounts)]
-#[instruction(name: String, donation_treasury: Pubkey, bump: u8)]
-pub struct CreateStateAccount<'info> {
-    #[account(
-        init,
-        seeds = [authority.key().as_ref()],
-        bump = bump,
-        payer = authority,
-        space = 5000,     // Each State Account can hold ~150 list references and costs 0.03 SOL
-    )]
-    state_account: Account<'info, StateAccount>,
-    #[account(signer)]
-    authority: AccountInfo<'info>,
-    system_program: AccountInfo<'info>,
-}
+
 
 #[account]
 pub struct StateAccount {
@@ -364,40 +322,7 @@ pub struct DonatedTokens {              // 1 complete struct = 329 bytes
     pub arweave_link: [u8; 280],        // 1 byte * 280
 }
 
-#[derive(Accounts)]
-pub struct SendSol<'info> {
-    #[account(mut)]
-    from: Signer<'info>,
-    #[account(mut)]
-    to: AccountInfo<'info>,
-    system_program: Program<'info, System>
-}
 
-impl<'a, 'b, 'c, 'info> From<&mut SendSPL<'info>>
-for CpiContext<'a, 'b, 'c, 'info, Transfer<'info>> {
-    fn from(
-        accounts: &mut SendSPL<'info>
-    ) -> CpiContext<'a, 'b, 'c, 'info, Transfer<'info>> {
-        let cpi_accounts = Transfer {
-            from: accounts.from.clone(),
-            to: accounts.to.clone(),
-            authority: accounts.authority.clone(),
-        };
-        let cpi_program = accounts.token_program.clone();
-        CpiContext::new(cpi_program, cpi_accounts)
-    }
-}
-
-#[derive(Accounts)]
-pub struct SendSPL<'info> {
-    #[account(signer)]
-    pub authority: AccountInfo<'info>,
-    #[account(mut)]
-    pub from: AccountInfo<'info>,
-    #[account(mut)]
-    pub to: AccountInfo<'info>,
-    pub token_program: AccountInfo<'info>,
-}
 
 impl BaseAccount {
     fn append(&mut self, donor_list_in: DonorStruct) {
