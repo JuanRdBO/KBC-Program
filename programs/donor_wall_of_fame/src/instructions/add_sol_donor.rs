@@ -11,7 +11,6 @@ pub fn handler(
     donated_amount: u64,
     is_nft: bool,
     arweave_link: String,
-    sol_amount: u64,
 ) -> ProgramResult {
     let mut base_account = ctx.accounts.base_account.load_mut()?;
     let timestamp = ctx.accounts.clock.unix_timestamp;
@@ -21,7 +20,7 @@ pub fn handler(
     let ix = anchor_lang::solana_program::system_instruction::transfer(
         &ctx.accounts.authority.key(),
         &ctx.accounts.donation_treasury.key(),
-        sol_amount,
+        donated_sol,
     );
     anchor_lang::solana_program::program::invoke(
         &ix,

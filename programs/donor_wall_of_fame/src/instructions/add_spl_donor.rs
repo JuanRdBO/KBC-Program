@@ -13,7 +13,6 @@ pub fn handler(
     donated_amount: u64,
     is_nft: bool,
     arweave_link: String,
-    spl_token_amount: u64,
 ) -> ProgramResult {
     let mut base_account = ctx.accounts.base_account.load_mut()?;
     let timestamp = Clock::get().unwrap().unix_timestamp;
@@ -35,7 +34,7 @@ pub fn handler(
                 authority: ctx.accounts.authority.to_account_info(),
             },
         ),
-        spl_token_amount
+        donated_amount
     )?;
 
     base_account.append({

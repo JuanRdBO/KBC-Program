@@ -47,9 +47,8 @@ pub mod donor_wall_of_fame {
         donated_amount: u64,
         is_nft: bool,
         arweave_link: String,
-        sol_amount: u64,
     ) -> ProgramResult {
-        instructions::add_sol_donor::handler(ctx, donor_twitter_handle, donor_name, donated_sol, donated_usdc, donated_token, donated_amount, is_nft, arweave_link, sol_amount)
+        instructions::add_sol_donor::handler(ctx, donor_twitter_handle, donor_name, donated_sol, donated_usdc, donated_token, donated_amount, is_nft, arweave_link)
     }
 
     pub fn add_spl_donor(
@@ -62,9 +61,8 @@ pub mod donor_wall_of_fame {
         donated_amount: u64,
         is_nft: bool,
         arweave_link: String,
-        spl_token_amount: u64,
     ) -> ProgramResult {
-        instructions::add_spl_donor::handler(ctx, donor_twitter_handle, donor_name, donated_sol, donated_usdc, donated_token, donated_amount, is_nft, arweave_link, spl_token_amount)
+        instructions::add_spl_donor::handler(ctx, donor_twitter_handle, donor_name, donated_sol, donated_usdc, donated_token, donated_amount, is_nft, arweave_link)
     }
 
     pub fn close_base_account(ctx: Context<CloseBaseAccount>) -> ProgramResult {

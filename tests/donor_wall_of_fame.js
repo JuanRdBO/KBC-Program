@@ -194,13 +194,12 @@ describe("donor_wall_of_fame", () => {
     await program.rpc.addSolDonor(
       "@if__name__main",
       "Juan Ruiz de Bustillo",
-      new BN(0),
+      new BN(LAMPORTS_PER_SOL),
       new BN(0),
       kekwCoin, // he it would be SOL mint
       new BN(0),
       false,
       "_",
-      new BN(LAMPORTS_PER_SOL),
       {
         accounts: {
           stateAccount,
@@ -295,10 +294,9 @@ describe("donor_wall_of_fame", () => {
       new BN(0),
       new BN(0),
       kekwCoin.publicKey, // he it would be SOL mint
-      new BN(0),
+      new BN(20),
       false,
       "_",
-      new BN(20),
       {
         accounts: {
           stateAccount,
