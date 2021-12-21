@@ -175,7 +175,7 @@ describe("donor_wall_of_fame", () => {
     assert.ok(name.startsWith("KBC donation list")); // [u8; 280] => trailing zeros.
   }); */
 
-  /*   it("Random guy adds donors (donates some SOL)", async () => {
+  it("Random guy adds donors (donates some SOL)", async () => {
     const authorityKeypair = Keypair.generate();
 
     await airdrop(authorityKeypair.publicKey, 5, provider);
@@ -221,7 +221,7 @@ describe("donor_wall_of_fame", () => {
     const name = new TextDecoder("utf-8").decode(new Uint8Array(donorList.name));
     console.log("DonationList name is " + name);
     assert.ok(name.startsWith("KBC donation list")); // [u8; 280] => trailing zeros.
-  }); */
+  });
 
   it("Random guy adds donors (donates some KEKW)", async () => {
     const authorityKeypair = Keypair.generate();
