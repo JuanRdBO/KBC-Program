@@ -6,10 +6,10 @@ import assert from "assert";
 import { NodeWallet } from "@project-serum/anchor/dist/cjs/provider";
 import * as fs from "fs";
 
-const DONOR_PROGRAM_ID = new anchor.web3.PublicKey("FK3H6Bwnm3L8eGFHKrBZpZpRB5SFwfk2mRFX4tnGP6L7");
-const DONOR_AUTHORITY = new anchor.web3.PublicKey("juan3uxteK3E4ikyTeAg2AYRKzBS7CJ4dkGmx7zyHMv");
+const DONOR_PROGRAM_ID = new anchor.web3.PublicKey("K1DSetpGVWimLrMgHuWukWdDPJgddnSakUUawW5Hd2G.json");
+const DONOR_AUTHORITY = new anchor.web3.PublicKey("KBCmkF8cyDpsRjReSMGMtfs6WDC89DRy5keRZCVf9pa.json");
 
-const admin_wallet = loadWalletKey("/home/joan/.config/solana/id.json");
+const admin_wallet = loadWalletKey("/home/joan/.config/solana/kbc_admin.json");
 const endpointUrl = "https://api.devnet.solana.com";
 
 const getProvider = (endpointUrl, wallet) => {
@@ -143,6 +143,36 @@ async function createNewBaseAccount(program: anchor.Program) {
   return baseAccount;
 }
 
+async function refundStateAccount(program) {
+  const authority = program.provider.wallet.publicKey;
+  const [stateAccount, bump] = await anchor.web3.PublicKey.findProgramAddress(
+    [authority.toBuffer()],
+    program.programId
+  );
+
+  console.log("stateAccount", stateAccount.toBase58());
+
+  let UserAccountBalance = await program.provider.connection.getBalance(authority);
+  console.log("UserAccount has " + UserAccountBalance / anchor.web3.LAMPORTS_PER_SOL + " SOL.");
+
+  let stateAccountBalance = await program.provider.connection.getBalance(stateAccount);
+  console.log("StateAccount has " + stateAccountBalance / anchor.web3.LAMPORTS_PER_SOL + " SOL.");
+
+  await program.rpc.closeStateAccount({
+    accounts: {
+      authority: authority,
+      stateAccount: stateAccount,
+      donorProgram: program.programId,
+    },
+  });
+
+  UserAccountBalance = await program.provider.connection.getBalance(authority);
+  console.log("UserAccount has " + UserAccountBalance / anchor.web3.LAMPORTS_PER_SOL + " SOL.");
+
+  stateAccountBalance = await program.provider.connection.getBalance(stateAccount);
+  console.log("StateAccount has " + stateAccountBalance / anchor.web3.LAMPORTS_PER_SOL + " SOL.");
+}
+
 async function refundBaseAccount(program, baseAccountToDelete) {
   const authority = program.provider.wallet.publicKey;
 
@@ -185,8 +215,33 @@ async function getDonorListInfo(program: anchor.Program, addNewBaseAccount: bool
   return { programState, allDonorsLists, allDonationsLists, allBaseAccounts };
 }
 
-async function main(addNewBaseAccount, baseAccountToDelete) {
+async function rmRFAll(program: anchor.Program) {
+  const { programState, allDonorsLists, allDonationsLists, allBaseAccounts } = await getDonorListInfo(program, false);
+
+  console.log("Refunding base accounts...");
+  for (let i = 0; i < allBaseAccounts.length; i++) {
+    console.log(`Refunding base account '${allBaseAccounts[i][0]}' (pk: ${allBaseAccounts[i][1]})`);
+    await refundBaseAccount(program, new anchor.web3.PublicKey(allBaseAccounts[i][1]));
+  }
+  console.log("Refunded base accounts");
+
+  console.log("Refunding state account");
+  const authority = program.provider.wallet.publicKey;
+  const [stateAccount, bump] = await anchor.web3.PublicKey.findProgramAddress(
+    [authority.toBuffer()],
+    program.programId
+  );
+  await refundStateAccount(program);
+  console.log("Refunded state account");
+}
+
+async function main(addNewBaseAccount, nukeAll, baseAccountToDelete) {
   const program = await getProgramEnv(DONOR_PROGRAM_ID, endpointUrl, admin_wallet);
+
+  if (nukeAll) {
+    await rmRFAll(program);
+    return;
+  }
 
   if (baseAccountToDelete) {
     await refundBaseAccount(program, baseAccountToDelete);
@@ -212,7 +267,8 @@ async function main(addNewBaseAccount, baseAccountToDelete) {
  *    RUN DOWN HERE YOUR COMMANDS   *
  ************************************/
 
-const addNewBaseAccount = false;
+const addNewBaseAccount = false; // Adds a new base account
+const nukeAll = true;
 const baseAccountToDelete = undefined; //new anchor.web3.PublicKey("6z23QvjcnjYNdKADAJcGvLrdKzfKNibLrxEeKtDMkqaa");
 
-main(addNewBaseAccount, baseAccountToDelete);
+main(addNewBaseAccount, nukeAll, baseAccountToDelete);

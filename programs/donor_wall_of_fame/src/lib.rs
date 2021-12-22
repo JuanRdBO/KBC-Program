@@ -6,7 +6,7 @@ pub mod state;
 use instructions::*;
 use state::{StateAccount, BaseAccount, DonatedTokens, DonorStruct};
 
-declare_id!("FK3H6Bwnm3L8eGFHKrBZpZpRB5SFwfk2mRFX4tnGP6L7");
+declare_id!("K1DSdBSAee2CQCL6ToXDDFLMPqKjinpKJj6mB738aBQ");
 
 #[program]
 pub mod donor_wall_of_fame {

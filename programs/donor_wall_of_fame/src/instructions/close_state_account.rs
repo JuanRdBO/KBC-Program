@@ -16,7 +16,8 @@ pub struct CloseStateAccount<'info> {
     #[account(
         mut,
         constraint = state_account.authority == *authority.key,
-        close = authority)]
+        close = authority
+    )]
     pub state_account: Account<'info, StateAccount>,
     pub donor_program: AccountInfo<'info>,
 }
