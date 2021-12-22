@@ -3,9 +3,15 @@ use anchor_lang::prelude::*;
 
 use crate::state::*;
 
-pub fn handler(_ctx: Context<CloseBaseAccount>) -> ProgramResult {
+pub fn handler(ctx: Context<CloseBaseAccount>) -> ProgramResult {
+
+    msg!("Closing a base_account and removing from base Account list...");
+
+    let state_account = &mut ctx.accounts.state_account;
+    let acc_to_close = &mut ctx.accounts.acc_to_close;
         
-    msg!("Closing a base_account...");
+    state_account.donor_lists.retain(|x| *x != acc_to_close.key());
+    state_account.total_donor_lists -= 1;
 
     Ok(())
 }
